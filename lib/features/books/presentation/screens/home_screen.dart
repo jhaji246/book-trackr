@@ -4,8 +4,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../shared/providers/books_provider.dart';
+import '../../../../shared/providers/recommendation_provider.dart';
 import '../../../../shared/models/book.dart';
 import '../widgets/book_card.dart';
+import '../widgets/recommendation_card.dart';
+import '../../../../core/widgets/theme_toggle.dart';
 
 class HomeScreen extends HookConsumerWidget {
   const HomeScreen({super.key});
@@ -15,59 +18,31 @@ class HomeScreen extends HookConsumerWidget {
     final booksState = ref.watch(booksProvider);
     final searchController = useTextEditingController();
 
-    return WillPopScope(
-      onWillPop: () async {
-        // Handle back button press
-        if (Navigator.of(context).canPop()) {
-          Navigator.of(context).pop();
-        } else {
-          // If we're at the root, show exit confirmation
-          final shouldExit = await showDialog<bool>(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Exit App'),
-              content: const Text('Are you sure you want to exit BookTrackr?'),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(false),
-                  child: const Text('Cancel'),
-                ),
-                FilledButton(
-                  onPressed: () => Navigator.of(context).pop(true),
-                  child: const Text('Exit'),
-                ),
-              ],
-            ),
-          );
-          return shouldExit ?? false;
-        }
-        return false;
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('BookTrackr'),
-          backgroundColor: AppConstants.lightSurface,
-          foregroundColor: AppConstants.lightOnSurface,
-          automaticallyImplyLeading: false, // Don't show back button on home
-          actions: [
-            IconButton(
-              onPressed: () => context.go('/profile'),
-              icon: const Icon(Icons.person),
-            ),
-          ],
-        ),
-        body: Column(
-          children: [
-            _buildSearchBar(context, searchController, ref),
-            Expanded(
-              child: booksState.isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : booksState.error != null
-                      ? _buildErrorState(context, booksState.error!, ref)
-                      : _buildContent(context, booksState, ref),
-            ),
-          ],
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('BookTrackr'),
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        foregroundColor: Theme.of(context).colorScheme.onSurface,
+        automaticallyImplyLeading: false,
+        actions: [
+          const ThemeToggle(),
+          IconButton(
+            onPressed: () => context.go('/profile'),
+            icon: const Icon(Icons.person),
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          _buildSearchBar(context, searchController, ref),
+          Expanded(
+            child: booksState.isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : booksState.error != null
+                    ? _buildErrorState(context, booksState.error!, ref)
+                    : _buildContent(context, ref, booksState),
+          ),
+        ],
       ),
     );
   }
@@ -109,7 +84,7 @@ class HomeScreen extends HookConsumerWidget {
           Icon(
             Icons.error_outline,
             size: 64,
-            color: AppConstants.lightOnSurfaceVariant,
+            color: Theme.of(context).colorScheme.error,
           ),
           const SizedBox(height: AppConstants.paddingLarge),
           Text(
@@ -137,143 +112,87 @@ class HomeScreen extends HookConsumerWidget {
     );
   }
 
-  Widget _buildContent(BuildContext context, BooksState booksState, WidgetRef ref) {
-    if (booksState.searchQuery != null) {
-      return _buildSearchResults(context, booksState, ref);
-    } else {
-      return _buildHomeContent(context, booksState, ref);
-    }
-  }
+  Widget _buildContent(BuildContext context, WidgetRef ref, booksState) {
+    final recommendationState = ref.watch(recommendationProvider);
 
-  Widget _buildSearchResults(BuildContext context, BooksState booksState, WidgetRef ref) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(AppConstants.paddingMedium),
-          child: Row(
-            children: [
-              Text(
-                'Search Results for "${booksState.searchQuery}"',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
+    return RefreshIndicator(
+      onRefresh: () async {
+        ref.read(booksProvider.notifier).loadFeaturedBooks();
+        ref.read(recommendationProvider.notifier).refreshRecommendations();
+      },
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.only(bottom: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // AI Recommendations Section
+            if (recommendationState.personalizedRecommendations.isNotEmpty)
+              RecommendationSection(
+                title: '🤖 Recommended for You',
+                books: recommendationState.personalizedRecommendations,
+                getReasons: (book) => ref.read(recommendationProvider.notifier).getRecommendationReasons(book),
+                onBookTap: () {},
+              ),
+
+            // Trending Books Section
+            if (recommendationState.trendingBooks.isNotEmpty)
+              RecommendationSection(
+                title: '🔥 Trending Now',
+                books: recommendationState.trendingBooks,
+                getReasons: (book) => ['Popular and highly rated'],
+                onBookTap: () {},
+              ),
+
+            // Featured Books Section
+            if (booksState.featuredBooks.isNotEmpty) ...[
+              Padding(
+                padding: const EdgeInsets.all(AppConstants.paddingMedium),
+                child: Text(
+                  'Featured Books',
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-              const Spacer(),
-              TextButton(
-                onPressed: () {
-                  ref.read(booksProvider.notifier).clearSearch();
-                },
-                child: const Text('Clear'),
-              ),
-            ],
-          ),
-        ),
-        Expanded(
-          child: booksState.books.isEmpty
-              ? _buildEmptySearchState(context)
-              : _buildBooksGrid(context, booksState.books),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildEmptySearchState(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.search_off,
-            size: 64,
-            color: AppConstants.lightOnSurfaceVariant,
-          ),
-          const SizedBox(height: AppConstants.paddingLarge),
-          Text(
-            'No books found',
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: AppConstants.paddingMedium),
-          Text(
-            'Try searching with different keywords',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AppConstants.lightOnSurfaceVariant,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildHomeContent(BuildContext context, BooksState booksState, WidgetRef ref) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(AppConstants.paddingMedium),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildFeaturedSection(context, booksState.featuredBooks),
-          const SizedBox(height: AppConstants.paddingLarge),
-          _buildCategoriesSection(context, ref),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFeaturedSection(BuildContext context, List<Book> featuredBooks) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Featured Books',
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: AppConstants.paddingMedium),
-        SizedBox(
-          height: 300,
-          child: featuredBooks.isEmpty
-              ? _buildEmptyFeaturedState(context)
-              : ListView.builder(
+              SizedBox(
+                height: 160,
+                child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: featuredBooks.length,
+                  padding: const EdgeInsets.symmetric(horizontal: AppConstants.paddingMedium),
+                  itemCount: booksState.featuredBooks.length,
                   itemBuilder: (context, index) {
+                    final book = booksState.featuredBooks[index];
                     return Container(
-                      width: 200,
+                      width: 100,
                       margin: const EdgeInsets.only(right: AppConstants.paddingMedium),
-                      child: BookCard(book: featuredBooks[index]),
+                      child: BookCard(
+                        book: book,
+                        onTap: () => context.push('/book/${book.id}'),
+                      ),
                     );
                   },
                 ),
-        ),
-      ],
-    );
-  }
+              ),
+            ],
 
-  Widget _buildEmptyFeaturedState(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.book,
-            size: 64,
-            color: AppConstants.lightOnSurfaceVariant,
-          ),
-          const SizedBox(height: AppConstants.paddingMedium),
-          Text(
-            'No featured books',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              color: AppConstants.lightOnSurfaceVariant,
+            // Browse by Category Section
+            Padding(
+              padding: const EdgeInsets.all(AppConstants.paddingMedium),
+              child: Text(
+                'Browse by Category',
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
-          ),
-        ],
+            _buildCategoryGrid(context),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildCategoriesSection(BuildContext context, WidgetRef ref) {
+  Widget _buildCategoryGrid(BuildContext context) {
     final categories = [
       {'name': 'Fiction', 'icon': Icons.book, 'color': Colors.blue},
       {'name': 'Non-Fiction', 'icon': Icons.school, 'color': Colors.green},
@@ -281,76 +200,53 @@ class HomeScreen extends HookConsumerWidget {
       {'name': 'Mystery', 'icon': Icons.search, 'color': Colors.orange},
     ];
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Browse by Category',
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: AppConstants.paddingMedium),
+      child: GridView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: AppConstants.paddingMedium,
+          mainAxisSpacing: AppConstants.paddingMedium,
+          childAspectRatio: 2.0,
         ),
-        const SizedBox(height: AppConstants.paddingMedium),
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 1.5,
-            crossAxisSpacing: AppConstants.paddingMedium,
-            mainAxisSpacing: AppConstants.paddingMedium,
-          ),
-          itemCount: categories.length,
-          itemBuilder: (context, index) {
-            final category = categories[index];
-            return Card(
-              child: InkWell(
-                onTap: () {
-                  ref.read(booksProvider.notifier).searchBooks(category['name'] as String);
-                },
-                borderRadius: BorderRadius.circular(AppConstants.radiusMedium),
-                child: Padding(
-                  padding: const EdgeInsets.all(AppConstants.paddingMedium),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        category['icon'] as IconData,
-                        size: 32,
-                        color: category['color'] as Color,
+        itemCount: categories.length,
+        itemBuilder: (context, index) {
+          final category = categories[index];
+          return Card(
+            child: InkWell(
+              onTap: () {
+                // Navigate to category
+              },
+              borderRadius: BorderRadius.circular(AppConstants.radiusMedium),
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      category['icon'] as IconData,
+                      size: 24,
+                      color: category['color'] as Color,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      category['name'] as String,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        fontWeight: FontWeight.bold,
                       ),
-                      const SizedBox(height: AppConstants.paddingSmall),
-                      Text(
-                        category['name'] as String,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
               ),
-            );
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget _buildBooksGrid(BuildContext context, List<Book> books) {
-    return GridView.builder(
-      padding: const EdgeInsets.all(AppConstants.paddingMedium),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 0.7,
-        crossAxisSpacing: AppConstants.paddingMedium,
-        mainAxisSpacing: AppConstants.paddingMedium,
+            ),
+          );
+        },
       ),
-      itemCount: books.length,
-      itemBuilder: (context, index) {
-        return BookCard(book: books[index]);
-      },
     );
   }
 } 

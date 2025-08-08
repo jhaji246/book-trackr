@@ -7,6 +7,7 @@ import 'core/services/hive_service.dart';
 import 'core/services/notification_service.dart';
 import 'core/services/reading_reminders_service.dart';
 import 'core/services/cache_service.dart';
+import 'shared/providers/theme_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,14 +39,14 @@ class BookTrackrApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = AppRouter.router;
+    final themeMode = ref.watch(themeProvider);
 
     return MaterialApp.router(
       title: 'BookTrackr',
-      debugShowCheckedModeBanner: false, // Remove debug banner
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      debugShowCheckedModeBanner: false,
+      themeMode: themeMode,
+      theme: AppThemes.lightTheme,
+      darkTheme: AppThemes.darkTheme,
       routerConfig: router,
     );
   }

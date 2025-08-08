@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../shared/providers/auth_provider.dart';
 import '../../../../shared/providers/bookshelf_provider.dart';
+import '../../../../shared/providers/reading_goals_provider.dart';
+import '../../../../core/widgets/theme_toggle.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -17,12 +19,13 @@ class ProfileScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        foregroundColor: Theme.of(context).colorScheme.onSurface,
         actions: [
+          const ThemeToggle(),
           IconButton(
+            onPressed: () => _showSettingsDialog(context),
             icon: const Icon(Icons.settings),
-            onPressed: () {
-              _showSettingsDialog(context);
-            },
           ),
         ],
       ),
@@ -141,14 +144,14 @@ class ProfileScreen extends ConsumerWidget {
                   Icons.flag,
                   'Reading Goals',
                   'Set and track your goals',
-                  () => context.push('/reading-goals'),
+                  () => context.push('/goals'),
                 ),
                 _buildMenuItem(
                   context,
                   Icons.analytics,
                   'Reading Stats',
                   'View your reading statistics',
-                  () => _showReadingStatsDialog(context, bookshelfState),
+                  () => context.push('/statistics'),
                 ),
               ],
             ),
@@ -174,6 +177,10 @@ class ProfileScreen extends ConsumerWidget {
                 ),
               ],
             ),
+            const SizedBox(height: AppConstants.paddingLarge),
+            
+            // Theme Settings
+            const ThemeSelector(),
           ],
         ),
       ),

@@ -97,7 +97,7 @@ class LoginScreen extends HookConsumerWidget {
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
-                  onPressed: () => context.push('/forgot-password'),
+                  onPressed: () => _showForgotPasswordDialog(context, ref),
                   child: const Text('Forgot Password?'),
                 ),
               ),
@@ -291,6 +291,26 @@ class LoginScreen extends HookConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+
+  void _showForgotPasswordDialog(BuildContext context, WidgetRef ref) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Forgot Password'),
+          content: const Text('This feature is not yet implemented.'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 } 
