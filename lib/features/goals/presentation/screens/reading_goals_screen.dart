@@ -1,159 +1,228 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_constants.dart';
-import '../../../../shared/providers/bookshelf_provider.dart';
-import '../../../../core/services/notification_service.dart';
+import '../../../../shared/providers/reading_goals_provider.dart';
 
 class ReadingGoalsScreen extends HookConsumerWidget {
   const ReadingGoalsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final bookshelfState = ref.watch(bookshelfProvider);
-    final booksGoalController = useTextEditingController(text: '12');
-    final pagesGoalController = useTextEditingController(text: '50');
-    final currentYear = DateTime.now().year;
+    final goalsState = ref.watch(readingGoalsProvider);
+    final goalsNotifier = ref.read(readingGoalsProvider.notifier);
+
+    final booksController = useTextEditingController(
+      text: goalsState.booksPerYear.toString(),
+    );
+    final pagesController = useTextEditingController(
+      text: goalsState.pagesPerDay.toString(),
+    );
+
+    final isReminderEnabled = useState(false);
+    final reminderTime = useState(const TimeOfDay(hour: 20, minute: 0));
+    final reminderDays = useState<List<int>>([1, 2, 3, 4, 5, 6, 7]);
+    final reminderMessage = useState('Time to read! 📚');
+
+    // Load reminder preferences
+    useEffect(() {
+      goalsNotifier.getReminderPreferences().then((prefs) {
+        isReminderEnabled.value = prefs['isEnabled'] ?? false;
+        reminderTime.value = TimeOfDay(
+          hour: prefs['hour'] ?? 20,
+          minute: prefs['minute'] ?? 0,
+        );
+        reminderDays.value = prefs['days'] ?? [1, 2, 3, 4, 5, 6, 7];
+        reminderMessage.value = prefs['message'] ?? 'Time to read! 📚';
+      });
+      return null;
+    }, []);
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Reading Goals'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.save),
-            onPressed: () {
-              // TODO: Save goals to local storage or Firebase
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Goals saved!')),
-              );
-            },
-          ),
-        ],
+        backgroundColor: AppConstants.lightSurface,
+        foregroundColor: AppConstants.lightOnSurface,
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppConstants.paddingLarge),
+      body: goalsState.isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              padding: const EdgeInsets.all(AppConstants.paddingLarge),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildGoalsSection(context, goalsState, goalsNotifier, booksController, pagesController),
+                  const SizedBox(height: AppConstants.paddingLarge),
+                  _buildProgressSection(context, goalsState),
+                  const SizedBox(height: AppConstants.paddingLarge),
+                  _buildRemindersSection(
+                    context,
+                    isReminderEnabled,
+                    reminderTime,
+                    reminderDays,
+                    reminderMessage,
+                    goalsNotifier,
+                  ),
+                  const SizedBox(height: AppConstants.paddingLarge),
+                  _buildStatisticsSection(context, goalsState),
+                ],
+              ),
+            ),
+    );
+  }
+
+  Widget _buildGoalsSection(
+    BuildContext context,
+    ReadingGoalsState goalsState,
+    ReadingGoalsNotifier goalsNotifier,
+    TextEditingController booksController,
+    TextEditingController pagesController,
+  ) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(AppConstants.paddingMedium),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header
             Text(
-              '$currentYear Reading Goals',
+              'Set Your Reading Goals',
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: AppConstants.paddingMedium),
-            Text(
-              'Set your reading goals and track your progress throughout the year.',
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: AppConstants.lightOnSurfaceVariant,
+            TextField(
+              controller: booksController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: 'Books per year',
+                hintText: 'Enter your target',
+                prefixIcon: Icon(Icons.book),
+                border: OutlineInputBorder(),
               ),
             ),
-            const SizedBox(height: AppConstants.paddingXLarge),
-
-            // Current Progress
-            _buildProgressCard(context, bookshelfState),
-            const SizedBox(height: AppConstants.paddingXLarge),
-
-            // Goals Section
-            Text(
-              'Set Your Goals',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
+            const SizedBox(height: AppConstants.paddingSmall),
+            TextField(
+              controller: pagesController,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: 'Pages per day',
+                hintText: 'Enter your target',
+                prefixIcon: Icon(Icons.menu_book),
+                border: OutlineInputBorder(),
               ),
-            ),
-            const SizedBox(height: AppConstants.paddingLarge),
-
-            // Books Goal
-            _buildGoalCard(
-              context,
-              'Books to Read',
-              'Set a target number of books to read this year',
-              Icons.library_books,
-              booksGoalController,
-              'books',
             ),
             const SizedBox(height: AppConstants.paddingMedium),
-
-            // Pages Goal
-            _buildGoalCard(
-              context,
-              'Pages per Day',
-              'Set a daily reading goal in pages',
-              Icons.menu_book,
-              pagesGoalController,
-              'pages',
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton(
+                onPressed: () {
+                  final books = int.tryParse(booksController.text) ?? 0;
+                  final pages = int.tryParse(pagesController.text) ?? 0;
+                  goalsNotifier.setReadingGoals(
+                    booksPerYear: books,
+                    pagesPerDay: pages,
+                  );
+                },
+                child: const Text('Save Goals'),
+              ),
             ),
-            const SizedBox(height: AppConstants.paddingXLarge),
-
-            // Reading Streak
-            _buildStreakCard(context),
-            const SizedBox(height: AppConstants.paddingXLarge),
-
-            // Genre Challenge
-            _buildGenreChallengeCard(context),
-            const SizedBox(height: AppConstants.paddingXLarge),
-
-            // Notifications
-            _buildNotificationCard(context, ref),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildProgressCard(BuildContext context, bookshelfState) {
-    final completedBooks = bookshelfState.completed.length;
-    final totalBooks = bookshelfState.totalBooks;
-    final readingProgress = totalBooks > 0 ? (completedBooks / totalBooks) : 0.0;
-
+  Widget _buildProgressSection(BuildContext context, ReadingGoalsState goalsState) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(AppConstants.paddingLarge),
+        padding: const EdgeInsets.all(AppConstants.paddingMedium),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Current Progress',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+              'Your Progress',
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: AppConstants.paddingMedium),
+            _buildProgressCard(
+              context,
+              'Books Read',
+              '${goalsState.booksRead} / ${goalsState.booksPerYear}',
+              goalsState.booksProgress,
+              Icons.book,
+              Colors.blue,
+            ),
+            const SizedBox(height: AppConstants.paddingSmall),
+            _buildProgressCard(
+              context,
+              'Pages Read',
+              '${goalsState.pagesRead} / ${goalsState.pagesPerDay}',
+              goalsState.pagesProgress,
+              Icons.menu_book,
+              Colors.green,
+            ),
+            const SizedBox(height: AppConstants.paddingSmall),
+            _buildStreakCard(context, goalsState),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProgressCard(
+    BuildContext context,
+    String title,
+    String subtitle,
+    double progress,
+    IconData icon,
+    Color color,
+  ) {
+    return Card(
+      color: color.withValues(alpha: 0.1),
+      child: Padding(
+        padding: const EdgeInsets.all(AppConstants.paddingMedium),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
             Row(
               children: [
+                Icon(icon, color: color),
+                const SizedBox(width: AppConstants.paddingSmall),
                 Expanded(
-                  child: _buildProgressItem(
-                    context,
-                    'Books Read',
-                    completedBooks.toString(),
-                    Icons.check_circle,
-                    AppConstants.successColor,
-                  ),
-                ),
-                const SizedBox(width: AppConstants.paddingLarge),
-                Expanded(
-                  child: _buildProgressItem(
-                    context,
-                    'Total Books',
-                    totalBooks.toString(),
-                    Icons.library_books,
-                    AppConstants.primaryColor,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title,
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        subtitle,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: AppConstants.paddingMedium),
+            const SizedBox(height: AppConstants.paddingSmall),
             LinearProgressIndicator(
-              value: readingProgress,
-              backgroundColor: Colors.grey[300],
-              valueColor: AlwaysStoppedAnimation<Color>(AppConstants.primaryColor),
+              value: progress / 100,
+              backgroundColor: color.withValues(alpha: 0.3),
+              valueColor: AlwaysStoppedAnimation<Color>(color),
             ),
             const SizedBox(height: AppConstants.paddingSmall),
             Text(
-              '${(readingProgress * 100).toStringAsFixed(1)}% of your reading journey',
-              style: Theme.of(context).textTheme.bodySmall,
+              '${progress.toStringAsFixed(1)}%',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: color,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
@@ -161,232 +230,241 @@ class ReadingGoalsScreen extends HookConsumerWidget {
     );
   }
 
-  Widget _buildProgressItem(BuildContext context, String label, String value, IconData icon, Color color) {
-    return Column(
-      children: [
-        Icon(icon, color: color, size: 32),
-        const SizedBox(height: AppConstants.paddingSmall),
-        Text(
-          value,
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: color,
-          ),
+  Widget _buildStreakCard(BuildContext context, ReadingGoalsState goalsState) {
+    return Card(
+      color: Colors.orange.withValues(alpha: 0.1),
+      child: Padding(
+        padding: const EdgeInsets.all(AppConstants.paddingMedium),
+        child: Row(
+          children: [
+            const Icon(Icons.local_fire_department, color: Colors.orange),
+            const SizedBox(width: AppConstants.paddingSmall),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Current Streak',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    '${goalsState.currentStreak} days',
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: Colors.orange,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-        Text(
-          label,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: AppConstants.lightOnSurfaceVariant,
-          ),
-        ),
-      ],
+      ),
     );
   }
 
-  Widget _buildGoalCard(
+  Widget _buildRemindersSection(
     BuildContext context,
-    String title,
-    String description,
-    IconData icon,
-    TextEditingController controller,
-    String type,
+    ValueNotifier<bool> isReminderEnabled,
+    ValueNotifier<TimeOfDay> reminderTime,
+    ValueNotifier<List<int>> reminderDays,
+    ValueNotifier<String> reminderMessage,
+    ReadingGoalsNotifier goalsNotifier,
   ) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(AppConstants.paddingLarge),
+        padding: const EdgeInsets.all(AppConstants.paddingMedium),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Icon(icon, color: AppConstants.primaryColor),
-                const SizedBox(width: AppConstants.paddingSmall),
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: AppConstants.paddingSmall),
             Text(
-              description,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppConstants.lightOnSurfaceVariant,
+              'Reading Reminders',
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: AppConstants.paddingMedium),
-            TextField(
-              controller: controller,
-              keyboardType: TextInputType.number,
-              decoration: InputDecoration(
-                labelText: type == 'books' ? 'Number of books' : 'Pages per day',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(AppConstants.radiusMedium),
-                ),
-              ),
+            SwitchListTile(
+              title: const Text('Enable Daily Reminders'),
+              subtitle: const Text('Get notified to read daily'),
+              value: isReminderEnabled.value,
+              onChanged: (value) {
+                isReminderEnabled.value = value;
+                _saveReminderPreferences(
+                  goalsNotifier,
+                  isReminderEnabled.value,
+                  reminderTime.value,
+                  reminderDays.value,
+                  reminderMessage.value,
+                );
+              },
             ),
+            if (isReminderEnabled.value) ...[
+              const SizedBox(height: AppConstants.paddingSmall),
+              ListTile(
+                title: const Text('Reminder Time'),
+                subtitle: Text(reminderTime.value.format(context)),
+                trailing: const Icon(Icons.access_time),
+                onTap: () async {
+                  final time = await showTimePicker(
+                    context: context,
+                    initialTime: reminderTime.value,
+                  );
+                  if (time != null) {
+                    reminderTime.value = time;
+                    _saveReminderPreferences(
+                      goalsNotifier,
+                      isReminderEnabled.value,
+                      reminderTime.value,
+                      reminderDays.value,
+                      reminderMessage.value,
+                    );
+                  }
+                },
+              ),
+              const SizedBox(height: AppConstants.paddingSmall),
+              _buildDaysSelector(context, reminderDays, goalsNotifier, isReminderEnabled, reminderTime, reminderMessage),
+            ],
           ],
         ),
       ),
     );
   }
 
-  Widget _buildStreakCard(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(AppConstants.paddingLarge),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.local_fire_department, color: Colors.orange),
-                const SizedBox(width: AppConstants.paddingSmall),
-                Text(
-                  'Reading Streak',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: AppConstants.paddingMedium),
-            Row(
-              children: [
-                Expanded(
-                  child: _buildStreakItem(context, 'Current', '7 days', Colors.orange),
-                ),
-                const SizedBox(width: AppConstants.paddingLarge),
-                Expanded(
-                  child: _buildStreakItem(context, 'Best', '21 days', Colors.red),
-                ),
-              ],
-            ),
-            const SizedBox(height: AppConstants.paddingMedium),
-            LinearProgressIndicator(
-              value: 7 / 21, // Current streak / Best streak
-              backgroundColor: Colors.grey[300],
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildStreakItem(BuildContext context, String label, String value, Color color) {
+  Widget _buildDaysSelector(
+    BuildContext context,
+    ValueNotifier<List<int>> reminderDays,
+    ReadingGoalsNotifier goalsNotifier,
+    ValueNotifier<bool> isReminderEnabled,
+    ValueNotifier<TimeOfDay> reminderTime,
+    ValueNotifier<String> reminderMessage,
+  ) {
+    final days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          value,
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: color,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppConstants.paddingMedium),
+          child: Text(
+            'Reminder Days',
+            style: Theme.of(context).textTheme.titleMedium,
           ),
         ),
-        Text(
-          label,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: AppConstants.lightOnSurfaceVariant,
-          ),
+        const SizedBox(height: AppConstants.paddingSmall),
+        Wrap(
+          spacing: AppConstants.paddingSmall,
+          children: List.generate(7, (index) {
+            final dayNumber = index + 1;
+            final isSelected = reminderDays.value.contains(dayNumber);
+            
+            return FilterChip(
+              label: Text(days[index]),
+              selected: isSelected,
+              onSelected: (selected) {
+                final newDays = List<int>.from(reminderDays.value);
+                if (selected) {
+                  newDays.add(dayNumber);
+                } else {
+                  newDays.remove(dayNumber);
+                }
+                reminderDays.value = newDays;
+                _saveReminderPreferences(
+                  goalsNotifier,
+                  isReminderEnabled.value,
+                  reminderTime.value,
+                  reminderDays.value,
+                  reminderMessage.value,
+                );
+              },
+            );
+          }),
         ),
       ],
     );
   }
 
-  Widget _buildGenreChallengeCard(BuildContext context) {
-    final genres = ['Fiction', 'Non-Fiction', 'Science Fiction', 'Mystery', 'Biography'];
+  Widget _buildStatisticsSection(BuildContext context, ReadingGoalsState goalsState) {
+    final stats = goalsState.getReadingStatistics();
     
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(AppConstants.paddingLarge),
+        padding: const EdgeInsets.all(AppConstants.paddingMedium),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Icon(Icons.category, color: AppConstants.primaryColor),
-                const SizedBox(width: AppConstants.paddingSmall),
-                Text(
-                  'Genre Challenge',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: AppConstants.paddingMedium),
             Text(
-              'Read books from different genres to expand your horizons.',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppConstants.lightOnSurfaceVariant,
+              'Reading Statistics',
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: AppConstants.paddingMedium),
-            Wrap(
-              spacing: AppConstants.paddingSmall,
-              children: genres.map((genre) {
-                return Chip(
-                  label: Text(genre),
-                  backgroundColor: AppConstants.primaryColor.withValues(alpha: 0.1),
-                  labelStyle: TextStyle(color: AppConstants.primaryColor),
-                );
-              }).toList(),
-            ),
+            _buildStatItem(context, 'Current Streak', '${stats['currentStreak']} days', Icons.local_fire_department),
+            _buildStatItem(context, 'Books Read', '${stats['booksRead']}', Icons.book),
+            _buildStatItem(context, 'Pages Read', '${stats['pagesRead']}', Icons.menu_book),
+            if (stats['lastReadDate'] != null)
+              _buildStatItem(
+                context,
+                'Last Read',
+                _formatDate(stats['lastReadDate']),
+                Icons.calendar_today,
+              ),
+            if (stats['daysSinceLastRead'] != null)
+              _buildStatItem(
+                context,
+                'Days Since Last Read',
+                '${stats['daysSinceLastRead']} days',
+                Icons.schedule,
+              ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildNotificationCard(BuildContext context, WidgetRef ref) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(AppConstants.paddingLarge),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.notifications, color: AppConstants.primaryColor),
-                const SizedBox(width: AppConstants.paddingSmall),
-                Text(
-                  'Reading Reminders',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
+  Widget _buildStatItem(BuildContext context, String title, String value, IconData icon) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: AppConstants.paddingSmall),
+      child: Row(
+        children: [
+          Icon(icon, size: 20),
+          const SizedBox(width: AppConstants.paddingSmall),
+          Expanded(
+            child: Text(
+              title,
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
-            const SizedBox(height: AppConstants.paddingMedium),
-            Text(
-              'Get notified about your reading goals and progress.',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppConstants.lightOnSurfaceVariant,
-              ),
+          ),
+          Text(
+            value,
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              fontWeight: FontWeight.bold,
             ),
-            const SizedBox(height: AppConstants.paddingMedium),
-            SwitchListTile(
-              title: const Text('Daily Reading Reminders'),
-              subtitle: const Text('Get reminded to read every day'),
-              value: true, // TODO: Get from settings
-              onChanged: (value) {
-                // TODO: Save to settings
-              },
-            ),
-            SwitchListTile(
-              title: const Text('Goal Progress Updates'),
-              subtitle: const Text('Get notified when you reach milestones'),
-              value: true, // TODO: Get from settings
-              onChanged: (value) {
-                // TODO: Save to settings
-              },
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
+    );
+  }
+
+  String _formatDate(DateTime date) {
+    return '${date.day}/${date.month}/${date.year}';
+  }
+
+  void _saveReminderPreferences(
+    ReadingGoalsNotifier goalsNotifier,
+    bool isEnabled,
+    TimeOfDay time,
+    List<int> days,
+    String message,
+  ) {
+    goalsNotifier.setReminderPreferences(
+      isEnabled: isEnabled,
+      reminderTime: time,
+      reminderDays: days,
+      reminderMessage: message,
     );
   }
 } 

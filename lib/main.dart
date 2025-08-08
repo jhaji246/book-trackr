@@ -1,70 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'core/routing/app_router.dart';
 import 'core/services/hive_service.dart';
 import 'core/services/notification_service.dart';
-import 'core/routing/app_router.dart';
-import 'core/theme/app_theme.dart';
+import 'core/services/reading_reminders_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  bool firebaseInitialized = false;
-  
   // Initialize Firebase
   try {
     await Firebase.initializeApp();
-    firebaseInitialized = true;
-    print('Firebase initialized successfully');
   } catch (e) {
-    print('Firebase not configured: $e');
-    // Continue without Firebase for development
+    print('Firebase initialization failed: $e');
   }
 
   // Initialize Hive
-  try {
-    await HiveService.initialize();
-    print('Hive initialized successfully');
-  } catch (e) {
-    print('Hive initialization error: $e');
-    // Continue without Hive for now
-  }
+  await Hive.initFlutter();
+  await HiveService.initialize();
 
-  // Initialize Notifications (only if Firebase is available)
-  if (firebaseInitialized) {
-    try {
-      final notificationService = NotificationService();
-      await notificationService.initialize();
-      print('Notifications initialized successfully');
-    } catch (e) {
-      print('Notification initialization error: $e');
-    }
-  }
+  // Initialize Notifications
+  await NotificationService().initialize();
+  await ReadingRemindersService.initialize();
 
-  runApp(
-    ProviderScope(
-      child: BookTrackrApp(firebaseInitialized: firebaseInitialized),
-    ),
-  );
+  runApp(const ProviderScope(child: BookTrackrApp()));
 }
 
 class BookTrackrApp extends ConsumerWidget {
-  final bool firebaseInitialized;
-
-  const BookTrackrApp({
-    super.key,
-    required this.firebaseInitialized,
-  });
+  const BookTrackrApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final router = AppRouter.router;
+
     return MaterialApp.router(
       title: 'BookTrackr',
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system,
-      routerConfig: AppRouter.router,
-      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      routerConfig: router,
     );
   }
 }

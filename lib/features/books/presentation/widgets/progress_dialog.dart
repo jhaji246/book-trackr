@@ -4,73 +4,37 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../shared/models/book.dart';
 import '../../../../shared/providers/bookshelf_provider.dart';
+import '../../../../shared/providers/reading_goals_provider.dart';
 
 class ProgressDialog extends HookConsumerWidget {
   final UserBook userBook;
-  final Book book;
 
   const ProgressDialog({
     super.key,
     required this.userBook,
-    required this.book,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentPageController = useTextEditingController(
-      text: userBook.currentPage?.toString() ?? '',
+      text: userBook.currentPage.toString(),
     );
     final reviewController = useTextEditingController(
-      text: userBook.review ?? '',
+      text: userBook.review,
     );
-    final rating = useState(userBook.rating ?? 0.0);
 
-    return Dialog(
-      child: Container(
-        constraints: const BoxConstraints(maxWidth: 400),
-        padding: const EdgeInsets.all(AppConstants.paddingLarge),
+    final selectedRating = useState(userBook.rating);
+
+    return AlertDialog(
+      title: Text('Update Progress - ${userBook.book.title}'),
+      content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    'Update Progress',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                IconButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  icon: const Icon(Icons.close),
-                ),
-              ],
-            ),
-            const SizedBox(height: AppConstants.paddingMedium),
-
-            // Book Info
             Text(
-              book.title,
+              'Current Progress',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              'by ${book.author}',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppConstants.lightOnSurfaceVariant,
-              ),
-            ),
-            const SizedBox(height: AppConstants.paddingLarge),
-
-            // Current Page Input
-            Text(
-              'Current Page',
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -79,31 +43,18 @@ class ProgressDialog extends HookConsumerWidget {
               controller: currentPageController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
+                labelText: 'Current Page',
                 hintText: 'Enter current page',
-                suffixText: book.pageCount != null ? 'of ${book.pageCount}' : null,
+                prefixIcon: const Icon(Icons.book),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(AppConstants.radiusMedium),
+                ),
               ),
             ),
             const SizedBox(height: AppConstants.paddingMedium),
-
-            // Progress Bar
-            if (book.pageCount != null) ...[
-              LinearProgressIndicator(
-                value: (int.tryParse(currentPageController.text) ?? 0) / book.pageCount!,
-                backgroundColor: Colors.grey[300],
-                valueColor: AlwaysStoppedAnimation<Color>(AppConstants.primaryColor),
-              ),
-              const SizedBox(height: AppConstants.paddingSmall),
-              Text(
-                '${((int.tryParse(currentPageController.text) ?? 0) / book.pageCount! * 100).toStringAsFixed(1)}% complete',
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-              const SizedBox(height: AppConstants.paddingMedium),
-            ],
-
-            // Rating
             Text(
               'Your Rating',
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -112,21 +63,21 @@ class ProgressDialog extends HookConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(5, (index) {
                 return IconButton(
-                  onPressed: () => rating.value = index + 1.0,
+                  onPressed: () {
+                    selectedRating.value = index + 1;
+                  },
                   icon: Icon(
-                    index < rating.value ? Icons.star : Icons.star_border,
-                    size: 32,
-                    color: AppConstants.accentColor,
+                    index < selectedRating.value ? Icons.star : Icons.star_border,
+                    color: Colors.amber,
+                    size: 30,
                   ),
                 );
               }),
             ),
             const SizedBox(height: AppConstants.paddingMedium),
-
-            // Review
             Text(
-              'Your Review (Optional)',
-              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+              'Your Review',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -134,60 +85,69 @@ class ProgressDialog extends HookConsumerWidget {
             TextField(
               controller: reviewController,
               maxLines: 3,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
+                labelText: 'Review (optional)',
                 hintText: 'Share your thoughts about this book...',
-                border: OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.rate_review),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(AppConstants.radiusMedium),
+                ),
               ),
-            ),
-            const SizedBox(height: AppConstants.paddingLarge),
-
-            // Action Buttons
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Cancel'),
-                  ),
-                ),
-                const SizedBox(width: AppConstants.paddingMedium),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      final currentPage = int.tryParse(currentPageController.text);
-                      if (currentPage != null) {
-                        await ref.read(bookshelfProvider.notifier).updateBookProgress(
-                          userBook.id,
-                          currentPage,
-                        );
-                      }
-                      
-                      if (rating.value > 0) {
-                        await ref.read(bookshelfProvider.notifier).rateBook(
-                          userBook.id,
-                          rating.value,
-                        );
-                      }
-                      
-                      if (reviewController.text.isNotEmpty) {
-                        await ref.read(bookshelfProvider.notifier).addBookReview(
-                          userBook.id,
-                          reviewController.text,
-                        );
-                      }
-                      
-                      if (context.mounted) {
-                        Navigator.of(context).pop();
-                      }
-                    },
-                    child: const Text('Save Progress'),
-                  ),
-                ),
-              ],
             ),
           ],
         ),
       ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Cancel'),
+        ),
+        FilledButton(
+          onPressed: () async {
+            final currentPage = int.tryParse(currentPageController.text) ?? 0;
+            final rating = selectedRating.value;
+            final review = reviewController.text;
+
+            // Update bookshelf
+            await ref.read(bookshelfProvider.notifier).updateReadingProgress(
+              userBook.book.id,
+              currentPage,
+            );
+
+            if (rating > 0) {
+              await ref.read(bookshelfProvider.notifier).rateBook(
+                userBook.book.id,
+                rating,
+              );
+            }
+
+            if (review.isNotEmpty) {
+              await ref.read(bookshelfProvider.notifier).reviewBook(
+                userBook.book.id,
+                review,
+              );
+            }
+
+            // Record reading activity for goals
+            final previousPages = userBook.currentPage;
+            final pagesRead = currentPage - previousPages;
+            if (pagesRead > 0) {
+              await ref.read(readingGoalsProvider.notifier).recordReadingActivity(
+                pagesRead: pagesRead,
+                bookCompleted: false,
+              );
+            }
+
+            if (context.mounted) {
+              Navigator.of(context).pop();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Progress updated!')),
+              );
+            }
+          },
+          child: const Text('Save'),
+        ),
+      ],
     );
   }
 } 

@@ -73,6 +73,8 @@ _$VolumeInfoImpl _$$VolumeInfoImplFromJson(Map<String, dynamic> json) =>
       previewLink: json['previewLink'] as String?,
       infoLink: json['infoLink'] as String?,
       canonicalVolumeLink: json['canonicalVolumeLink'] as String?,
+      averageRating: (json['averageRating'] as num?)?.toDouble(),
+      ratingsCount: (json['ratingsCount'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$VolumeInfoImplToJson(_$VolumeInfoImpl instance) =>
@@ -96,6 +98,8 @@ Map<String, dynamic> _$$VolumeInfoImplToJson(_$VolumeInfoImpl instance) =>
       'previewLink': instance.previewLink,
       'infoLink': instance.infoLink,
       'canonicalVolumeLink': instance.canonicalVolumeLink,
+      'averageRating': instance.averageRating,
+      'ratingsCount': instance.ratingsCount,
     };
 
 _$IndustryIdentifierImpl _$$IndustryIdentifierImplFromJson(

@@ -483,6 +483,8 @@ mixin _$VolumeInfo {
   String? get previewLink => throw _privateConstructorUsedError;
   String? get infoLink => throw _privateConstructorUsedError;
   String? get canonicalVolumeLink => throw _privateConstructorUsedError;
+  double? get averageRating => throw _privateConstructorUsedError;
+  int? get ratingsCount => throw _privateConstructorUsedError;
 
   /// Serializes this VolumeInfo to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -519,7 +521,9 @@ abstract class $VolumeInfoCopyWith<$Res> {
       String? language,
       String? previewLink,
       String? infoLink,
-      String? canonicalVolumeLink});
+      String? canonicalVolumeLink,
+      double? averageRating,
+      int? ratingsCount});
 
   $ReadingModesCopyWith<$Res>? get readingModes;
   $ImageLinksCopyWith<$Res>? get imageLinks;
@@ -559,6 +563,8 @@ class _$VolumeInfoCopyWithImpl<$Res, $Val extends VolumeInfo>
     Object? previewLink = freezed,
     Object? infoLink = freezed,
     Object? canonicalVolumeLink = freezed,
+    Object? averageRating = freezed,
+    Object? ratingsCount = freezed,
   }) {
     return _then(_value.copyWith(
       title: null == title
@@ -637,6 +643,14 @@ class _$VolumeInfoCopyWithImpl<$Res, $Val extends VolumeInfo>
           ? _value.canonicalVolumeLink
           : canonicalVolumeLink // ignore: cast_nullable_to_non_nullable
               as String?,
+      averageRating: freezed == averageRating
+          ? _value.averageRating
+          : averageRating // ignore: cast_nullable_to_non_nullable
+              as double?,
+      ratingsCount: freezed == ratingsCount
+          ? _value.ratingsCount
+          : ratingsCount // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 
@@ -696,7 +710,9 @@ abstract class _$$VolumeInfoImplCopyWith<$Res>
       String? language,
       String? previewLink,
       String? infoLink,
-      String? canonicalVolumeLink});
+      String? canonicalVolumeLink,
+      double? averageRating,
+      int? ratingsCount});
 
   @override
   $ReadingModesCopyWith<$Res>? get readingModes;
@@ -736,6 +752,8 @@ class __$$VolumeInfoImplCopyWithImpl<$Res>
     Object? previewLink = freezed,
     Object? infoLink = freezed,
     Object? canonicalVolumeLink = freezed,
+    Object? averageRating = freezed,
+    Object? ratingsCount = freezed,
   }) {
     return _then(_$VolumeInfoImpl(
       title: null == title
@@ -814,6 +832,14 @@ class __$$VolumeInfoImplCopyWithImpl<$Res>
           ? _value.canonicalVolumeLink
           : canonicalVolumeLink // ignore: cast_nullable_to_non_nullable
               as String?,
+      averageRating: freezed == averageRating
+          ? _value.averageRating
+          : averageRating // ignore: cast_nullable_to_non_nullable
+              as double?,
+      ratingsCount: freezed == ratingsCount
+          ? _value.ratingsCount
+          : ratingsCount // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -840,7 +866,9 @@ class _$VolumeInfoImpl implements _VolumeInfo {
       this.language,
       this.previewLink,
       this.infoLink,
-      this.canonicalVolumeLink})
+      this.canonicalVolumeLink,
+      this.averageRating,
+      this.ratingsCount})
       : _authors = authors,
         _industryIdentifiers = industryIdentifiers,
         _categories = categories;
@@ -911,10 +939,14 @@ class _$VolumeInfoImpl implements _VolumeInfo {
   final String? infoLink;
   @override
   final String? canonicalVolumeLink;
+  @override
+  final double? averageRating;
+  @override
+  final int? ratingsCount;
 
   @override
   String toString() {
-    return 'VolumeInfo(title: $title, subtitle: $subtitle, authors: $authors, publisher: $publisher, publishedDate: $publishedDate, description: $description, industryIdentifiers: $industryIdentifiers, readingModes: $readingModes, pageCount: $pageCount, printType: $printType, categories: $categories, maturityRating: $maturityRating, allowAnonLogging: $allowAnonLogging, contentVersion: $contentVersion, imageLinks: $imageLinks, language: $language, previewLink: $previewLink, infoLink: $infoLink, canonicalVolumeLink: $canonicalVolumeLink)';
+    return 'VolumeInfo(title: $title, subtitle: $subtitle, authors: $authors, publisher: $publisher, publishedDate: $publishedDate, description: $description, industryIdentifiers: $industryIdentifiers, readingModes: $readingModes, pageCount: $pageCount, printType: $printType, categories: $categories, maturityRating: $maturityRating, allowAnonLogging: $allowAnonLogging, contentVersion: $contentVersion, imageLinks: $imageLinks, language: $language, previewLink: $previewLink, infoLink: $infoLink, canonicalVolumeLink: $canonicalVolumeLink, averageRating: $averageRating, ratingsCount: $ratingsCount)';
   }
 
   @override
@@ -957,7 +989,11 @@ class _$VolumeInfoImpl implements _VolumeInfo {
             (identical(other.infoLink, infoLink) ||
                 other.infoLink == infoLink) &&
             (identical(other.canonicalVolumeLink, canonicalVolumeLink) ||
-                other.canonicalVolumeLink == canonicalVolumeLink));
+                other.canonicalVolumeLink == canonicalVolumeLink) &&
+            (identical(other.averageRating, averageRating) ||
+                other.averageRating == averageRating) &&
+            (identical(other.ratingsCount, ratingsCount) ||
+                other.ratingsCount == ratingsCount));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -982,7 +1018,9 @@ class _$VolumeInfoImpl implements _VolumeInfo {
         language,
         previewLink,
         infoLink,
-        canonicalVolumeLink
+        canonicalVolumeLink,
+        averageRating,
+        ratingsCount
       ]);
 
   /// Create a copy of VolumeInfo
@@ -1021,7 +1059,9 @@ abstract class _VolumeInfo implements VolumeInfo {
       final String? language,
       final String? previewLink,
       final String? infoLink,
-      final String? canonicalVolumeLink}) = _$VolumeInfoImpl;
+      final String? canonicalVolumeLink,
+      final double? averageRating,
+      final int? ratingsCount}) = _$VolumeInfoImpl;
 
   factory _VolumeInfo.fromJson(Map<String, dynamic> json) =
       _$VolumeInfoImpl.fromJson;
@@ -1064,6 +1104,10 @@ abstract class _VolumeInfo implements VolumeInfo {
   String? get infoLink;
   @override
   String? get canonicalVolumeLink;
+  @override
+  double? get averageRating;
+  @override
+  int? get ratingsCount;
 
   /// Create a copy of VolumeInfo
   /// with the given fields replaced by the non-null parameter values.
