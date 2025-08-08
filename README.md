@@ -1,84 +1,99 @@
-# BookTrackr 📚
+# 📚 BookTrackr
 
-A Letterboxd-style book tracking Flutter app for iOS and Android, inspired by [kaguya.io](https://kaguya.io).
+A Letterboxd-style book tracking app built with Flutter, Firebase, and Riverpod. Track your reading journey with a modern, offline-first architecture.
 
-## Features
+![BookTrackr App](https://img.shields.io/badge/Flutter-3.19.0-blue?style=for-the-badge&logo=flutter)
+![Firebase](https://img.shields.io/badge/Firebase-Cloud%20Platform-orange?style=for-the-badge&logo=firebase)
+![Riverpod](https://img.shields.io/badge/Riverpod-State%20Management-purple?style=for-the-badge)
 
-### ✅ Implemented (Phase 1)
-- **Authentication Flow**: Email/password and Google sign-in (Firebase Auth)
-- **Book Browsing**: Browse and search through a curated collection of books
-- **Book Details**: View comprehensive book information with ratings and descriptions
-- **Modern UI**: Clean, responsive design with Material 3 components
-- **Theme Support**: Light and dark mode with system preference detection
-- **Navigation**: Bottom navigation with Home, Library, and Profile sections
-- **Offline Storage**: Hive database for local data persistence
-- **State Management**: Riverpod for reactive state management
+## ✨ Features
 
-### 🚧 Planned Features (Future Phases)
-- **Bookshelf Management**: Want to Read, Reading, Completed, DNF statuses
-- **Reading Progress**: Track current page and reading progress
-- **Reviews & Ratings**: Add personal ratings and reviews
-- **Push Notifications**: Firebase Cloud Messaging for book updates
-- **Google Books API**: Real book data integration
-- **Social Features**: Share reading lists and recommendations
-- **Reading Goals**: Set and track reading goals
-- **Analytics**: Reading statistics and insights
+### 🔐 Authentication
+- **Email/Password Sign-in** - Secure user authentication
+- **Google Sign-in** - One-tap authentication
+- **Password Reset** - Forgot password functionality
+- **Session Management** - Remember user sessions
 
-## Tech Stack
+### 📚 Book Management
+- **Google Books API Integration** - Real book data and covers
+- **Reading Progress Tracking** - Track current page and completion
+- **Bookshelf Organization** - Want to Read, Currently Reading, Completed
+- **Book Ratings & Reviews** - Rate books (1-5 stars) and add reviews
+- **Search & Browse** - Find books by title, author, or genre
 
-- **Framework**: Flutter 3.8+
-- **State Management**: Riverpod
-- **Authentication**: Firebase Auth
-- **Local Storage**: Hive
-- **Routing**: GoRouter
-- **Code Generation**: Freezed, JSON Serializable, Riverpod Generator
-- **UI Components**: Flutter Hooks, Material 3
-- **Image Loading**: Cached Network Image
+### 📱 User Experience
+- **Offline-First Design** - Works without internet using Hive
+- **Modern UI/UX** - Material Design 3 with dark/light themes
+- **Responsive Design** - Works on all screen sizes
+- **Smooth Navigation** - Intuitive app flow
 
-## Project Structure
+### 🎯 Reading Goals
+- **Reading Statistics** - Track books read, average rating
+- **Reading Goals** - Set yearly book targets
+- **Reading Streaks** - Maintain reading consistency
+- **Genre Challenges** - Explore different book genres
 
-```
-lib/
-├── core/
-│   ├── constants/          # App constants and configuration
-│   ├── data/              # Dummy data and data sources
-│   ├── routing/           # Navigation configuration
-│   ├── services/          # Core services (Hive, Firebase)
-│   └── theme/             # App theming
-├── features/
-│   ├── auth/              # Authentication feature
-│   │   ├── data/          # Auth data layer
-│   │   ├── domain/        # Auth business logic
-│   │   └── presentation/  # Auth UI screens
-│   ├── books/             # Books feature
-│   │   ├── data/          # Books data layer
-│   │   ├── domain/        # Books business logic
-│   │   └── presentation/  # Books UI screens and widgets
-│   └── profile/           # Profile feature
-│       ├── data/          # Profile data layer
-│       ├── domain/        # Profile business logic
-│       └── presentation/  # Profile UI screens
-└── shared/
-    ├── models/            # Shared data models
-    ├── providers/         # Shared Riverpod providers
-    └── widgets/           # Shared UI components
-```
+### 🔔 Notifications
+- **Reading Reminders** - Get notified to continue reading
+- **Goal Progress** - Celebrate reading milestones
+- **New Book Alerts** - Discover new books in your genres
 
-## Getting Started
+## 🛠️ Tech Stack
+
+### Frontend
+- **Flutter 3.19.0** - Cross-platform mobile development
+- **Dart** - Programming language
+- **Material Design 3** - Modern UI components
+- **Flutter Hooks** - React-inspired hooks for Flutter
+
+### State Management
+- **Riverpod** - Modern state management solution
+- **Riverpod Generator** - Code generation for providers
+- **Hooks Riverpod** - Integration with Flutter Hooks
+
+### Backend & Services
+- **Firebase Authentication** - User authentication
+- **Cloud Firestore** - NoSQL database
+- **Firebase Cloud Messaging** - Push notifications
+- **Google Books API** - Book data and covers
+
+### Local Storage
+- **Hive** - Fast, lightweight NoSQL database
+- **Hive Flutter** - Flutter integration
+- **Offline-First** - Works without internet
+
+### Code Generation
+- **Freezed** - Immutable data classes
+- **JSON Serializable** - JSON serialization
+- **Build Runner** - Code generation tool
+
+## 📱 Screenshots
+
+### Authentication Flow
+- Login screen with email/password and Google Sign-in
+- Signup screen with form validation
+- Password reset functionality
+
+### Main App Features
+- Home screen with featured books and search
+- Book detail screen with ratings and reviews
+- Library screen with reading progress
+- Profile screen with statistics and settings
+
+## 🚀 Getting Started
 
 ### Prerequisites
-
-- Flutter SDK 3.8.0 or higher
-- Dart SDK 3.8.0 or higher
+- Flutter SDK (3.19.0 or higher)
+- Dart SDK
 - Android Studio / VS Code
-- Firebase project (for authentication)
+- Firebase project setup
 
 ### Installation
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd book_tracker
+   git clone https://github.com/jhaji246/book-trackr.git
+   cd book-trackr
    ```
 
 2. **Install dependencies**
@@ -86,64 +101,118 @@ lib/
    flutter pub get
    ```
 
-3. **Generate code files**
-   ```bash
-   flutter packages pub run build_runner build --delete-conflicting-outputs
-   ```
-
-4. **Firebase Setup** (Optional for now)
+3. **Setup Firebase**
    - Create a Firebase project
-   - Add your Android/iOS apps
-   - Download and add the configuration files
-   - Enable Authentication (Email/Password and Google Sign-in)
+   - Add Android/iOS apps
+   - Download `google-services.json` and `GoogleService-Info.plist`
+   - Enable Authentication, Firestore, and Cloud Messaging
 
-5. **Run the app**
+4. **Run the app**
    ```bash
    flutter run
    ```
 
-## Development Phases
+### Firebase Configuration
 
-### Phase 1: Foundation ✅
-- [x] Project setup and dependencies
-- [x] Authentication with Firebase
-- [x] Basic UI components and theming
-- [x] Navigation and routing
-- [x] Book browsing with dummy data
-- [x] Local storage with Hive
+1. **Authentication**
+   - Enable Email/Password authentication
+   - Enable Google Sign-in
+   - Configure OAuth consent screen
 
-### Phase 2: Core Features (Next)
-- [ ] Bookshelf management (Want to Read, Reading, Completed)
-- [ ] Book detail interactions (add to shelf, rate, review)
-- [ ] Reading progress tracking
-- [ ] Offline-first data sync
+2. **Firestore Database**
+   - Create database in test mode
+   - Set up security rules
 
-### Phase 3: Advanced Features
-- [ ] Google Books API integration
-- [ ] Push notifications
-- [ ] Reading goals and analytics
-- [ ] Social features
+3. **Cloud Messaging**
+   - Enable Firebase Cloud Messaging
+   - Configure notification settings
 
-### Phase 4: Polish & Performance
-- [ ] Performance optimizations
-- [ ] Accessibility improvements
-- [ ] Comprehensive testing
-- [ ] App store preparation
+## 📁 Project Structure
 
-## Contributing
+```
+lib/
+├── core/
+│   ├── constants/          # App constants
+│   ├── routing/           # Navigation setup
+│   ├── services/          # Core services
+│   ├── theme/            # App theming
+│   └── data/             # Dummy data
+├── features/
+│   ├── auth/             # Authentication
+│   ├── books/            # Book management
+│   ├── profile/          # User profile
+│   └── goals/            # Reading goals
+└── shared/
+    ├── models/           # Data models
+    ├── providers/        # State management
+    └── widgets/          # Shared components
+```
+
+## 🔧 Development
+
+### Code Generation
+```bash
+# Generate code for models, providers, etc.
+flutter packages pub run build_runner build
+
+# Watch for changes
+flutter packages pub run build_runner watch
+```
+
+### Testing
+```bash
+# Run unit tests
+flutter test
+
+# Run integration tests
+flutter test integration_test/
+```
+
+## 📊 Features Status
+
+| Feature | Status | Description |
+|---------|--------|-------------|
+| Authentication | ✅ Complete | Email/password + Google Sign-in |
+| Book Browsing | ✅ Complete | Google Books API integration |
+| Reading Progress | ✅ Complete | Track current page and status |
+| Offline Support | ✅ Complete | Hive local storage |
+| Push Notifications | ✅ Complete | Firebase Cloud Messaging |
+| Reading Goals | ✅ Complete | Goal setting and tracking |
+| Dark/Light Theme | ✅ Complete | Material Design 3 theming |
+
+## 🤝 Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## License
+## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Acknowledgments
+## 👨‍💻 Author
 
-- Inspired by [kaguya.io](https://kaguya.io) and Letterboxd
-- Built with Flutter and Firebase
-- Icons from Material Design
+**Abhilash Jha** - [GitHub Profile](https://github.com/jhaji246)
+
+- Mobile App Developer
+- Native Android and Flutter Experience
+- Software Testing
+
+## 🙏 Acknowledgments
+
+- [Flutter Team](https://flutter.dev/) for the amazing framework
+- [Firebase](https://firebase.google.com/) for backend services
+- [Google Books API](https://developers.google.com/books) for book data
+- [Riverpod](https://riverpod.dev/) for state management
+- [Material Design](https://material.io/) for design guidelines
+
+## 📞 Contact
+
+- **GitHub**: [@jhaji246](https://github.com/jhaji246)
+- **Location**: Lucknow, India
+
+---
+
+⭐ **Star this repository if you found it helpful!**
