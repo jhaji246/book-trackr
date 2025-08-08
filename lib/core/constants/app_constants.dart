@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class AppConstants {
   // Colors
-  static const Color primaryColor = Color(0xFF6366F1);
+  static const Color primaryColor = Color(0xFF6750A4);
   static const Color secondaryColor = Color(0xFF8B5CF6);
   static const Color accentColor = Color(0xFFF59E0B);
   static const Color errorColor = Color(0xFFEF4444);
@@ -10,9 +10,9 @@ class AppConstants {
   
   // Light Theme Colors
   static const Color lightBackground = Color(0xFFFAFAFA);
-  static const Color lightSurface = Color(0xFFFFFFFF);
-  static const Color lightOnSurface = Color(0xFF1F2937);
-  static const Color lightOnSurfaceVariant = Color(0xFF6B7280);
+  static const Color lightSurface = Color(0xFFFFFBFE);
+  static const Color lightOnSurface = Color(0xFF1C1B1F);
+  static const Color lightOnSurfaceVariant = Color(0xFF49454F);
   
   // Dark Theme Colors
   static const Color darkBackground = Color(0xFF0F0F0F);
@@ -47,4 +47,32 @@ class AppConstants {
   static const String userBooksBoxName = 'user_books';
   static const String usersBoxName = 'users';
   static const String settingsBoxName = 'settings';
+
+  // Categories
+  static const List<Map<String, dynamic>> categories = [
+    {
+      'name': 'Fiction',
+      'icon': Icons.book,
+      'color': Colors.blue,
+      'description': 'Stories and novels'
+    },
+    {
+      'name': 'Non-Fiction',
+      'icon': Icons.school,
+      'color': Colors.green,
+      'description': 'Knowledge and learning'
+    },
+    {
+      'name': 'Science Fiction',
+      'icon': Icons.rocket_launch,
+      'color': Colors.purple,
+      'description': 'Future and space'
+    },
+    {
+      'name': 'Mystery',
+      'icon': Icons.search,
+      'color': Colors.orange,
+      'description': 'Thrillers and suspense'
+    },
+  ];
 } 

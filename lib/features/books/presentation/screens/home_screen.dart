@@ -15,6 +15,8 @@ class HomeScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isLoading = ref.watch(booksProvider.select((state) => state.isLoading));
+    final error = ref.watch(booksProvider.select((state) => state.error));
     final booksState = ref.watch(booksProvider);
     final searchController = useTextEditingController();
 
@@ -60,10 +62,10 @@ class HomeScreen extends HookConsumerWidget {
         children: [
           _buildSearchBar(context, searchController, ref),
           Expanded(
-            child: booksState.isLoading
+            child: isLoading
                 ? _buildLoadingState(context)
-                : booksState.error != null
-                    ? _buildErrorState(context, booksState.error!, ref)
+                : error != null
+                    ? _buildErrorState(context, error, ref)
                     : _buildContent(context, ref, booksState),
           ),
         ],
@@ -291,13 +293,6 @@ class HomeScreen extends HookConsumerWidget {
   }
 
   Widget _buildCategoryGrid(BuildContext context) {
-    final categories = [
-      {'name': 'Fiction', 'icon': Icons.book, 'color': Colors.blue, 'description': 'Stories and novels'},
-      {'name': 'Non-Fiction', 'icon': Icons.school, 'color': Colors.green, 'description': 'Knowledge and learning'},
-      {'name': 'Science Fiction', 'icon': Icons.rocket_launch, 'color': Colors.purple, 'description': 'Future and space'},
-      {'name': 'Mystery', 'icon': Icons.search, 'color': Colors.orange, 'description': 'Thrillers and suspense'},
-    ];
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: GridView.builder(
@@ -309,9 +304,9 @@ class HomeScreen extends HookConsumerWidget {
           mainAxisSpacing: 16,
           childAspectRatio: 1.4,
         ),
-        itemCount: categories.length,
+        itemCount: AppConstants.categories.length,
         itemBuilder: (context, index) {
-          final category = categories[index];
+          final category = AppConstants.categories[index];
           return Card(
             elevation: 2,
             shape: RoundedRectangleBorder(
