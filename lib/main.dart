@@ -6,6 +6,7 @@ import 'core/routing/app_router.dart';
 import 'core/services/hive_service.dart';
 import 'core/services/notification_service.dart';
 import 'core/services/reading_reminders_service.dart';
+import 'core/services/cache_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +25,9 @@ void main() async {
   // Initialize Notifications
   await NotificationService().initialize();
   await ReadingRemindersService.initialize();
+
+  // Initialize Cache Service
+  await CacheService.initialize();
 
   runApp(const ProviderScope(child: BookTrackrApp()));
 }
