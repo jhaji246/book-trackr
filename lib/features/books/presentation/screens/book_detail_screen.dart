@@ -48,6 +48,10 @@ class BookDetailScreen extends HookConsumerWidget {
         title: Text(book.title),
         backgroundColor: AppConstants.lightSurface,
         foregroundColor: AppConstants.lightOnSurface,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppConstants.paddingLarge),

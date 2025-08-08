@@ -15,6 +15,10 @@ class SearchScreen extends ConsumerWidget {
         title: const Text('Search Books'),
         backgroundColor: AppConstants.lightSurface,
         foregroundColor: AppConstants.lightOnSurface,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
       body: Column(
         children: [

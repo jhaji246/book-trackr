@@ -12,12 +12,14 @@ class AuthState {
   final firebase_auth.User? user;
   final String? error;
   final bool isAuthenticated;
+  final bool isInitialized;
 
   const AuthState({
     this.isLoading = false,
     this.user,
     this.error,
     this.isAuthenticated = false,
+    this.isInitialized = false,
   });
 
   AuthState copyWith({
@@ -25,12 +27,14 @@ class AuthState {
     firebase_auth.User? user,
     String? error,
     bool? isAuthenticated,
+    bool? isInitialized,
   }) {
     return AuthState(
       isLoading: isLoading ?? this.isLoading,
       user: user ?? this.user,
       error: error ?? this.error,
       isAuthenticated: isAuthenticated ?? this.isAuthenticated,
+      isInitialized: isInitialized ?? this.isInitialized,
     );
   }
 }
@@ -44,6 +48,19 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   void _init() {
+    // Check if user is already signed in
+    final currentUser = _auth.currentUser;
+    if (currentUser != null) {
+      state = state.copyWith(
+        user: currentUser,
+        isAuthenticated: true,
+        isInitialized: true,
+      );
+    } else {
+      state = state.copyWith(isInitialized: true);
+    }
+
+    // Listen to auth state changes
     _auth.authStateChanges().listen((firebase_auth.User? user) {
       if (user != null) {
         state = state.copyWith(
@@ -60,6 +77,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
       }
     });
   }
+
+  // Check if user is already signed in
+  bool get isUserSignedIn => _auth.currentUser != null;
 
   Future<void> signInWithEmail(String email, String password) async {
     try {

@@ -15,29 +15,59 @@ class HomeScreen extends HookConsumerWidget {
     final booksState = ref.watch(booksProvider);
     final searchController = useTextEditingController();
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('BookTrackr'),
-        backgroundColor: AppConstants.lightSurface,
-        foregroundColor: AppConstants.lightOnSurface,
-        actions: [
-          IconButton(
-            onPressed: () => context.go('/profile'),
-            icon: const Icon(Icons.person),
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          _buildSearchBar(context, searchController, ref),
-          Expanded(
-            child: booksState.isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : booksState.error != null
-                    ? _buildErrorState(context, booksState.error!, ref)
-                    : _buildContent(context, booksState, ref),
-          ),
-        ],
+    return WillPopScope(
+      onWillPop: () async {
+        // Handle back button press
+        if (Navigator.of(context).canPop()) {
+          Navigator.of(context).pop();
+        } else {
+          // If we're at the root, show exit confirmation
+          final shouldExit = await showDialog<bool>(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Exit App'),
+              content: const Text('Are you sure you want to exit BookTrackr?'),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(false),
+                  child: const Text('Cancel'),
+                ),
+                FilledButton(
+                  onPressed: () => Navigator.of(context).pop(true),
+                  child: const Text('Exit'),
+                ),
+              ],
+            ),
+          );
+          return shouldExit ?? false;
+        }
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('BookTrackr'),
+          backgroundColor: AppConstants.lightSurface,
+          foregroundColor: AppConstants.lightOnSurface,
+          automaticallyImplyLeading: false, // Don't show back button on home
+          actions: [
+            IconButton(
+              onPressed: () => context.go('/profile'),
+              icon: const Icon(Icons.person),
+            ),
+          ],
+        ),
+        body: Column(
+          children: [
+            _buildSearchBar(context, searchController, ref),
+            Expanded(
+              child: booksState.isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : booksState.error != null
+                      ? _buildErrorState(context, booksState.error!, ref)
+                      : _buildContent(context, booksState, ref),
+            ),
+          ],
+        ),
       ),
     );
   }
