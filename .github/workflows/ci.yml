@@ -1,0 +1,258 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  # Code Quality and Analysis
+  analyze:
+    name: Analyze Code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0'
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Analyze code
+        run: flutter analyze
+
+      - name: Check code formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+  # Unit Tests
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0'
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run unit tests
+        run: flutter test
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: test-results/
+
+  # Integration Tests
+  integration_test:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0'
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run integration tests
+        run: flutter test integration_test/
+
+  # Build Android APK
+  build_android:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+    needs: [analyze, test]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0'
+          channel: 'stable'
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build APK
+        run: flutter build apk --release
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release
+          path: build/app/outputs/flutter-apk/app-release.apk
+
+  # Build iOS (macOS only)
+  build_ios:
+    name: Build iOS
+    runs-on: macos-latest
+    needs: [analyze, test]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0'
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build iOS
+        run: flutter build ios --release --no-codesign
+
+      - name: Upload iOS build
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-build
+          path: build/ios/
+
+  # Security Analysis
+  security:
+    name: Security Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run security scan
+        uses: github/codeql-action/init@v3
+        with:
+          languages: dart
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+
+  # Performance Testing
+  performance:
+    name: Performance Testing
+    runs-on: ubuntu-latest
+    needs: [analyze, test]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0'
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run performance tests
+        run: flutter test test/performance/
+
+  # Documentation Generation
+  docs:
+    name: Generate Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0'
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Generate documentation
+        run: dart doc
+
+      - name: Upload documentation
+        uses: actions/upload-artifact@v4
+        with:
+          name: documentation
+          path: doc/
+
+  # Deploy to Firebase (on main branch)
+  deploy:
+    name: Deploy to Firebase
+    runs-on: ubuntu-latest
+    needs: [analyze, test, build_android, build_ios]
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0'
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
+          projectId: booktrackr-app
+          channelId: live
+
+  # Notify on Success/Failure
+  notify:
+    name: Notify Team
+    runs-on: ubuntu-latest
+    needs: [analyze, test, build_android, build_ios, deploy]
+    if: always()
+    steps:
+      - name: Notify on Success
+        if: success()
+        run: |
+          echo "✅ All checks passed!"
+          # Add notification logic here (Slack, email, etc.)
+
+      - name: Notify on Failure
+        if: failure()
+        run: |
+          echo "❌ Some checks failed!"
+          # Add notification logic here (Slack, email, etc.)
+
+# Cache dependencies for faster builds
+env:
+  FLUTTER_VERSION: "3.19.0"
+
+# Cache configuration
+cache:
+  paths:
+    - ~/.pub-cache
+    - .dart_tool/
+    - build/ 

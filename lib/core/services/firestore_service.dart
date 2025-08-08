@@ -2,19 +2,63 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import '../../shared/models/book.dart';
 
+/// Service class for handling all Firebase Firestore operations.
+/// 
+/// This service provides a centralized interface for all database operations
+/// including user profiles, bookshelf management, reading progress tracking,
+/// and data synchronization between local and cloud storage.
+/// 
+/// The service uses Firebase Firestore as the backend database and provides
+/// methods for CRUD operations on user data and book collections.
+/// 
+/// Example usage:
+/// ```dart
+/// // Create a user profile
+/// await FirestoreService.createUserProfile(
+///   userId: 'user123',
+///   displayName: 'John Doe',
+///   email: 'john@example.com',
+/// );
+/// 
+/// // Add a book to user's shelf
+/// await FirestoreService.addBookToShelf(
+///   userId: 'user123',
+///   userBook: userBook,
+/// );
+/// ```
 class FirestoreService {
+  /// Firebase Firestore instance
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  
+  /// Firebase Auth instance for user authentication
   static final firebase_auth.FirebaseAuth _auth = firebase_auth.FirebaseAuth.instance;
 
-  // Collection references
+  /// Collection reference for user profiles
   static CollectionReference get _usersCollection => _firestore.collection('users');
+  
+  /// Collection reference for user bookshelves
   static CollectionReference get _bookshelvesCollection => _firestore.collection('bookshelves');
+  
+  /// Collection reference for reading progress tracking
   static CollectionReference get _readingProgressCollection => _firestore.collection('reading_progress');
 
-  // Get current user ID
+  /// Gets the current authenticated user's ID
+  /// 
+  /// Returns null if no user is currently signed in.
   static String? get _currentUserId => _auth.currentUser?.uid;
 
-  // User Profile Operations
+  /// Creates a new user profile in Firestore.
+  /// 
+  /// This method is typically called after a user signs up for the first time.
+  /// It initializes the user's profile with default values for reading goals
+  /// and statistics.
+  /// 
+  /// Parameters:
+  /// - [userId]: The unique identifier for the user
+  /// - [displayName]: The user's display name
+  /// - [email]: The user's email address
+  /// 
+  /// Throws [Exception] if the profile creation fails.
   static Future<void> createUserProfile({
     required String userId,
     required String displayName,
@@ -43,6 +87,18 @@ class FirestoreService {
     }
   }
 
+  /// Retrieves a user's profile from Firestore.
+  /// 
+  /// Returns the user's profile data including reading goals, statistics,
+  /// and personal information.
+  /// 
+  /// Parameters:
+  /// - [userId]: The unique identifier for the user
+  /// 
+  /// Returns a [Map<String, dynamic>] containing the user's profile data,
+  /// or null if the user doesn't exist.
+  /// 
+  /// Throws [Exception] if the retrieval fails.
   static Future<Map<String, dynamic>?> getUserProfile(String userId) async {
     try {
       final doc = await _usersCollection.doc(userId).get();
@@ -52,6 +108,16 @@ class FirestoreService {
     }
   }
 
+  /// Updates a user's profile in Firestore.
+  /// 
+  /// This method allows updating specific fields in the user's profile
+  /// without overwriting the entire document.
+  /// 
+  /// Parameters:
+  /// - [userId]: The unique identifier for the user
+  /// - [data]: A map containing the fields to update
+  /// 
+  /// Throws [Exception] if the update fails.
   static Future<void> updateUserProfile({
     required String userId,
     required Map<String, dynamic> data,
@@ -66,7 +132,16 @@ class FirestoreService {
     }
   }
 
-  // Bookshelf Operations
+  /// Adds a book to a user's bookshelf.
+  /// 
+  /// This method creates a new entry in the user's bookshelf collection,
+  /// storing both the book data and the user's interaction with it.
+  /// 
+  /// Parameters:
+  /// - [userId]: The unique identifier for the user
+  /// - [userBook]: The UserBook object containing book data and user interaction
+  /// 
+  /// Throws [Exception] if the operation fails.
   static Future<void> addBookToShelf({
     required String userId,
     required UserBook userBook,

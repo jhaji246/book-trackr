@@ -7,7 +7,10 @@ import 'core/services/hive_service.dart';
 import 'core/services/notification_service.dart';
 import 'core/services/reading_reminders_service.dart';
 import 'core/services/cache_service.dart';
+import 'core/services/analytics_service.dart';
+import 'core/services/localization_service.dart';
 import 'shared/providers/theme_provider.dart';
+import 'core/widgets/error_boundary.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +33,12 @@ void main() async {
   // Initialize Cache Service
   await CacheService.initialize();
 
+  // Initialize Analytics
+  await AnalyticsService.initialize();
+
+  // Initialize Localization
+  await LocalizationService.initialize();
+
   runApp(const ProviderScope(child: BookTrackrApp()));
 }
 
@@ -41,13 +50,20 @@ class BookTrackrApp extends ConsumerWidget {
     final router = ref.watch(appRouterProvider);
     final themeMode = ref.watch(themeProvider);
 
-    return MaterialApp.router(
-      title: 'BookTrackr',
-      debugShowCheckedModeBanner: false,
-      themeMode: themeMode,
-      theme: AppThemes.lightTheme,
-      darkTheme: AppThemes.darkTheme,
-      routerConfig: router,
+    return ErrorBoundary(
+      onError: (error, stackTrace) {
+        // Log app-level errors
+        debugPrint('App Error: $error');
+        debugPrint('App StackTrace: $stackTrace');
+      },
+      child: MaterialApp.router(
+        title: 'BookTrackr',
+        debugShowCheckedModeBanner: false,
+        themeMode: themeMode,
+        theme: AppThemes.lightTheme,
+        darkTheme: AppThemes.darkTheme,
+        routerConfig: router,
+      ),
     );
   }
 }

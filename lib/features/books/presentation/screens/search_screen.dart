@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/widgets/error_boundary.dart';
 import '../../../../shared/providers/books_provider.dart';
 import '../../../../shared/models/book.dart';
 import '../widgets/book_card.dart';
@@ -12,25 +13,61 @@ class SearchScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    return ErrorBoundary(
+      onError: (error, stackTrace) {
+        // Log the error for debugging
+        debugPrint('SearchScreen Error: $error');
+        debugPrint('StackTrace: $stackTrace');
+      },
+      child: _SearchScreenContent(),
+    );
+  }
+}
+
+class _SearchScreenContent extends HookConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
     final booksState = ref.watch(booksProvider);
     final searchQuery = GoRouterState.of(context).uri.queryParameters['q'] ?? '';
     final category = GoRouterState.of(context).uri.queryParameters['category'] ?? '';
 
     // Use useEffect to trigger search when parameters change
     useEffect(() {
+      // Use a flag to prevent multiple calls
+      bool isInitialized = false;
+      
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        final booksNotifier = ref.read(booksProvider.notifier);
-        if (category.isNotEmpty) {
-          booksNotifier.searchBooks(category); // Search using category as query
-        } else if (searchQuery.isNotEmpty) {
-          booksNotifier.searchBooks(searchQuery);
-        } else {
-          // If no query or category, clear search and load featured books
-          booksNotifier.clearSearch();
-          booksNotifier.loadFeaturedBooks();
+        if (!isInitialized) {
+          isInitialized = true;
+          final booksNotifier = ref.read(booksProvider.notifier);
+          
+          try {
+            if (category.isNotEmpty) {
+              booksNotifier.searchBooks(category); // Search using category as query
+            } else if (searchQuery.isNotEmpty) {
+              booksNotifier.searchBooks(searchQuery);
+            } else {
+              // If no query or category, clear search and load featured books
+              booksNotifier.clearSearch();
+              booksNotifier.loadFeaturedBooks();
+            }
+          } catch (e) {
+            // Handle any errors gracefully
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Search failed: ${e.toString()}'),
+                  backgroundColor: Theme.of(context).colorScheme.error,
+                ),
+              );
+            }
+          }
         }
       });
-      return null; // No cleanup needed
+      
+      return () {
+        isInitialized = false;
+      };
     }, [searchQuery, category]); // Re-run effect if query or category changes
 
     return Scaffold(
@@ -47,7 +84,12 @@ class SearchScreen extends HookConsumerWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            // Safely navigate back
+            if (context.mounted) {
+              Navigator.of(context).pop();
+            }
+          },
         ),
       ),
       body: Column(
@@ -126,8 +168,8 @@ class SearchScreen extends HookConsumerWidget {
   }
 
   Widget _buildSearchResults(BuildContext context, booksState, WidgetRef ref, String category) {
-    // booksState.books should now contain the results of the searchBooks call
-    final List<Book> booksToShow = booksState.books;
+    // Safely access books list
+    final List<Book> booksToShow = booksState.books ?? [];
 
     if (booksToShow.isEmpty) {
       return Center(
@@ -165,7 +207,12 @@ class SearchScreen extends HookConsumerWidget {
             ),
             const SizedBox(height: 24),
             FilledButton.icon(
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () {
+                // Safely navigate back
+                if (context.mounted) {
+                  Navigator.of(context).pop();
+                }
+              },
               icon: const Icon(Icons.arrow_back),
               label: const Text('Go Back'),
             ),
@@ -207,7 +254,12 @@ class SearchScreen extends HookConsumerWidget {
                 final book = booksToShow[index];
                 return BookCard(
                   book: book,
-                  onTap: () => context.push('/book/${book.id}'),
+                  onTap: () {
+                    // Safely navigate to book detail
+                    if (context.mounted) {
+                      context.push('/book/${book.id}');
+                    }
+                  },
                 );
               },
             ),
@@ -238,8 +290,20 @@ class SearchScreen extends HookConsumerWidget {
           const SizedBox(height: AppConstants.paddingSmall),
           ElevatedButton(
             onPressed: () {
-              ref.read(booksProvider.notifier).loadFeaturedBooks();
-              ref.read(booksProvider.notifier).clearError();
+              // Safely retry
+              try {
+                ref.read(booksProvider.notifier).loadFeaturedBooks();
+                ref.read(booksProvider.notifier).clearError();
+              } catch (e) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Retry failed: ${e.toString()}'),
+                      backgroundColor: Theme.of(context).colorScheme.error,
+                    ),
+                  );
+                }
+              }
             },
             child: const Text('Retry'),
           ),

@@ -13,6 +13,7 @@ import '../../features/statistics/presentation/screens/reading_statistics_screen
 import '../../features/social/presentation/screens/social_feed_screen.dart';
 import '../../shared/providers/auth_provider.dart';
 import '../widgets/auth_loading_screen.dart';
+import '../widgets/error_boundary.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authProvider);
@@ -60,7 +61,14 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       // Main App Routes
       ShellRoute(
         builder: (context, state, child) {
-          return ScaffoldWithNavigationBar(child: child);
+          return ErrorBoundary(
+            onError: (error, stackTrace) {
+              // Log navigation errors
+              debugPrint('Navigation Error: $error');
+              debugPrint('Navigation StackTrace: $stackTrace');
+            },
+            child: ScaffoldWithNavigationBar(child: child),
+          );
         },
         routes: [
           GoRoute(
