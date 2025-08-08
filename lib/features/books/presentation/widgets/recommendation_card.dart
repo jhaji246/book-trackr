@@ -142,7 +142,7 @@ class RecommendationSection extends ConsumerWidget {
   final String title;
   final List<Book> books;
   final List<String> Function(Book) getReasons;
-  final VoidCallback? onBookTap;
+  final void Function(Book)? onBookTap;
 
   const RecommendationSection({
     super.key,
@@ -184,7 +184,7 @@ class RecommendationSection extends ConsumerWidget {
                 child: RecommendationCard(
                   book: book,
                   reasons: reasons,
-                  onTap: onBookTap,
+                  onTap: onBookTap != null ? () => onBookTap!(book) : null,
                 ),
               );
             },

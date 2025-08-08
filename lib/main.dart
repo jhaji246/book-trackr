@@ -38,7 +38,7 @@ class BookTrackrApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final router = AppRouter.router;
+    final router = ref.watch(appRouterProvider);
     final themeMode = ref.watch(themeProvider);
 
     return MaterialApp.router(

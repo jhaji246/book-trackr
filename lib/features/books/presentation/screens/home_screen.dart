@@ -131,7 +131,7 @@ class HomeScreen extends HookConsumerWidget {
                 title: '🤖 Recommended for You',
                 books: recommendationState.personalizedRecommendations,
                 getReasons: (book) => ref.read(recommendationProvider.notifier).getRecommendationReasons(book),
-                onBookTap: () {},
+                onBookTap: (book) => context.push('/book/${book.id}'),
               ),
 
             // Trending Books Section
@@ -140,7 +140,7 @@ class HomeScreen extends HookConsumerWidget {
                 title: '🔥 Trending Now',
                 books: recommendationState.trendingBooks,
                 getReasons: (book) => ['Popular and highly rated'],
-                onBookTap: () {},
+                onBookTap: (book) => context.push('/book/${book.id}'),
               ),
 
             // Featured Books Section
@@ -217,7 +217,8 @@ class HomeScreen extends HookConsumerWidget {
           return Card(
             child: InkWell(
               onTap: () {
-                // Navigate to category
+                // Navigate to search with category filter
+                context.push('/search?category=${category['name']}');
               },
               borderRadius: BorderRadius.circular(AppConstants.radiusMedium),
               child: Padding(

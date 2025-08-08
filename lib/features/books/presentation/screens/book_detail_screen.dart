@@ -21,9 +21,32 @@ class BookDetailScreen extends HookConsumerWidget {
     final bookshelfState = ref.watch(bookshelfProvider);
     final readingGoalsState = ref.watch(readingGoalsProvider);
 
-    final book = booksState.books.firstWhere(
-      (book) => book.id == bookId,
-      orElse: () => Book(
+    // Try to find book in different sources
+    Book book;
+    try {
+      book = booksState.books.firstWhere(
+        (Book book) => book.id == bookId,
+        orElse: () => booksState.featuredBooks.firstWhere(
+          (Book book) => book.id == bookId,
+          orElse: () => Book(
+            id: bookId,
+            title: 'Book not found',
+            author: 'Unknown',
+            coverUrl: '',
+            isbn: '',
+            pageCount: 0,
+            publishedDate: '',
+            description: '',
+            genres: [],
+            averageRating: 0.0,
+            publisher: '',
+            language: '',
+            ratingCount: 0,
+          ),
+        ),
+      );
+    } catch (e) {
+      book = Book(
         id: bookId,
         title: 'Book not found',
         author: 'Unknown',
@@ -37,8 +60,8 @@ class BookDetailScreen extends HookConsumerWidget {
         publisher: '',
         language: '',
         ratingCount: 0,
-      ),
-    );
+      );
+    }
 
     final userBook = bookshelfState.getUserBook(bookId);
     final currentStatus = bookshelfState.getBookStatus(bookId);
@@ -46,8 +69,8 @@ class BookDetailScreen extends HookConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(book.title),
-        backgroundColor: AppConstants.lightSurface,
-        foregroundColor: AppConstants.lightOnSurface,
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        foregroundColor: Theme.of(context).colorScheme.onSurface,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),

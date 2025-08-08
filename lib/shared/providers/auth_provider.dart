@@ -51,28 +51,33 @@ class AuthNotifier extends StateNotifier<AuthState> {
     // Check if user is already signed in
     final currentUser = _auth.currentUser;
     if (currentUser != null) {
+      print('User already signed in: ${currentUser.email}');
       state = state.copyWith(
         user: currentUser,
         isAuthenticated: true,
         isInitialized: true,
       );
     } else {
+      print('No user signed in');
       state = state.copyWith(isInitialized: true);
     }
 
     // Listen to auth state changes
     _auth.authStateChanges().listen((firebase_auth.User? user) {
+      print('Auth state changed: ${user?.email ?? 'null'}');
       if (user != null) {
         state = state.copyWith(
           user: user,
           isAuthenticated: true,
           error: null,
+          isInitialized: true,
         );
       } else {
         state = state.copyWith(
           user: null,
           isAuthenticated: false,
           error: null,
+          isInitialized: true,
         );
       }
     });

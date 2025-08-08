@@ -106,13 +106,33 @@ final appRouterProvider = Provider<GoRouter>((ref) {
 class ScaffoldWithNavigationBar extends ConsumerWidget {
   final Widget child;
 
-  const ScaffoldWithNavigationBar({super.key, required this.child});
+  const ScaffoldWithNavigationBar({
+    super.key,
+    required this.child,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       body: child,
       bottomNavigationBar: NavigationBar(
+        onDestinationSelected: (index) {
+          switch (index) {
+            case 0:
+              context.go('/');
+              break;
+            case 1:
+              context.go('/library');
+              break;
+            case 2:
+              context.go('/search');
+              break;
+            case 3:
+              context.go('/profile');
+              break;
+          }
+        },
+        selectedIndex: _getSelectedIndex(context),
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.home),
@@ -127,41 +147,10 @@ class ScaffoldWithNavigationBar extends ConsumerWidget {
             label: 'Search',
           ),
           NavigationDestination(
-            icon: Icon(Icons.analytics),
-            label: 'Stats',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.people),
-            label: 'Social',
-          ),
-          NavigationDestination(
             icon: Icon(Icons.person),
             label: 'Profile',
           ),
         ],
-        onDestinationSelected: (index) {
-          switch (index) {
-            case 0:
-              context.go('/');
-              break;
-            case 1:
-              context.go('/library');
-              break;
-            case 2:
-              context.go('/search');
-              break;
-            case 3:
-              context.go('/statistics');
-              break;
-            case 4:
-              context.go('/social');
-              break;
-            case 5:
-              context.go('/profile');
-              break;
-          }
-        },
-        selectedIndex: _getSelectedIndex(context),
       ),
     );
   }
@@ -175,65 +164,10 @@ class ScaffoldWithNavigationBar extends ConsumerWidget {
         return 1;
       case '/search':
         return 2;
-      case '/statistics':
-        return 3;
-      case '/social':
-        return 4;
       case '/profile':
-        return 5;
+        return 3;
       default:
         return 0;
     }
   }
-}
-
-// Static router instance for direct access
-class AppRouter {
-  static final router = GoRouter(
-    initialLocation: '/login',
-    routes: [
-      GoRoute(
-        path: '/login',
-        builder: (context, state) => const LoginScreen(),
-      ),
-      GoRoute(
-        path: '/signup',
-        builder: (context, state) => const SignupScreen(),
-      ),
-      GoRoute(
-        path: '/',
-        builder: (context, state) => const HomeScreen(),
-      ),
-      GoRoute(
-        path: '/library',
-        builder: (context, state) => const LibraryScreen(),
-      ),
-      GoRoute(
-        path: '/search',
-        builder: (context, state) => const SearchScreen(),
-      ),
-      GoRoute(
-        path: '/goals',
-        builder: (context, state) => const ReadingGoalsScreen(),
-      ),
-      GoRoute(
-        path: '/statistics',
-        builder: (context, state) => const ReadingStatisticsScreen(),
-      ),
-      GoRoute(
-        path: '/social',
-        builder: (context, state) => const SocialFeedScreen(),
-      ),
-      GoRoute(
-        path: '/profile',
-        builder: (context, state) => const ProfileScreen(),
-      ),
-      GoRoute(
-        path: '/book/:id',
-        builder: (context, state) => BookDetailScreen(
-          bookId: state.pathParameters['id']!,
-        ),
-      ),
-    ],
-  );
 } 
