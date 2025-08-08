@@ -34,10 +34,17 @@ class SearchScreen extends HookConsumerWidget {
     }, [searchQuery, category]); // Re-run effect if query or category changes
 
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        title: Text(category.isNotEmpty ? 'Category: $category' : 'Search'),
-        backgroundColor: AppConstants.lightSurface,
-        foregroundColor: AppConstants.lightOnSurface,
+        title: Text(
+          category.isNotEmpty ? 'Category: $category' : 'Search',
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        foregroundColor: Theme.of(context).colorScheme.onSurface,
+        elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),
@@ -45,12 +52,73 @@ class SearchScreen extends HookConsumerWidget {
       ),
       body: Column(
         children: [
+          if (category.isNotEmpty) ...[
+            Container(
+              margin: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primaryContainer,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.category,
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Browsing $category',
+                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.onPrimaryContainer,
+                          ),
+                        ),
+                        Text(
+                          'Discover amazing books in this category',
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: Theme.of(context).colorScheme.onPrimaryContainer.withValues(alpha: 0.8),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
           Expanded(
             child: booksState.isLoading
-                ? const Center(child: CircularProgressIndicator())
+                ? _buildLoadingState(context)
                 : booksState.error != null
                     ? _buildErrorState(context, booksState.error!, ref)
                     : _buildSearchResults(context, booksState, ref, category),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLoadingState(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(
+              Theme.of(context).colorScheme.primary,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'Searching for books...',
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+            ),
           ),
         ],
       ),
@@ -66,47 +134,85 @@ class SearchScreen extends HookConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.search_off,
-              size: 80,
-              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5),
-            ),
-            const SizedBox(height: AppConstants.paddingMedium),
-            Text(
-              'No books found in ${category.isNotEmpty ? category : 'your search'}',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.8),
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surfaceVariant,
+                shape: BoxShape.circle,
               ),
-              textAlign: TextAlign.center,
+              child: Icon(
+                Icons.search_off,
+                size: 60,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
             ),
-            const SizedBox(height: AppConstants.paddingSmall),
+            const SizedBox(height: 24),
             Text(
-              'Try browsing other categories or adjusting your search.',
+              'No books found',
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              category.isNotEmpty 
+                ? 'Try browsing other categories or adjusting your search.'
+                : 'Try searching with different keywords.',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6),
+                color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
               ),
               textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            FilledButton.icon(
+              onPressed: () => Navigator.of(context).pop(),
+              icon: const Icon(Icons.arrow_back),
+              label: const Text('Go Back'),
             ),
           ],
         ),
       );
     } else {
-      return GridView.builder(
-        padding: const EdgeInsets.all(AppConstants.paddingMedium),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: AppConstants.paddingMedium,
-          mainAxisSpacing: AppConstants.paddingMedium,
-          childAspectRatio: 0.7,
-        ),
-        itemCount: booksToShow.length,
-        itemBuilder: (context, index) {
-          final book = booksToShow[index];
-          return BookCard(
-            book: book,
-            onTap: () => context.push('/book/${book.id}'),
-          );
-        },
+      return Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.search,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  '${booksToShow.length} books found',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: GridView.builder(
+              padding: const EdgeInsets.all(16),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                childAspectRatio: 0.7,
+              ),
+              itemCount: booksToShow.length,
+              itemBuilder: (context, index) {
+                final book = booksToShow[index];
+                return BookCard(
+                  book: book,
+                  onTap: () => context.push('/book/${book.id}'),
+                );
+              },
+            ),
+          ),
+        ],
       );
     }
   }

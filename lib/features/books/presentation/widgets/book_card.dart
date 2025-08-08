@@ -14,35 +14,59 @@ class BookCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      elevation: 4,
+      shadowColor: Colors.black.withValues(alpha: 0.1),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
         child: Container(
           width: 100,
           height: 140,
-          padding: const EdgeInsets.all(6),
+          padding: const EdgeInsets.all(8),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // Book Cover
-              ClipRRect(
-                borderRadius: BorderRadius.circular(4),
-                child: Image.network(
-                  book.coverUrl,
-                  width: 70,
-                  height: 90,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      width: 70,
-                      height: 90,
-                      color: Colors.grey[300],
-                      child: const Icon(Icons.book, size: 20),
-                    );
-                  },
+              // Book Cover with Shadow
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.1),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(
+                    book.coverUrl,
+                    width: 70,
+                    height: 90,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        width: 70,
+                        height: 90,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.surfaceVariant,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Icon(
+                          Icons.book,
+                          size: 24,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
-              const SizedBox(height: 6),
+              const SizedBox(height: 8),
 
               // Book Title
               Flexible(
@@ -81,13 +105,14 @@ class BookCard extends StatelessWidget {
                   Icon(
                     Icons.star,
                     size: 10,
-                    color: Colors.yellow[700],
+                    color: Colors.amber[600],
                   ),
                   const SizedBox(width: 2),
                   Text(
                     book.averageRating.toStringAsFixed(1),
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       fontSize: 9,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],

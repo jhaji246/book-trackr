@@ -102,77 +102,127 @@ class BookDetailScreen extends HookConsumerWidget {
   }
 
   Widget _buildBookHeader(BuildContext context, Book book) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(AppConstants.radiusMedium),
-          child: Image.network(
-            book.coverUrl,
-            width: 120,
-            height: 180,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) {
-              return Container(
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Book Cover with Shadow
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.15),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: Image.network(
+                book.coverUrl,
                 width: 120,
                 height: 180,
-                color: Colors.grey[300],
-                child: const Icon(Icons.book, size: 50),
-              );
-            },
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    width: 120,
+                    height: 180,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surfaceVariant,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      Icons.book,
+                      size: 50,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  );
+                },
+              ),
+            ),
           ),
-        ),
-        const SizedBox(width: AppConstants.paddingLarge),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                book.title,
-                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: AppConstants.paddingSmall),
-              Text(
-                'by ${book.author}',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: AppConstants.lightOnSurfaceVariant,
-                ),
-              ),
-              const SizedBox(height: AppConstants.paddingSmall),
-              Row(
-                children: [
-                  ...List.generate(5, (index) {
-                    return Icon(
-                      index < book.averageRating ? Icons.star : Icons.star_border,
-                      color: Colors.amber,
-                      size: 20,
-                    );
-                  }),
-                  const SizedBox(width: AppConstants.paddingSmall),
-                  Text(
-                    '(${book.averageRating.toStringAsFixed(1)})',
-                    style: Theme.of(context).textTheme.bodySmall,
+          const SizedBox(width: 20),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  book.title,
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
                   ),
-                ],
-              ),
-              const SizedBox(height: AppConstants.paddingSmall),
-              if (book.genres.isNotEmpty)
-                Wrap(
-                  spacing: AppConstants.paddingSmall,
-                  children: book.genres.take(3).map((genre) {
-                    return Chip(
-                      label: Text(genre),
-                      backgroundColor: AppConstants.primaryColor.withValues(alpha: 0.1),
-                      labelStyle: TextStyle(color: AppConstants.primaryColor),
-                    );
-                  }).toList(),
                 ),
-            ],
+                const SizedBox(height: 8),
+                Text(
+                  'by ${book.author}',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    ...List.generate(5, (index) {
+                      return Icon(
+                        index < book.averageRating ? Icons.star : Icons.star_border,
+                        color: Colors.amber[600],
+                        size: 20,
+                      );
+                    }),
+                    const SizedBox(width: 8),
+                    Text(
+                      '(${book.averageRating.toStringAsFixed(1)})',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                if (book.genres.isNotEmpty)
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 4,
+                    children: book.genres.take(3).map((genre) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.3),
+                          ),
+                        ),
+                        child: Text(
+                          genre,
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

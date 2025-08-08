@@ -19,14 +19,18 @@ class RecommendationCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Card(
-      margin: const EdgeInsets.only(bottom: 4),
+      elevation: 3,
+      shadowColor: Colors.black.withValues(alpha: 0.08),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.circular(10),
         child: Container(
           width: 110,
           height: 130,
-          padding: const EdgeInsets.all(4),
+          padding: const EdgeInsets.all(6),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -34,10 +38,14 @@ class RecommendationCard extends ConsumerWidget {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 1),
+                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(3),
+                    color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(6),
+                    border: Border.all(
+                      color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.3),
+                      width: 0.5,
+                    ),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -47,7 +55,7 @@ class RecommendationCard extends ConsumerWidget {
                         size: 8,
                         color: Theme.of(context).colorScheme.primary,
                       ),
-                      const SizedBox(width: 1),
+                      const SizedBox(width: 2),
                       Text(
                         'AI',
                         style: TextStyle(
@@ -60,27 +68,46 @@ class RecommendationCard extends ConsumerWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 6),
 
-              // Book Cover
-              ClipRRect(
-                borderRadius: BorderRadius.circular(3),
-                child: Image.network(
-                  book.coverUrl,
-                  width: 45,
-                  height: 55,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      width: 45,
-                      height: 55,
-                      color: Colors.grey[300],
-                      child: const Icon(Icons.book, size: 12),
-                    );
-                  },
+              // Book Cover with Shadow
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(6),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.1),
+                      blurRadius: 6,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(6),
+                  child: Image.network(
+                    book.coverUrl,
+                    width: 45,
+                    height: 55,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        width: 45,
+                        height: 55,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.surfaceVariant,
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: Icon(
+                          Icons.book,
+                          size: 16,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
-              const SizedBox(height: 4),
+              const SizedBox(height: 6),
 
               // Book Title
               Flexible(
@@ -95,7 +122,7 @@ class RecommendationCard extends ConsumerWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
-              const SizedBox(height: 1),
+              const SizedBox(height: 2),
 
               // Author
               Flexible(
@@ -110,7 +137,7 @@ class RecommendationCard extends ConsumerWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
-              const SizedBox(height: 2),
+              const SizedBox(height: 3),
 
               // Rating
               Row(
@@ -119,13 +146,14 @@ class RecommendationCard extends ConsumerWidget {
                   Icon(
                     Icons.star,
                     size: 8,
-                    color: Colors.yellow[700],
+                    color: Colors.amber[600],
                   ),
                   const SizedBox(width: 1),
                   Text(
                     book.averageRating.toStringAsFixed(1),
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       fontSize: 7,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
