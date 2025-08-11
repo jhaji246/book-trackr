@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../shared/providers/auth_provider.dart';
 import '../../../../core/constants/app_constants.dart';
+import 'signup_screen.dart';
+import 'forgot_password_screen.dart';
 
 class LoginScreen extends HookConsumerWidget {
   const LoginScreen({super.key});
@@ -146,7 +147,7 @@ class LoginScreen extends HookConsumerWidget {
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
-                      onPressed: () => context.push('/forgot-password'),
+                      onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ForgotPasswordScreen())),
                       child: Text(
                         'Forgot Password?',
                         style: TextStyle(
@@ -222,7 +223,7 @@ class LoginScreen extends HookConsumerWidget {
                         ),
                       ),
                       TextButton(
-                        onPressed: () => context.push('/signup'),
+                        onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const SignupScreen())),
                         child: Text(
                           'Sign Up',
                           style: TextStyle(

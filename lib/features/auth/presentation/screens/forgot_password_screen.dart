@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../shared/providers/auth_provider.dart';
+import 'login_screen.dart';
 
 class ForgotPasswordScreen extends HookConsumerWidget {
   const ForgotPasswordScreen({super.key});
@@ -18,7 +18,7 @@ class ForgotPasswordScreen extends HookConsumerWidget {
         title: const Text('Forgot Password'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: () => context.pop(),
+          onPressed: () => Navigator.of(context).pop(),
         ),
       ),
       body: Padding(
@@ -97,10 +97,41 @@ class ForgotPasswordScreen extends HookConsumerWidget {
             FilledButton(
               onPressed: authState.isLoading
                   ? null
-                  : () {
+                  : () async {
                       if (emailController.text.trim().isNotEmpty) {
-                        ref.read(authProvider.notifier).resetPassword(
-                          emailController.text.trim(),
+                        try {
+                          await ref.read(authProvider.notifier).resetPassword(
+                            emailController.text.trim(),
+                          );
+                          
+                          // Show success message and navigate back to login
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Password reset link sent! Check your email.'),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                            
+                            // Navigate back to login screen
+                            Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                builder: (context) => const LoginScreen(),
+                              ),
+                              (route) => false, // Remove all previous routes
+                            );
+                          }
+                        } catch (e) {
+                          // Error is already handled by the provider
+                          debugPrint('Password reset error: $e');
+                        }
+                      } else {
+                        // Show error for empty email
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Please enter your email address'),
+                            backgroundColor: Colors.red,
+                          ),
                         );
                       }
                     },
@@ -129,7 +160,7 @@ class ForgotPasswordScreen extends HookConsumerWidget {
 
             // Back to Login
             TextButton(
-              onPressed: () => context.pop(),
+              onPressed: () => Navigator.of(context).pop(),
               child: const Text('Back to Login'),
             ),
           ],
