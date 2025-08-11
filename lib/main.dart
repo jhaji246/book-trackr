@@ -86,19 +86,19 @@ class _BookTrackrAppState extends ConsumerState<BookTrackrApp> {
       );
     }
 
-    // Show main app once ready
-    return ErrorBoundary(
-      onError: (error, stackTrace) {
-        debugPrint('App Error: $error');
-        debugPrint('App StackTrace: $stackTrace');
-      },
-      child: MaterialApp(
-        title: 'BookTrackr',
-        debugShowCheckedModeBanner: false,
-        themeMode: themeMode,
-        theme: AppThemes.lightTheme,
-        darkTheme: AppThemes.darkTheme,
-        home: const HomeScreen(),
+    // Show main app once ready - ErrorBoundary is now inside MaterialApp
+    return MaterialApp(
+      title: 'BookTrackr',
+      debugShowCheckedModeBanner: false,
+      themeMode: themeMode,
+      theme: AppThemes.lightTheme,
+      darkTheme: AppThemes.darkTheme,
+      home: ErrorBoundary(
+        onError: (error, stackTrace) {
+          debugPrint('App Error: $error');
+          debugPrint('App StackTrace: $stackTrace');
+        },
+        child: const HomeScreen(),
       ),
     );
   }
