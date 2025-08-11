@@ -234,41 +234,48 @@ class HomeScreen extends HookConsumerWidget {
       },
       child: SingleChildScrollView(
         padding: const EdgeInsets.only(bottom: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // AI Recommendations Section
-            if (recommendationState.personalizedRecommendations.isNotEmpty)
-              _buildSectionHeader(context, '🤖 Recommended for You', 'Based on your reading history'),
-            if (recommendationState.personalizedRecommendations.isNotEmpty)
-              RecommendationSection(
-                title: '🤖 Recommended for You',
-                books: recommendationState.personalizedRecommendations,
-                getReasons: (book) => ref.read(recommendationProvider.notifier).getRecommendationReasons(book),
-                onBookTap: (book) => context.push('/book/${book.id}'),
-              ),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(
+            minHeight: 0,
+          ),
+          child: IntrinsicHeight(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // AI Recommendations Section
+                if (recommendationState.personalizedRecommendations.isNotEmpty)
+                  _buildSectionHeader(context, '🤖 Recommended for You', 'Based on your reading history'),
+                if (recommendationState.personalizedRecommendations.isNotEmpty)
+                  RecommendationSection(
+                    title: '🤖 Recommended for You',
+                    books: recommendationState.personalizedRecommendations,
+                    getReasons: (book) => ref.read(recommendationProvider.notifier).getRecommendationReasons(book),
+                    onBookTap: (book) => context.push('/book/${book.id}'),
+                  ),
 
-            // Trending Books Section
-            if (recommendationState.trendingBooks.isNotEmpty)
-              _buildSectionHeader(context, '🔥 Trending Now', 'Popular books everyone is reading'),
-            if (recommendationState.trendingBooks.isNotEmpty)
-              RecommendationSection(
-                title: '🔥 Trending Now',
-                books: recommendationState.trendingBooks,
-                getReasons: (book) => ['Popular and highly rated'],
-                onBookTap: (book) => context.push('/book/${book.id}'),
-              ),
+                // Trending Books Section
+                if (recommendationState.trendingBooks.isNotEmpty)
+                  _buildSectionHeader(context, '🔥 Trending Now', 'Popular books everyone is reading'),
+                if (recommendationState.trendingBooks.isNotEmpty)
+                  RecommendationSection(
+                    title: '🔥 Trending Now',
+                    books: recommendationState.trendingBooks,
+                    getReasons: (book) => ['Popular and highly rated'],
+                    onBookTap: (book) => context.push('/book/${book.id}'),
+                  ),
 
-            // Featured Books Section
-            if (booksState.featuredBooks.isNotEmpty) ...[
-              _buildSectionHeader(context, '📚 Featured Books', 'Handpicked for you'),
-              _buildFeaturedBooks(context, booksState.featuredBooks),
-            ],
+                // Featured Books Section
+                if (booksState.featuredBooks.isNotEmpty) ...[
+                  _buildSectionHeader(context, '📚 Featured Books', 'Handpicked for you'),
+                  _buildFeaturedBooks(context, booksState.featuredBooks),
+                ],
 
-            // Browse by Category Section
-            _buildSectionHeader(context, '📂 Browse by Category', 'Discover new genres'),
-            _buildCategoryGrid(context),
-          ],
+                // Browse by Category Section
+                _buildSectionHeader(context, '📂 Browse by Category', 'Discover new genres'),
+                _buildCategoryGrid(context),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -323,80 +330,96 @@ class HomeScreen extends HookConsumerWidget {
   Widget _buildCategoryGrid(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: GridView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
-          childAspectRatio: 1.4,
-        ),
-        itemCount: categories.length,
-        itemBuilder: (context, index) {
-          final category = categories[index];
-          return Card(
-            elevation: 2,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: InkWell(
-              onTap: () {
-                context.push('/search?category=${category['name']}');
-              },
-              borderRadius: BorderRadius.circular(16),
-              child: Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      (category['color'] as Color).withValues(alpha: 0.1),
-                      (category['color'] as Color).withValues(alpha: 0.05),
-                    ],
-                  ),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: (category['color'] as Color).withValues(alpha: 0.2),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        category['icon'] as IconData,
-                        size: 20,
-                        color: category['color'] as Color,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      category['name'] as String,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      category['description'] as String,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
-                        fontSize: 10,
-                      ),
-                      textAlign: TextAlign.center,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          // Calculate the number of rows needed
+          final crossAxisCount = 2;
+          final itemCount = categories.length;
+          final rowCount = (itemCount / crossAxisCount).ceil();
+          
+          // Calculate total height needed for the grid
+          final itemHeight = 120.0; // Fixed height for each category item
+          final totalHeight = (rowCount * itemHeight) + ((rowCount - 1) * 16); // 16 is mainAxisSpacing
+          
+          return SizedBox(
+            height: totalHeight,
+            child: GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                childAspectRatio: 1.4,
               ),
+              itemCount: categories.length,
+              itemBuilder: (context, index) {
+                final category = categories[index];
+                return Card(
+                  elevation: 2,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: InkWell(
+                    onTap: () {
+                      context.push('/search?category=${category['name']}');
+                    },
+                    borderRadius: BorderRadius.circular(16),
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            (category['color'] as Color).withValues(alpha: 0.1),
+                            (category['color'] as Color).withValues(alpha: 0.05),
+                          ],
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: (category['color'] as Color).withValues(alpha: 0.2),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              category['icon'] as IconData,
+                              size: 20,
+                              color: category['color'] as Color,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            category['name'] as String,
+                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            category['description'] as String,
+                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                              fontSize: 10,
+                            ),
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
           );
         },
