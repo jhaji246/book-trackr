@@ -27,38 +27,53 @@ class BookTrackrApp extends ConsumerStatefulWidget {
 
 class _BookTrackrAppState extends ConsumerState<BookTrackrApp> {
   bool _isReady = false;
+  bool _isInitializing = true;
 
   @override
   void initState() {
     super.initState();
-    // Initialize authentication immediately
-    _initializeAuth();
+    // Use addPostFrameCallback to ensure the widget is fully built before initializing auth
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initializeAuth();
+    });
   }
 
   Future<void> _initializeAuth() async {
-    try {
-      debugPrint('BookTrackrApp: Starting authentication initialization...');
-      final authNotifier = ref.read(authProvider.notifier);
-      
-      // Clear any persistent errors before initializing
-      authNotifier.clearAllErrors();
-      
-      await authNotifier.initializeAuth();
-      
-      // Mark app as ready after auth initialization
-      if (mounted) {
-        setState(() {
-          _isReady = true;
-        });
-        debugPrint('BookTrackrApp: App is now ready');
-      }
-    } catch (e) {
-      debugPrint('BookTrackrApp: Authentication initialization failed: $e');
-      // Even if auth fails, show the app
-      if (mounted) {
-        setState(() {
-          _isReady = true;
-        });
+    if (_isInitializing) {
+      try {
+        debugPrint('BookTrackrApp: Starting authentication initialization...');
+        final authNotifier = ref.read(authProvider.notifier);
+        
+        // Clear any persistent errors before initializing
+        authNotifier.clearAllErrors();
+        
+        await authNotifier.initializeAuth();
+        
+        // Mark app as ready after auth initialization - use addPostFrameCallback to prevent rebuild issues
+        if (mounted) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              setState(() {
+                _isReady = true;
+                _isInitializing = false;
+              });
+              debugPrint('BookTrackrApp: App is now ready');
+            }
+          });
+        }
+      } catch (e) {
+        debugPrint('BookTrackrApp: Authentication initialization failed: $e');
+        // Even if auth fails, show the app - use addPostFrameCallback to prevent rebuild issues
+        if (mounted) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) {
+              setState(() {
+                _isReady = true;
+                _isInitializing = false;
+              });
+            }
+          });
+        }
       }
     }
   }
@@ -68,7 +83,8 @@ class _BookTrackrAppState extends ConsumerState<BookTrackrApp> {
     final themeMode = ref.watch(themeProvider);
 
     // Show loading screen until auth is initialized
-    if (!_isReady) {
+    if (!_isReady || _isInitializing) {
+      debugPrint('BookTrackrApp: Rendering Initializing screen. _isReady: $_isReady, _isInitializing: $_isInitializing');
       return MaterialApp(
         title: 'BookTrackr',
         debugShowCheckedModeBanner: false,
@@ -92,6 +108,7 @@ class _BookTrackrAppState extends ConsumerState<BookTrackrApp> {
     }
 
     // Show main app once ready - Check authentication state
+    debugPrint('BookTrackrApp: Rendering main app. _isReady: $_isReady, _isInitializing: $_isInitializing');
     return MaterialApp(
       title: 'BookTrackr',
       debugShowCheckedModeBanner: false,
@@ -106,9 +123,11 @@ class _BookTrackrAppState extends ConsumerState<BookTrackrApp> {
         child: Consumer(
           builder: (context, ref, child) {
             final authState = ref.watch(authProvider);
+            debugPrint('BookTrackrApp Consumer: authState.isLoading: ${authState.isLoading}, authState.isAuthenticated: ${authState.isAuthenticated}');
             
             // Show loading while auth is initializing
             if (authState.isLoading) {
+              debugPrint('BookTrackrApp Consumer: Rendering Checking authentication screen.');
               return const Scaffold(
                 backgroundColor: Colors.white,
                 body: Center(
@@ -126,10 +145,12 @@ class _BookTrackrAppState extends ConsumerState<BookTrackrApp> {
             
             // Show login screen if not authenticated
             if (!authState.isAuthenticated) {
+              debugPrint('BookTrackrApp Consumer: Rendering LoginScreen.');
               return const LoginScreen();
             }
             
             // Show home screen if authenticated
+            debugPrint('BookTrackrApp Consumer: Rendering HomeScreen.');
             return const HomeScreen();
           },
         ),

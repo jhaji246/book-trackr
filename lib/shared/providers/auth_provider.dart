@@ -56,13 +56,24 @@ class AuthNotifier extends StateNotifier<AuthState> {
         (User? user) {
           try {
             debugPrint('AuthProvider: Auth state changed - User: ${user?.uid ?? 'null'}');
-            state = state.copyWith(
-              user: user,
-              isAuthenticated: user != null,
-              error: null, // Clear any previous errors
-              isLoading: false, // Auth is now initialized
-            );
-            debugPrint('AuthProvider: State updated - isAuthenticated: ${state.isAuthenticated}, isLoading: ${state.isLoading}');
+            
+            // Only update state if there's an actual change to prevent unnecessary rebuilds
+            final newIsAuthenticated = user != null;
+            if (state.isAuthenticated != newIsAuthenticated || state.user?.uid != user?.uid) {
+              state = state.copyWith(
+                user: user,
+                isAuthenticated: newIsAuthenticated,
+                error: null, // Clear any previous errors
+                isLoading: false, // Auth is now initialized
+              );
+              debugPrint('AuthProvider: State updated - isAuthenticated: ${state.isAuthenticated}, isLoading: ${state.isLoading}');
+            } else {
+              // Just update loading state if no other changes
+              if (state.isLoading) {
+                state = state.copyWith(isLoading: false);
+                debugPrint('AuthProvider: Loading state updated to false');
+              }
+            }
           } catch (e) {
             debugPrint('AuthProvider: Error in auth state listener: $e');
             // Handle internal Firebase errors gracefully - don't show user-facing errors for internal issues
@@ -71,10 +82,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
                 e.toString().contains('type cast')) {
               debugPrint('Firebase type casting error in listener (handled gracefully): $e');
               // Don't set user-facing error for internal Firebase issues
-              state = state.copyWith(
-                isLoading: false,
-                // Keep existing error state if any, don't override with internal errors
-              );
+              if (state.isLoading) {
+                state = state.copyWith(isLoading: false);
+              }
             } else {
               // Only set user-facing errors for non-internal issues
               state = state.copyWith(
@@ -92,10 +102,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
               error.toString().contains('type cast')) {
             debugPrint('Firebase type casting error in listener (handled gracefully): $error');
             // Don't set user-facing error for internal Firebase issues
-            state = state.copyWith(
-              isLoading: false,
-              // Keep existing error state if any, don't override with internal errors
-            );
+            if (state.isLoading) {
+              state = state.copyWith(isLoading: false);
+            }
           } else {
             // Only set user-facing errors for non-internal issues
             state = state.copyWith(
