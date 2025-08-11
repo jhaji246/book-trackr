@@ -8,7 +8,12 @@ import 'core/widgets/error_boundary.dart';
 import 'features/books/presentation/screens/home_screen.dart';
 
 void main() async {
-  await AppInitializer.initialize();
+  try {
+    await AppInitializer.initialize();
+  } catch (e) {
+    debugPrint('Critical initialization failed: $e');
+    // Continue anyway - app will show error state but won't be stuck
+  }
   runApp(const ProviderScope(child: BookTrackrApp()));
 }
 

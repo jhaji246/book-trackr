@@ -22,8 +22,13 @@ class AppInitializer {
     try {
       WidgetsFlutterBinding.ensureInitialized();
 
-      // Initialize Firebase (blocking - must complete before continuing)
-      await _initializeFirebase();
+      // Initialize Firebase (non-blocking - app can function without it)
+      try {
+        await _initializeFirebase();
+      } catch (e) {
+        debugPrint('Firebase initialization failed, continuing without it: $e');
+        // Don't rethrow Firebase errors - app can still function
+      }
 
       // Initialize Local Storage (blocking - must complete before continuing)
       await _initializeLocalStorage();
@@ -36,28 +41,52 @@ class AppInitializer {
       _isInitialized = true;
     } catch (e) {
       debugPrint('App initialization failed: $e');
-      // Re-throw critical initialization errors
-      rethrow;
+      // Only rethrow critical errors that prevent app from functioning
+      if (e.toString().contains('Hive') || e.toString().contains('local storage')) {
+        rethrow;
+      }
+      // For other errors, mark as initialized and continue
+      _isInitialized = true;
     }
   }
 
   /// Initialize Firebase services
   static Future<void> _initializeFirebase() async {
     try {
-      // Check if Firebase is already initialized
+      // More robust check for Firebase initialization
       if (Firebase.apps.isNotEmpty) {
-        debugPrint('Firebase already initialized');
-        return;
+        // Check if the default app exists
+        try {
+          Firebase.app();
+          debugPrint('Firebase default app already exists, skipping initialization');
+          return;
+        } catch (e) {
+          debugPrint('Firebase app exists but not accessible, reinitializing: $e');
+          // Continue with initialization
+        }
       }
       
+      // Initialize Firebase with proper error handling
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
       debugPrint('Firebase initialized successfully');
     } catch (e) {
       debugPrint('Firebase initialization failed: $e');
-      // Re-throw Firebase errors as they are critical for the app
-      rethrow;
+      
+      // If it's a duplicate app error, try to get the existing app
+      if (e.toString().contains('duplicate-app')) {
+        try {
+          Firebase.app();
+          debugPrint('Using existing Firebase app after duplicate error');
+          return;
+        } catch (getAppError) {
+          debugPrint('Failed to get existing Firebase app: $getAppError');
+        }
+      }
+      
+      // For other errors, continue without Firebase (app can still function)
+      debugPrint('Continuing without Firebase initialization');
     }
   }
 
