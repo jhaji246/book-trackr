@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/widgets/gradient_button.dart';
 import '../../../../shared/models/book.dart';
+import '../../../../shared/models/user_book.dart';
+import '../../../../shared/models/reading_status.dart';
 import '../../../../shared/providers/bookshelf_provider.dart';
-import '../../../../shared/providers/books_provider.dart';
 import '../../../../shared/providers/reading_goals_provider.dart';
 import '../widgets/progress_dialog.dart';
 
@@ -17,35 +20,32 @@ class BookDetailScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final booksState = ref.watch(booksProvider);
     final bookshelfState = ref.watch(bookshelfProvider);
     final readingGoalsState = ref.watch(readingGoalsProvider);
 
-    // Try to find book in different sources
+    // Try to find book in bookshelf first, then create a placeholder
     Book book;
-    try {
-      book = booksState.books.firstWhere(
-        (Book book) => book.id == bookId,
-        orElse: () => booksState.featuredBooks.firstWhere(
-          (Book book) => book.id == bookId,
-          orElse: () => Book(
-            id: bookId,
-            title: 'Book not found',
-            author: 'Unknown',
-            coverUrl: '',
-            isbn: '',
-            pageCount: 0,
-            publishedDate: '',
-            description: '',
-            genres: [],
-            averageRating: 0.0,
-            publisher: '',
-            language: '',
-            ratingCount: 0,
-          ),
-        ),
+    final userBook = bookshelfState.getUserBook(bookId);
+    
+    if (userBook != null) {
+      // Convert UserBook back to Book for display
+      book = Book(
+        id: userBook.id,
+        title: userBook.title,
+        author: userBook.author,
+        coverUrl: userBook.coverUrl,
+        isbn: userBook.isbn,
+        pageCount: userBook.pageCount,
+        publishedDate: userBook.publishedDate,
+        description: userBook.description,
+        genres: userBook.genres,
+        averageRating: userBook.averageRating,
+        publisher: userBook.publisher,
+        language: userBook.language,
+        ratingCount: userBook.ratingCount,
       );
-    } catch (e) {
+    } else {
+      // Create a placeholder book
       book = Book(
         id: bookId,
         title: 'Book not found',
@@ -63,7 +63,6 @@ class BookDetailScreen extends HookConsumerWidget {
       );
     }
 
-    final userBook = bookshelfState.getUserBook(bookId);
     final currentStatus = bookshelfState.getBookStatus(bookId);
 
     return Scaffold(
@@ -378,69 +377,42 @@ class BookDetailScreen extends HookConsumerWidget {
     return Column(
       children: [
         if (userBook == null) ...[
-          _buildActionButton(
-            context,
-            'Add to Want to Read',
-            Icons.bookmark_add,
-            Colors.blue,
-            () => _addToShelf(context, ref, book, const BookStatus.wantToRead()),
+          GradientOutlinedButton(
+            onPressed: () => _addToShelf(context, ref, book, const BookStatus.wantToRead()),
+            text: 'Add to Want to Read',
+            icon: Icons.bookmark_add,
+            colors: [Colors.blue, Colors.blue.shade600],
           ),
           const SizedBox(height: AppConstants.paddingSmall),
-          _buildActionButton(
-            context,
-            'Start Reading',
-            Icons.play_arrow,
-            Colors.green,
-            () => _addToShelf(context, ref, book, const BookStatus.reading()),
+          GradientOutlinedButton(
+            onPressed: () => _addToShelf(context, ref, book, const BookStatus.reading()),
+            text: 'Start Reading',
+            icon: Icons.play_arrow,
+            colors: [Colors.green, Colors.green.shade600],
           ),
         ] else ...[
-          _buildActionButton(
-            context,
-            'Update Progress',
-            Icons.edit,
-            Colors.orange,
-            () => _showProgressDialog(context, ref, userBook),
+          GradientOutlinedButton(
+            onPressed: () => _showProgressDialog(context, ref, userBook),
+            text: 'Update Progress',
+            icon: Icons.edit,
+            colors: [Colors.orange, Colors.orange.shade600],
           ),
           const SizedBox(height: AppConstants.paddingSmall),
-          _buildActionButton(
-            context,
-            'Mark as Completed',
-            Icons.check_circle,
-            Colors.green,
-            () => _markAsCompleted(context, ref, userBook, readingGoalsState),
+          GradientOutlinedButton(
+            onPressed: () => _markAsCompleted(context, ref, userBook, readingGoalsState),
+            text: 'Mark as Completed',
+            icon: Icons.check_circle,
+            colors: [Colors.green, Colors.green.shade600],
           ),
           const SizedBox(height: AppConstants.paddingSmall),
-          _buildActionButton(
-            context,
-            'Remove from Shelf',
-            Icons.delete,
-            Colors.red,
-            () => _removeFromShelf(context, ref, book.id),
+          GradientOutlinedButton(
+            onPressed: () => _removeFromShelf(context, ref, book.id),
+            text: 'Remove from Shelf',
+            icon: Icons.delete,
+            colors: [Colors.red, Colors.red.shade600],
           ),
         ],
       ],
-    );
-  }
-
-  Widget _buildActionButton(
-    BuildContext context,
-    String text,
-    IconData icon,
-    Color color,
-    VoidCallback onPressed,
-  ) {
-    return SizedBox(
-      width: double.infinity,
-      child: OutlinedButton.icon(
-        onPressed: onPressed,
-        icon: Icon(icon, color: color),
-        label: Text(text),
-        style: OutlinedButton.styleFrom(
-          foregroundColor: color,
-          side: BorderSide(color: color),
-          padding: const EdgeInsets.symmetric(vertical: AppConstants.paddingMedium),
-        ),
-      ),
     );
   }
 
@@ -482,11 +454,11 @@ class BookDetailScreen extends HookConsumerWidget {
         title: const Text('Remove Book'),
         content: const Text('Are you sure you want to remove this book from your shelf?'),
         actions: [
-          TextButton(
+          GradientTextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
+            text: 'Cancel',
           ),
-          TextButton(
+          GradientTextButton(
             onPressed: () {
               ref.read(bookshelfProvider.notifier).removeBook(bookId);
               Navigator.of(context).pop();
@@ -494,7 +466,7 @@ class BookDetailScreen extends HookConsumerWidget {
                 const SnackBar(content: Text('Removed from shelf')),
               );
             },
-            child: const Text('Remove'),
+            text: 'Remove',
           ),
         ],
       ),

@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/widgets/gradient_button.dart';
+import '../../../../shared/providers/bookshelf_provider.dart';
+import '../../../../shared/providers/recommendation_provider.dart';
+import '../../../../shared/models/book.dart';
+import '../../../books/presentation/widgets/book_card.dart';
+import '../../../books/presentation/screens/book_detail_screen.dart';
 
 
 class SocialFeedScreen extends ConsumerWidget {
@@ -321,9 +328,18 @@ class SocialFeedScreen extends ConsumerWidget {
           ],
         ),
         actions: [
-          TextButton(
+          GradientTextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
+            text: 'Cancel',
+          ),
+          GradientButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Shared your reading activity!')),
+              );
+            },
+            text: 'Share',
           ),
         ],
       ),
@@ -370,18 +386,18 @@ class SocialFeedScreen extends ConsumerWidget {
           ],
         ),
         actions: [
-          TextButton(
+          GradientTextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
+            text: 'Cancel',
           ),
-          FilledButton(
+          GradientButton(
             onPressed: () {
               Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Shared your reading activity!')),
               );
             },
-            child: const Text('Share'),
+            text: 'Share',
           ),
         ],
       ),
@@ -413,18 +429,18 @@ class SocialFeedScreen extends ConsumerWidget {
           ],
         ),
         actions: [
-          TextButton(
+          GradientTextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
+            text: 'Cancel',
           ),
-          FilledButton(
+          GradientButton(
             onPressed: () {
               Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Shared your reading activity!')),
               );
             },
-            child: const Text('Share'),
+            text: 'Share',
           ),
         ],
       ),
@@ -471,18 +487,18 @@ class SocialFeedScreen extends ConsumerWidget {
           ],
         ),
         actions: [
-          TextButton(
+          GradientTextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
+            text: 'Cancel',
           ),
-          FilledButton(
+          GradientButton(
             onPressed: () {
               Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Shared your rating!')),
               );
             },
-            child: const Text('Share'),
+            text: 'Share',
           ),
         ],
       ),
@@ -514,18 +530,18 @@ class SocialFeedScreen extends ConsumerWidget {
           ],
         ),
         actions: [
-          TextButton(
+          GradientTextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
+            text: 'Cancel',
           ),
-          FilledButton(
+          GradientButton(
             onPressed: () {
               Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Shared your milestone!')),
               );
             },
-            child: const Text('Share'),
+            text: 'Share',
           ),
         ],
       ),
@@ -551,18 +567,18 @@ class SocialFeedScreen extends ConsumerWidget {
           maxLines: 3,
         ),
         actions: [
-          TextButton(
+          GradientTextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
+            text: 'Cancel',
           ),
-          FilledButton(
+          GradientButton(
             onPressed: () {
               Navigator.of(context).pop();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Comment added! 💬')),
               );
             },
-            child: const Text('Post'),
+            text: 'Post',
           ),
         ],
       ),
@@ -571,7 +587,7 @@ class SocialFeedScreen extends ConsumerWidget {
 
   void _shareActivity(BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Shared! ��')),
+      const SnackBar(content: Text('Shared! ')),
     );
   }
 } 

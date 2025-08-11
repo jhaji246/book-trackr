@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/widgets/gradient_button.dart';
 import '../../../../shared/providers/bookshelf_provider.dart';
 import '../widgets/book_card.dart';
+import 'home_screen.dart';
 
 class LibraryScreen extends ConsumerWidget {
   const LibraryScreen({super.key});
@@ -13,6 +14,7 @@ class LibraryScreen extends ConsumerWidget {
     final bookshelfState = ref.watch(bookshelfProvider);
 
     return Scaffold(
+      backgroundColor: AppConstants.lightSurface,
       appBar: AppBar(
         title: const Text('My Library'),
         backgroundColor: AppConstants.lightSurface,
@@ -20,9 +22,50 @@ class LibraryScreen extends ConsumerWidget {
       ),
       body: bookshelfState.isLoading
           ? const Center(child: CircularProgressIndicator())
-          : bookshelfState.books.isEmpty
-              ? _buildEmptyState(context)
+          : bookshelfState.error != null
+              ? _buildErrorState(context, bookshelfState.error!, ref)
               : _buildLibraryContent(context, bookshelfState),
+    );
+  }
+
+  Widget _buildErrorState(BuildContext context, String error, WidgetRef ref) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(AppConstants.paddingLarge),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.error_outline,
+              size: 80,
+              color: AppConstants.lightError,
+            ),
+            const SizedBox(height: AppConstants.paddingMedium),
+            Text(
+              'Error: $error',
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                color: AppConstants.lightError,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: AppConstants.paddingMedium),
+            Text(
+              'Unable to load your library. Please try again.',
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: AppConstants.lightOnSurfaceVariant,
+              ),
+            ),
+            const SizedBox(height: AppConstants.paddingLarge),
+            GradientButton(
+              onPressed: () => Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => const HomeScreen()),
+              ),
+              icon: Icons.search,
+              text: 'Browse Books',
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -51,10 +94,12 @@ class LibraryScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: AppConstants.paddingLarge),
-          FilledButton.icon(
-            onPressed: () => context.go('/'),
-            icon: const Icon(Icons.search),
-            label: const Text('Browse Books'),
+          GradientButton(
+            onPressed: () => Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => const HomeScreen()),
+            ),
+            icon: Icons.search,
+            text: 'Browse Books',
           ),
         ],
       ),

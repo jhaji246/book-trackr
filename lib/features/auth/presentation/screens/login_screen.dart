@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../../shared/providers/auth_provider.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/widgets/gradient_button.dart';
 import 'signup_screen.dart';
 import 'forgot_password_screen.dart';
 
@@ -158,37 +159,20 @@ class LoginScreen extends HookConsumerWidget {
                   // Forgot Password
                   Align(
                     alignment: Alignment.centerRight,
-                    child: TextButton(
-                      onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ForgotPasswordScreen())),
-                      child: Text(
-                        'Forgot Password?',
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
+                    child: GradientTextButton(
+                      onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute(builder: (_) => const ForgotPasswordScreen()),
                       ),
+                      text: 'Forgot Password?',
                     ),
                   ),
                   const SizedBox(height: AppConstants.paddingMedium),
 
                   // Sign In Button
-                  FilledButton(
+                  GradientButton(
                     onPressed: authState.isLoading ? null : handleSignIn,
-                    style: FilledButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(AppConstants.radiusMedium),
-                      ),
-                    ),
-                    child: authState.isLoading
-                        ? const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : const Text(
-                            'Sign In',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
+                    text: 'Sign In',
+                    isLoading: authState.isLoading,
                   ),
                   const SizedBox(height: AppConstants.paddingMedium),
 
@@ -211,16 +195,14 @@ class LoginScreen extends HookConsumerWidget {
                   const SizedBox(height: AppConstants.paddingMedium),
 
                   // Google Sign In Button
-                  OutlinedButton.icon(
+                  GradientOutlinedButton(
                     onPressed: authState.isLoading ? null : handleGoogleSignIn,
-                    icon: const Icon(Icons.g_mobiledata),
-                    label: const Text('Continue with Google'),
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(AppConstants.radiusMedium),
-                      ),
-                    ),
+                    icon: Icons.g_mobiledata,
+                    text: 'Continue with Google',
+                    colors: [
+                      Colors.grey.shade700,
+                      Colors.grey.shade600,
+                    ],
                   ),
                   const SizedBox(height: AppConstants.paddingLarge),
 
@@ -234,15 +216,11 @@ class LoginScreen extends HookConsumerWidget {
                           color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
                         ),
                       ),
-                      TextButton(
-                        onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (_) => const SignupScreen())),
-                        child: Text(
-                          'Sign Up',
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.primary,
-                            fontWeight: FontWeight.bold,
-                          ),
+                      GradientTextButton(
+                        onPressed: () => Navigator.of(context).push(
+                          MaterialPageRoute(builder: (_) => const SignupScreen()),
                         ),
+                        text: 'Sign Up',
                       ),
                     ],
                   ),
@@ -288,11 +266,11 @@ class LoginScreen extends HookConsumerWidget {
                   // Test Error Clearing Button (for debugging)
                   if (authState.error != null) ...[
                     const SizedBox(height: AppConstants.paddingSmall),
-                    TextButton(
+                    GradientTextButton(
                       onPressed: () {
                         ref.read(authProvider.notifier).clearAllErrors();
                       },
-                      child: const Text('Clear Error (Debug)'),
+                      text: 'Clear Error (Debug)',
                     ),
                   ],
                 ],

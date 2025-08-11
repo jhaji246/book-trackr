@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/widgets/gradient_button.dart';
 import '../../../../shared/providers/auth_provider.dart';
 import 'login_screen.dart';
 import '../../../books/presentation/screens/home_screen.dart';
@@ -169,7 +170,7 @@ class SignupScreen extends HookConsumerWidget {
               const SizedBox(height: AppConstants.paddingLarge),
 
               // Sign Up Button
-              FilledButton(
+              GradientButton(
                 onPressed: authState.isLoading
                     ? null
                     : () async {
@@ -200,7 +201,7 @@ class SignupScreen extends HookConsumerWidget {
                         
                         try {
                           await ref.read(authProvider.notifier).signUpWithEmail(email, password, name);
-                          
+                         
                           // Check if sign up was successful
                           if (ref.read(authProvider).isAuthenticated) {
                             if (context.mounted) {
@@ -220,36 +221,19 @@ class SignupScreen extends HookConsumerWidget {
                           }
                         }
                       },
-                style: FilledButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(AppConstants.radiusMedium),
-                  ),
-                ),
-                child: authState.isLoading
-                    ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Text(
-                        'Create Account',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                text: 'Create Account',
+                isLoading: authState.isLoading,
               ),
               const SizedBox(height: AppConstants.paddingMedium),
 
               // Google Sign Up Button
-              OutlinedButton.icon(
+              GradientOutlinedButton(
                 onPressed: authState.isLoading
                     ? null
                     : () async {
                         try {
                           await ref.read(authProvider.notifier).signInWithGoogle();
-                          
+
                           // Check if sign in was successful
                           if (ref.read(authProvider).isAuthenticated) {
                             if (context.mounted) {
@@ -259,24 +243,16 @@ class SignupScreen extends HookConsumerWidget {
                             }
                           }
                         } catch (e) {
-                          if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Google sign up failed: $e'),
-                                backgroundColor: Colors.red,
-                              ),
-                            );
-                          }
+                          // Error is already handled by the provider
+                          debugPrint('Google sign up error: $e');
                         }
                       },
-                icon: const Icon(Icons.g_mobiledata),
-                label: const Text('Sign up with Google'),
-                style: OutlinedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(AppConstants.radiusMedium),
-                  ),
-                ),
+                icon: Icons.g_mobiledata,
+                text: 'Sign up with Google',
+                colors: [
+                  Colors.grey.shade700,
+                  Colors.grey.shade600,
+                ],
               ),
 
               const SizedBox(height: AppConstants.paddingXLarge),
@@ -286,11 +262,11 @@ class SignupScreen extends HookConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text('Already have an account? '),
-                  TextButton(
+                  GradientTextButton(
                     onPressed: () => Navigator.of(context).pushReplacement(
                       MaterialPageRoute(builder: (context) => const LoginScreen()),
                     ),
-                    child: const Text('Sign In'),
+                    text: 'Sign In',
                   ),
                 ],
               ),

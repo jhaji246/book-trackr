@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../../core/constants/app_constants.dart';
-import '../../../../shared/models/book.dart';
+import '../../../../core/widgets/gradient_button.dart';
+import '../../../../shared/models/user_book.dart';
 import '../../../../shared/providers/bookshelf_provider.dart';
 import '../../../../shared/providers/reading_goals_provider.dart';
 
@@ -20,13 +21,13 @@ class ProgressDialog extends HookConsumerWidget {
       text: userBook.currentPage.toString(),
     );
     final reviewController = useTextEditingController(
-      text: userBook.review,
+      text: userBook.notes,
     );
 
     final selectedRating = useState(userBook.rating);
 
     return AlertDialog(
-      title: Text('Update Progress - ${userBook.book.title}'),
+      title: Text('Update Progress - ${userBook.title}'),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -98,11 +99,11 @@ class ProgressDialog extends HookConsumerWidget {
         ),
       ),
       actions: [
-        TextButton(
+        GradientTextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancel'),
+          text: 'Cancel',
         ),
-        FilledButton(
+        GradientButton(
           onPressed: () async {
             final currentPage = int.tryParse(currentPageController.text) ?? 0;
             final rating = selectedRating.value;
@@ -110,20 +111,20 @@ class ProgressDialog extends HookConsumerWidget {
 
             // Update bookshelf
             await ref.read(bookshelfProvider.notifier).updateReadingProgress(
-              userBook.book.id,
+              userBook.id,
               currentPage,
             );
 
             if (rating > 0) {
               await ref.read(bookshelfProvider.notifier).rateBook(
-                userBook.book.id,
+                userBook.id,
                 rating,
               );
             }
 
             if (review.isNotEmpty) {
               await ref.read(bookshelfProvider.notifier).reviewBook(
-                userBook.book.id,
+                userBook.id,
                 review,
               );
             }
@@ -145,7 +146,7 @@ class ProgressDialog extends HookConsumerWidget {
               );
             }
           },
-          child: const Text('Save'),
+          text: 'Save',
         ),
       ],
     );

@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../shared/providers/books_provider.dart';
 import '../../../../shared/providers/recommendation_provider.dart';
 import '../../../../shared/models/book.dart';
+import '../../../../core/widgets/gradient_button.dart';
 import '../widgets/book_card.dart';
 import '../widgets/recommendation_card.dart';
 import '../../../../core/widgets/theme_toggle.dart';
@@ -226,13 +227,13 @@ class HomeScreen extends HookConsumerWidget {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 24),
-          FilledButton.icon(
+          GradientButton(
             onPressed: () {
               ref.read(booksProvider.notifier).clearError();
               ref.read(booksProvider.notifier).loadFeaturedBooks();
             },
-            icon: const Icon(Icons.refresh),
-            label: const Text('Try Again'),
+            icon: Icons.refresh,
+            text: 'Try Again',
           ),
         ],
       ),

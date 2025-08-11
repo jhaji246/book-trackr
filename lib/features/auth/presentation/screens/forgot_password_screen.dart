@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/widgets/gradient_button.dart';
 import '../../../../shared/providers/auth_provider.dart';
 import 'login_screen.dart';
 
@@ -94,74 +95,54 @@ class ForgotPasswordScreen extends HookConsumerWidget {
             const SizedBox(height: AppConstants.paddingLarge),
 
             // Reset Button
-            FilledButton(
+            GradientButton(
               onPressed: authState.isLoading
                   ? null
                   : () async {
-                      if (emailController.text.trim().isNotEmpty) {
-                        try {
-                          await ref.read(authProvider.notifier).resetPassword(
-                            emailController.text.trim(),
-                          );
-                          
-                          // Show success message and navigate back to login
-                          if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Password reset link sent! Check your email.'),
-                                backgroundColor: Colors.green,
-                              ),
-                            );
-                            
-                            // Navigate back to login screen
-                            Navigator.of(context).pushAndRemoveUntil(
-                              MaterialPageRoute(
-                                builder: (context) => const LoginScreen(),
-                              ),
-                              (route) => false, // Remove all previous routes
-                            );
-                          }
-                        } catch (e) {
-                          // Error is already handled by the provider
-                          debugPrint('Password reset error: $e');
-                        }
-                      } else {
-                        // Show error for empty email
+                      final email = emailController.text.trim();
+                      
+                      if (email.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text('Please enter your email address'),
                             backgroundColor: Colors.red,
                           ),
                         );
+                        return;
+                      }
+                      
+                      try {
+                        await ref.read(authProvider.notifier).resetPassword(email);
+                        
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Password reset email sent! Check your inbox.'),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+                          
+                          // Navigate to login screen
+                          Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(builder: (context) => const LoginScreen()),
+                            (route) => false,
+                          );
+                        }
+                      } catch (e) {
+                        // Error is already handled by the provider
+                        debugPrint('Password reset error: $e');
                       }
                     },
-              style: FilledButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppConstants.radiusMedium),
-                ),
-              ),
-              child: authState.isLoading
-                  ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : const Text(
-                      'Send Reset Link',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+              text: 'Send Reset Link',
+              isLoading: authState.isLoading,
             ),
 
             const Spacer(),
 
             // Back to Login
-            TextButton(
+            GradientTextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Back to Login'),
+              text: 'Back to Login',
             ),
           ],
         ),

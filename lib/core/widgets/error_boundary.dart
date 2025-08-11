@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import '../constants/app_constants.dart';
+import 'gradient_button.dart';
 
 /// A widget that catches errors in its child widget tree and displays
 /// a fallback UI instead of crashing the app.
@@ -142,10 +143,10 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
               ),
               if (widget.showRetry) ...[
                 const SizedBox(height: 24),
-                FilledButton.icon(
+                GradientButton(
                   onPressed: _retry,
-                  icon: const Icon(Icons.refresh),
-                  label: const Text('Try Again'),
+                  icon: Icons.refresh,
+                  text: 'Try Again',
                 ),
               ],
               if (kDebugMode) ...[
@@ -347,10 +348,10 @@ class _AsyncErrorBoundaryState extends State<AsyncErrorBoundary> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 24),
-              FilledButton.icon(
+              GradientButton(
                 onPressed: _retry,
-                icon: const Icon(Icons.refresh),
-                label: const Text('Retry'),
+                icon: Icons.refresh,
+                text: 'Retry',
               ),
               if (kDebugMode && _error != null) ...[
                 const SizedBox(height: 16),

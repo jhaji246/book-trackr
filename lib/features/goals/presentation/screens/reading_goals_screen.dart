@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/widgets/gradient_button.dart';
 import '../../../../shared/providers/reading_goals_provider.dart';
 
 class ReadingGoalsScreen extends HookConsumerWidget {
@@ -115,7 +116,7 @@ class ReadingGoalsScreen extends HookConsumerWidget {
             const SizedBox(height: AppConstants.paddingMedium),
             SizedBox(
               width: double.infinity,
-              child: FilledButton(
+              child: GradientButton(
                 onPressed: () {
                   final books = int.tryParse(booksController.text) ?? 0;
                   final pages = int.tryParse(pagesController.text) ?? 0;
@@ -124,7 +125,7 @@ class ReadingGoalsScreen extends HookConsumerWidget {
                     pagesPerDay: pages,
                   );
                 },
-                child: const Text('Save Goals'),
+                text: 'Save Goals',
               ),
             ),
           ],

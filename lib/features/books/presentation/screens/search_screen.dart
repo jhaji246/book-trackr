@@ -3,6 +3,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/widgets/error_boundary.dart';
+import '../../../../core/widgets/gradient_button.dart';
 import '../../../../shared/providers/books_provider.dart';
 import '../../../../shared/models/book.dart';
 import '../widgets/book_card.dart';
@@ -224,15 +225,15 @@ class _SearchScreenContent extends HookConsumerWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
-            FilledButton.icon(
+            GradientButton(
               onPressed: () {
                 // Safely navigate back
                 if (context.mounted) {
                   Navigator.of(context).pop();
                 }
               },
-              icon: const Icon(Icons.arrow_back),
-              label: const Text('Go Back'),
+              icon: Icons.arrow_back,
+              text: 'Go Back',
             ),
           ],
         ),
