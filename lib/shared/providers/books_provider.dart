@@ -2,7 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
 import '../models/book.dart';
 import '../models/google_book.dart';
-import '../../core/services/books_api_service.dart';
+import 'package:flutter/foundation.dart';
+import '../../core/config/environment.dart';
 
 final booksProvider = StateNotifierProvider<BooksNotifier, BooksState>((ref) {
   return BooksNotifier();
@@ -59,6 +60,51 @@ class BooksNotifier extends StateNotifier<BooksState> {
         isLoading: false,
       );
     } catch (e) {
+      // In development, provide fallback data
+      if (Environment.isDebugMode) {
+        debugPrint('Error loading featured books: $e');
+        debugPrint('Using fallback data for development');
+        
+        final fallbackBooks = [
+          Book(
+            id: 'fallback_1',
+            title: 'The Great Gatsby',
+            author: 'F. Scott Fitzgerald',
+            description: 'A story of the fabulously wealthy Jay Gatsby and his love for the beautiful Daisy Buchanan.',
+            coverUrl: 'https://books.google.com/books/content?id=1',
+            averageRating: 4.2,
+            ratingCount: 1000,
+            pageCount: 180,
+            isbn: '978-0743273565',
+            publishedDate: '1925-04-10',
+            genres: ['Fiction', 'Classic'],
+            publisher: 'Scribner',
+            language: 'en',
+          ),
+          Book(
+            id: 'fallback_2',
+            title: 'To Kill a Mockingbird',
+            author: 'Harper Lee',
+            description: 'The story of young Scout Finch and her father Atticus in a racially divided Alabama town.',
+            coverUrl: 'https://books.google.com/books/content?id=2',
+            averageRating: 4.3,
+            ratingCount: 1200,
+            pageCount: 281,
+            isbn: '978-0446310789',
+            publishedDate: '1960-07-11',
+            genres: ['Fiction', 'Classic'],
+            publisher: 'Grand Central Publishing',
+            language: 'en',
+          ),
+        ];
+        
+        state = state.copyWith(
+          featuredBooks: fallbackBooks,
+          isLoading: false,
+        );
+        return;
+      }
+      
       state = state.copyWith(
         isLoading: false,
         error: 'Failed to load featured books: $e',
@@ -67,26 +113,55 @@ class BooksNotifier extends StateNotifier<BooksState> {
   }
 
   Future<void> searchBooks(String query) async {
-    if (query.trim().isEmpty) {
-      state = state.copyWith(books: [], searchQuery: null);
+    if (_isQueryEmpty(query)) {
+      _clearSearchResults();
       return;
     }
 
     try {
-      state = state.copyWith(isLoading: true, error: null, searchQuery: query);
+      _setLoadingState(true);
+      _clearError();
+      _updateSearchQuery(query);
       
       final books = await _apiService.searchBooks(query);
-      
-      state = state.copyWith(
-        books: books,
-        isLoading: false,
-      );
+      _updateSearchResults(books);
     } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: 'Failed to search books: $e',
-      );
+      _handleSearchError(e);
+    } finally {
+      _setLoadingState(false);
     }
+  }
+
+  bool _isQueryEmpty(String query) {
+    return query.trim().isEmpty;
+  }
+
+  void _clearSearchResults() {
+    state = state.copyWith(books: [], searchQuery: null);
+  }
+
+  void _setLoadingState(bool isLoading) {
+    state = state.copyWith(isLoading: isLoading);
+  }
+
+  void _clearError() {
+    state = state.copyWith(error: null);
+  }
+
+  void _updateSearchQuery(String query) {
+    state = state.copyWith(searchQuery: query);
+  }
+
+  Future<List<Book>> _performBookSearch(String query) async {
+    return await _apiService.searchBooks(query);
+  }
+
+  void _updateSearchResults(List<Book> books) {
+    state = state.copyWith(books: books);
+  }
+
+  void _handleSearchError(dynamic error) {
+    state = state.copyWith(error: 'Failed to search books: $error');
   }
 
   Future<Book?> getBookById(String bookId) async {
@@ -99,19 +174,23 @@ class BooksNotifier extends StateNotifier<BooksState> {
     }
   }
 
-  void clearError() {
-    state = state.copyWith(error: null);
-  }
-
   void clearSearch() {
     state = state.copyWith(books: [], searchQuery: null);
+  }
+
+  void clearError() {
+    state = state.copyWith(error: null);
   }
 }
 
 class BooksApiService {
   final Dio _dio = Dio();
   static const String _baseUrl = 'https://www.googleapis.com/books/v1';
-  static const String _apiKey = 'AIzaSyDnr1rFHn0G4fXZQpWfR75fx5GTpeFM4FE';
+  
+  // Get API key from environment configuration
+  String get _apiKey {
+    return Environment.googleBooksApiKey;
+  }
 
   Future<List<Book>> searchBooks(String query) async {
     try {
@@ -126,9 +205,19 @@ class BooksApiService {
 
       if (response.statusCode == 200) {
         final googleResponse = GoogleBooksResponse.fromJson(response.data);
-        return googleResponse.items?.map((item) => _convertToBook(item)).toList() ?? [];
+        return googleResponse.items.map((item) => _convertToBook(item)).toList();
       } else {
-        throw Exception('Failed to search books: ${response.statusCode}');
+        throw Exception('Failed to search books: HTTP ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 400) {
+        throw Exception('Invalid API request. Please check your API key configuration.');
+      } else if (e.response?.statusCode == 403) {
+        throw Exception('API key is invalid or quota exceeded.');
+      } else if (e.response?.statusCode == 429) {
+        throw Exception('API rate limit exceeded. Please try again later.');
+      } else {
+        throw Exception('Network error: ${e.message}');
       }
     } catch (e) {
       throw Exception('Failed to search books: $e');

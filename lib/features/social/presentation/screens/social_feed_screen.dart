@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:go_router/go_router.dart';
+
 import '../../../../core/constants/app_constants.dart';
-import '../../../../shared/models/book.dart';
+
 
 class SocialFeedScreen extends ConsumerWidget {
   const SocialFeedScreen({super.key});

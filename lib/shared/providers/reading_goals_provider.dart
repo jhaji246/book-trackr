@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/foundation.dart';
 import '../../core/services/firestore_service.dart';
 import '../../core/services/reading_reminders_service.dart';
 
@@ -119,7 +120,7 @@ class ReadingGoalsNotifier extends StateNotifier<ReadingGoalsState> {
       }
     } catch (e) {
       // Log error but don't fail the local operation
-      print('Failed to load goals from cloud: $e');
+      debugPrint('Failed to load goals from cloud: $e');
     }
   }
 
@@ -159,7 +160,7 @@ class ReadingGoalsNotifier extends StateNotifier<ReadingGoalsState> {
         await FirestoreService.updateReadingGoals(userId: userId, goals: goals);
       }
     } catch (e) {
-      print('Failed to save goals to cloud: $e');
+      debugPrint('Failed to save goals to cloud: $e');
     }
   }
 
@@ -243,7 +244,7 @@ class ReadingGoalsNotifier extends StateNotifier<ReadingGoalsState> {
         );
       }
     } catch (e) {
-      print('Failed to update cloud progress: $e');
+      debugPrint('Failed to update cloud progress: $e');
     }
   }
 
@@ -259,7 +260,7 @@ class ReadingGoalsNotifier extends StateNotifier<ReadingGoalsState> {
         currentBookTotalPages: null,
       );
     } catch (e) {
-      print('Failed to update reminders: $e');
+      debugPrint('Failed to update reminders: $e');
     }
   }
 

@@ -2,6 +2,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dio/dio.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import '../constants/app_constants.dart';
 
 class CacheService {
@@ -37,7 +38,7 @@ class CacheService {
   static void _cacheResponse(String path, dynamic data) {
     // Implementation for caching API responses
     // This is a simplified version - in production you might want more sophisticated caching
-    print('Caching response for path: $path');
+    debugPrint('Caching response for path: $path');
   }
 
   // Book caching

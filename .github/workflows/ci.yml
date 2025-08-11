@@ -30,6 +30,44 @@ jobs:
       - name: Check code formatting
         run: dart format --output=none --set-exit-if-changed .
 
+  # SonarQube Analysis
+  sonarqube:
+    name: SonarQube Analysis
+    runs-on: ubuntu-latest
+    needs: [analyze, test]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.0'
+          channel: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Run tests with coverage
+        run: flutter test --coverage
+
+      - name: Generate coverage report
+        run: genhtml coverage/lcov.info -o coverage/html
+
+      - name: SonarQube Scan
+        uses: sonarqube-quality-gate-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        with:
+          scannerArgs: >
+            -Dsonar.projectKey=booktrackr-flutter
+            -Dsonar.sources=lib
+            -Dsonar.tests=test,integration_test
+            -Dsonar.coverage.exclusions=**/*.g.dart,**/*.freezed.dart
+            -Dsonar.dart.coverage.reportPath=coverage/lcov.info
+            -Dsonar.analysis.mode=publish
+
   # Unit Tests
   test:
     name: Run Tests
@@ -204,7 +242,7 @@ jobs:
   deploy:
     name: Deploy to Firebase
     runs-on: ubuntu-latest
-    needs: [analyze, test, build_android, build_ios]
+    needs: [analyze, test, build_android, build_ios, sonarqube]
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout code
@@ -231,19 +269,21 @@ jobs:
   notify:
     name: Notify Team
     runs-on: ubuntu-latest
-    needs: [analyze, test, build_android, build_ios, deploy]
+    needs: [analyze, test, build_android, build_ios, sonarqube, deploy]
     if: always()
     steps:
       - name: Notify on Success
         if: success()
         run: |
           echo "✅ All checks passed!"
+          echo "📊 SonarQube Quality Gate: PASSED"
           # Add notification logic here (Slack, email, etc.)
 
       - name: Notify on Failure
         if: failure()
         run: |
           echo "❌ Some checks failed!"
+          echo "📊 SonarQube Quality Gate: FAILED"
           # Add notification logic here (Slack, email, etc.)
 
 # Cache dependencies for faster builds

@@ -1,44 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'core/app_initializer.dart';
 import 'core/routing/app_router.dart';
-import 'core/services/hive_service.dart';
-import 'core/services/notification_service.dart';
-import 'core/services/reading_reminders_service.dart';
-import 'core/services/cache_service.dart';
-import 'core/services/analytics_service.dart';
-import 'core/services/localization_service.dart';
 import 'shared/providers/theme_provider.dart';
 import 'core/widgets/error_boundary.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  // Initialize Firebase
-  try {
-    await Firebase.initializeApp();
-  } catch (e) {
-    print('Firebase initialization failed: $e');
-  }
-
-  // Initialize Hive
-  await Hive.initFlutter();
-  await HiveService.initialize();
-
-  // Initialize Notifications
-  await NotificationService().initialize();
-  await ReadingRemindersService.initialize();
-
-  // Initialize Cache Service
-  await CacheService.initialize();
-
-  // Initialize Analytics
-  await AnalyticsService.initialize();
-
-  // Initialize Localization
-  await LocalizationService.initialize();
-
+  await AppInitializer.initialize();
   runApp(const ProviderScope(child: BookTrackrApp()));
 }
 
@@ -47,12 +15,11 @@ class BookTrackrApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final router = ref.watch(appRouterProvider);
+    final router = ref.watch(routerProvider);
     final themeMode = ref.watch(themeProvider);
 
     return ErrorBoundary(
       onError: (error, stackTrace) {
-        // Log app-level errors
         debugPrint('App Error: $error');
         debugPrint('App StackTrace: $stackTrace');
       },

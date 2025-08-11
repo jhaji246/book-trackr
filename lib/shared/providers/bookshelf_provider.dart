@@ -3,6 +3,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import '../../core/services/firestore_service.dart';
 import '../models/book.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
 final bookshelfProvider = StateNotifierProvider<BookshelfNotifier, BookshelfState>((ref) {
   return BookshelfNotifier();
@@ -225,7 +226,7 @@ class BookshelfNotifier extends StateNotifier<BookshelfState> {
       }
     } catch (e) {
       // Log error but don't fail the local operation
-      print('Failed to sync to cloud: $e');
+      debugPrint('Failed to sync to cloud: $e');
     }
   }
 
@@ -240,7 +241,7 @@ class BookshelfNotifier extends StateNotifier<BookshelfState> {
       }
     } catch (e) {
       // Log error but don't fail the local operation
-      print('Failed to remove from cloud: $e');
+      debugPrint('Failed to remove from cloud: $e');
     }
   }
 

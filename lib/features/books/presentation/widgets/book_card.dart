@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../shared/models/book.dart';
+import '../../../../core/widgets/cached_network_image_widget.dart';
 
 class BookCard extends StatelessWidget {
   final Book book;
@@ -41,29 +42,11 @@ class BookCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: ClipRRect(
+                child: CachedNetworkImageWidget(
+                  imageUrl: book.coverUrl,
+                  width: 70,
+                  height: 90,
                   borderRadius: BorderRadius.circular(8),
-                  child: Image.network(
-                    book.coverUrl,
-                    width: 70,
-                    height: 90,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        width: 70,
-                        height: 90,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.surfaceVariant,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Icon(
-                          Icons.book,
-                          size: 24,
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
-                      );
-                    },
-                  ),
                 ),
               ),
               const SizedBox(height: 8),

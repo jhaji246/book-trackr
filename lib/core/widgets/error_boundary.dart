@@ -70,9 +70,9 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
 
     // Log error in debug mode
     if (kDebugMode) {
-      print('ErrorBoundary caught error: $error');
+      debugPrint('ErrorBoundary caught error: $error');
       if (stackTrace != null) {
-        print('StackTrace: $stackTrace');
+        debugPrint('StackTrace: $stackTrace');
       }
     }
   }
@@ -143,7 +143,7 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
                 Container(
                   padding: const EdgeInsets.all(12),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surfaceVariant,
+                    color: Theme.of(context).colorScheme.surfaceContainerHighest,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Column(
@@ -160,6 +160,20 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
                         _error.toString(),
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
+                      if (_stackTrace != null) ...[
+                        const SizedBox(height: 8),
+                        Text(
+                          'StackTrace:',
+                          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          _stackTrace.toString(),
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
                     ],
                   ),
                 ),
@@ -243,8 +257,8 @@ class _AsyncErrorBoundaryState extends State<AsyncErrorBoundary> {
       widget.onError?.call(error, stackTrace);
 
       if (kDebugMode) {
-        print('AsyncErrorBoundary caught error: $error');
-        print('StackTrace: $stackTrace');
+        debugPrint('AsyncErrorBoundary caught error: $error');
+        debugPrint('StackTrace: $stackTrace');
       }
     }
   }
@@ -310,6 +324,46 @@ class _AsyncErrorBoundaryState extends State<AsyncErrorBoundary> {
                 icon: const Icon(Icons.refresh),
                 label: const Text('Retry'),
               ),
+              if (kDebugMode && _error != null) ...[
+                const SizedBox(height: 16),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Debug Info:',
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        _error.toString(),
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                      if (_stackTrace != null) ...[
+                        const SizedBox(height: 8),
+                        Text(
+                          'StackTrace:',
+                          style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          _stackTrace.toString(),
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ],
             ],
           ),
         ),

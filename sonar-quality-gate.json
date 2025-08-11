@@ -1,0 +1,59 @@
+{
+  "name": "BookTrackr Flutter Quality Gate",
+  "conditions": [
+    {
+      "metric": "bugs",
+      "op": "GT",
+      "error": "0",
+      "warning": "0"
+    },
+    {
+      "metric": "vulnerabilities",
+      "op": "GT",
+      "error": "0",
+      "warning": "0"
+    },
+    {
+      "metric": "security_hotspots_reviewed",
+      "op": "LT",
+      "error": "100",
+      "warning": "90"
+    },
+    {
+      "metric": "code_smells",
+      "op": "GT",
+      "error": "50",
+      "warning": "25"
+    },
+    {
+      "metric": "coverage",
+      "op": "LT",
+      "error": "80",
+      "warning": "90"
+    },
+    {
+      "metric": "duplicated_lines_density",
+      "op": "GT",
+      "error": "3",
+      "warning": "1"
+    },
+    {
+      "metric": "maintainability_rating",
+      "op": "GT",
+      "error": "1",
+      "warning": "1"
+    },
+    {
+      "metric": "reliability_rating",
+      "op": "GT",
+      "error": "1",
+      "warning": "1"
+    },
+    {
+      "metric": "security_rating",
+      "op": "GT",
+      "error": "1",
+      "warning": "1"
+    }
+  ]
+} 

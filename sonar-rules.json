@@ -1,0 +1,254 @@
+{
+  "rules": {
+    "dart": {
+      "S1135": {
+        "name": "Track uses of \"FIXME\" tags",
+        "severity": "INFO",
+        "status": "ACTIVE"
+      },
+      "S1481": {
+        "name": "Unused local variables should be removed",
+        "severity": "MINOR",
+        "status": "ACTIVE"
+      },
+      "S1172": {
+        "name": "Unused function parameters should be removed",
+        "severity": "MINOR",
+        "status": "ACTIVE"
+      },
+      "S1066": {
+        "name": "Collapsible \"if\" statements should be merged",
+        "severity": "MINOR",
+        "status": "ACTIVE"
+      },
+      "S1125": {
+        "name": "Boolean literals should not be redundant",
+        "severity": "MINOR",
+        "status": "ACTIVE"
+      },
+      "S1075": {
+        "name": "URIs should not be hardcoded",
+        "severity": "MAJOR",
+        "status": "ACTIVE"
+      },
+      "S2068": {
+        "name": "Credentials should not be hard-coded",
+        "severity": "BLOCKER",
+        "status": "ACTIVE"
+      },
+      "S1313": {
+        "name": "IP addresses should not be hardcoded",
+        "severity": "MAJOR",
+        "status": "ACTIVE"
+      },
+      "S1192": {
+        "name": "String literals should not be duplicated",
+        "severity": "MINOR",
+        "status": "ACTIVE"
+      },
+      "S1854": {
+        "name": "Dead stores should be removed",
+        "severity": "MINOR",
+        "status": "ACTIVE"
+      },
+      "S1144": {
+        "name": "Unused private types or members should be removed",
+        "severity": "MINOR",
+        "status": "ACTIVE"
+      },
+      "S125": {
+        "name": "Sections of code should not be commented out",
+        "severity": "INFO",
+        "status": "ACTIVE"
+      },
+      "S1186": {
+        "name": "Methods should not be empty",
+        "severity": "MINOR",
+        "status": "ACTIVE"
+      },
+      "S1188": {
+        "name": "Wildcard imports should not be used",
+        "severity": "MINOR",
+        "status": "ACTIVE"
+      },
+      "S1200": {
+        "name": "Classes should not be coupled to too many other classes",
+        "severity": "MAJOR",
+        "status": "ACTIVE"
+      },
+      "S1201": {
+        "name": "Methods should not be too complex",
+        "severity": "MAJOR",
+        "status": "ACTIVE"
+      },
+      "S1202": {
+        "name": "Classes should not be too deep",
+        "severity": "MAJOR",
+        "status": "ACTIVE"
+      },
+      "S1203": {
+        "name": "Classes should not be too large",
+        "severity": "MAJOR",
+        "status": "ACTIVE"
+      },
+      "S1215": {
+        "name": "\"GC.Collect\" should not be called",
+        "severity": "MAJOR",
+        "status": "ACTIVE"
+      },
+      "S1226": {
+        "name": "Method parameters, caught exceptions and foreach variables' initial values should not be ignored",
+        "severity": "MINOR",
+        "status": "ACTIVE"
+      },
+      "S1227": {
+        "name": "Break statements should not be used except for switch cases",
+        "severity": "MINOR",
+        "status": "ACTIVE"
+      },
+      "S1228": {
+        "name": "Arbitrary \"if\" statements should not be used",
+        "severity": "MINOR",
+        "status": "ACTIVE"
+      },
+      "S1231": {
+        "name": "The ternary operator should not be used",
+        "severity": "MINOR",
+        "status": "ACTIVE"
+      },
+      "S1234": {
+        "name": "Classes should not be coupled to too many other classes (Single Responsibility Principle)",
+        "severity": "MAJOR",
+        "status": "ACTIVE"
+      },
+      "S1235": {
+        "name": "Classes should not be too large",
+        "severity": "MAJOR",
+        "status": "ACTIVE"
+      },
+      "S1236": {
+        "name": "Methods should not be too complex",
+        "severity": "MAJOR",
+        "status": "ACTIVE"
+      },
+      "S1237": {
+        "name": "Classes should not be too deep",
+        "severity": "MAJOR",
+        "status": "ACTIVE"
+      },
+      "S1238": {
+        "name": "Classes should not be too large",
+        "severity": "MAJOR",
+        "status": "ACTIVE"
+      },
+      "S1239": {
+        "name": "Classes should not be too deep",
+        "severity": "MAJOR",
+        "status": "ACTIVE"
+      },
+      "S1240": {
+        "name": "Classes should not be too large",
+        "severity": "MAJOR",
+        "status": "ACTIVE"
+      },
+      "S1241": {
+        "name": "Methods should not be too complex",
+        "severity": "MAJOR",
+        "status": "ACTIVE"
+      },
+      "S1242": {
+        "name": "Classes should not be too deep",
+        "severity": "MAJOR",
+        "status": "ACTIVE"
+      },
+      "S1243": {
+        "name": "Classes should not be too large",
+        "severity": "MAJOR",
+        "status": "ACTIVE"
+      },
+      "S1244": {
+        "name": "Methods should not be too complex",
+        "severity": "MAJOR",
+        "status": "ACTIVE"
+      },
+      "S1245": {
+        "name": "Classes should not be too deep",
+        "severity": "MAJOR",
+        "status": "ACTIVE"
+      },
+      "S1246": {
+        "name": "Classes should not be too large",
+        "severity": "MAJOR",
+        "status": "ACTIVE"
+      },
+      "S1247": {
+        "name": "Methods should not be too complex",
+        "severity": "MAJOR",
+        "status": "ACTIVE"
+      },
+      "S1248": {
+        "name": "Classes should not be too deep",
+        "severity": "MAJOR",
+        "status": "ACTIVE"
+      },
+      "S1249": {
+        "name": "Classes should not be too large",
+        "severity": "MAJOR",
+        "status": "ACTIVE"
+      },
+      "S1250": {
+        "name": "Methods should not be too complex",
+        "severity": "MAJOR",
+        "status": "ACTIVE"
+      }
+    }
+  },
+  "qualityProfiles": {
+    "dart": {
+      "name": "BookTrackr Flutter Profile",
+      "language": "dart",
+      "rules": [
+        "dart:S1135",
+        "dart:S1481",
+        "dart:S1172",
+        "dart:S1066",
+        "dart:S1125",
+        "dart:S1075",
+        "dart:S2068",
+        "dart:S1313",
+        "dart:S1192",
+        "dart:S1854",
+        "dart:S1144",
+        "dart:S125",
+        "dart:S1186",
+        "dart:S1188",
+        "dart:S1200",
+        "dart:S1201",
+        "dart:S1202",
+        "dart:S1203",
+        "dart:S1215",
+        "dart:S1226",
+        "dart:S1227",
+        "dart:S1228",
+        "dart:S1231",
+        "dart:S1234",
+        "dart:S1235",
+        "dart:S1236",
+        "dart:S1237",
+        "dart:S1238",
+        "dart:S1239",
+        "dart:S1240",
+        "dart:S1241",
+        "dart:S1242",
+        "dart:S1243",
+        "dart:S1244",
+        "dart:S1245",
+        "dart:S1246",
+        "dart:S1247",
+        "dart:S1248",
+        "dart:S1249",
+        "dart:S1250"
+      ]
+    }
+  }
+} 

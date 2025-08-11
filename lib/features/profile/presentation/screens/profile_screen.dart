@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/constants/app_constants.dart';
+
 import '../../../../shared/providers/auth_provider.dart';
 import '../../../../shared/providers/bookshelf_provider.dart';
-import '../../../../shared/providers/reading_goals_provider.dart';
-import '../../../../core/widgets/theme_toggle.dart';
+
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});

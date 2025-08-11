@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../constants/app_constants.dart';
 import '../../shared/models/book.dart';
 import '../../shared/providers/bookshelf_provider.dart';
+import 'cached_network_image_widget.dart';
 
 class AnimatedBookCard extends HookConsumerWidget {
   final Book book;
@@ -82,17 +83,10 @@ class AnimatedBookCard extends HookConsumerWidget {
                       child: Stack(
                         children: [
                           // Book Cover Image
-                          Image.network(
-                            book.coverUrl,
+                          CachedNetworkImageWidget(
+                            imageUrl: book.coverUrl,
                             width: double.infinity,
                             height: double.infinity,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Container(
-                                color: AppConstants.lightOnSurfaceVariant.withValues(alpha: 0.1),
-                                child: const Icon(Icons.book, size: 48),
-                              );
-                            },
                           ),
                           // Status Overlay
                           if (showStatus && userBook != null)

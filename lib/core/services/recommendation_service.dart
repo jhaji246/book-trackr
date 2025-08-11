@@ -1,6 +1,6 @@
 import 'dart:math';
 import '../../shared/models/book.dart';
-import '../../shared/providers/bookshelf_provider.dart';
+
 
 class RecommendationService {
   static const int _maxRecommendations = 10;
@@ -20,7 +20,6 @@ class RecommendationService {
     }
 
     final userProfile = analyzeUserProfile(userBooks, completedBooks);
-    final recommendations = <Book>[];
     final scores = <Book, double>{};
 
     for (final book in availableBooks) {
@@ -185,7 +184,6 @@ class RecommendationService {
     List<Book> availableBooks,
     int limit,
   ) {
-    final similarBooks = <Book>[];
     final scores = <Book, double>{};
 
     for (final book in availableBooks) {

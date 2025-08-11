@@ -27,25 +27,33 @@ import '../../shared/models/book.dart';
 /// );
 /// ```
 class FirestoreService {
-  /// Firebase Firestore instance
-  static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  /// Firebase Firestore instance - lazy loaded
+  static FirebaseFirestore? _firestore;
+  static FirebaseFirestore get _firestoreInstance {
+    _firestore ??= FirebaseFirestore.instance;
+    return _firestore!;
+  }
   
-  /// Firebase Auth instance for user authentication
-  static final firebase_auth.FirebaseAuth _auth = firebase_auth.FirebaseAuth.instance;
+  /// Firebase Auth instance for user authentication - lazy loaded
+  static firebase_auth.FirebaseAuth? _auth;
+  static firebase_auth.FirebaseAuth get _authInstance {
+    _auth ??= firebase_auth.FirebaseAuth.instance;
+    return _auth!;
+  }
 
   /// Collection reference for user profiles
-  static CollectionReference get _usersCollection => _firestore.collection('users');
+  static CollectionReference get _usersCollection => _firestoreInstance.collection('users');
   
   /// Collection reference for user bookshelves
-  static CollectionReference get _bookshelvesCollection => _firestore.collection('bookshelves');
+  static CollectionReference get _bookshelvesCollection => _firestoreInstance.collection('bookshelves');
   
   /// Collection reference for reading progress tracking
-  static CollectionReference get _readingProgressCollection => _firestore.collection('reading_progress');
+  static CollectionReference get _readingProgressCollection => _firestoreInstance.collection('reading_progress');
 
   /// Gets the current authenticated user's ID
   /// 
   /// Returns null if no user is currently signed in.
-  static String? get _currentUserId => _auth.currentUser?.uid;
+  static String? get _currentUserId => _authInstance.currentUser?.uid;
 
   /// Creates a new user profile in Firestore.
   /// 
@@ -339,10 +347,6 @@ class FirestoreService {
       final cloudBooks = await getUserBookshelf(userId);
       
       // Create maps for easy comparison
-      final localBookMap = {
-        for (var book in localBooks) book.book.id: book
-      };
-      
       final cloudBookMap = {
         for (var book in cloudBooks) book['bookId']: book
       };
