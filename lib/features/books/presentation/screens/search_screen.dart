@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/widgets/error_boundary.dart';
 import '../../../../shared/providers/books_provider.dart';
 import '../../../../shared/models/book.dart';
 import '../widgets/book_card.dart';
+import 'book_detail_screen.dart';
 
 class SearchScreen extends HookConsumerWidget {
-  const SearchScreen({super.key});
+  final String? searchQuery;
+  final String? category;
+  
+  const SearchScreen({
+    super.key,
+    this.searchQuery,
+    this.category,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -19,17 +26,28 @@ class SearchScreen extends HookConsumerWidget {
         debugPrint('SearchScreen Error: $error');
         debugPrint('StackTrace: $stackTrace');
       },
-      child: _SearchScreenContent(),
+      child: _SearchScreenContent(
+        searchQuery: searchQuery,
+        category: category,
+      ),
     );
   }
 }
 
 class _SearchScreenContent extends HookConsumerWidget {
+  final String? searchQuery;
+  final String? category;
+  
+  const _SearchScreenContent({
+    this.searchQuery,
+    this.category,
+  });
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final booksState = ref.watch(booksProvider);
-    final searchQuery = GoRouterState.of(context).uri.queryParameters['q'] ?? '';
-    final category = GoRouterState.of(context).uri.queryParameters['category'] ?? '';
+    final query = searchQuery ?? '';
+    final cat = category ?? '';
 
     // Use useEffect to trigger search when parameters change
     useEffect(() {
@@ -42,10 +60,10 @@ class _SearchScreenContent extends HookConsumerWidget {
           final booksNotifier = ref.read(booksProvider.notifier);
           
           try {
-            if (category.isNotEmpty) {
-              booksNotifier.searchBooks(category); // Search using category as query
-            } else if (searchQuery.isNotEmpty) {
-              booksNotifier.searchBooks(searchQuery);
+            if (cat.isNotEmpty) {
+              booksNotifier.searchBooks(cat); // Search using category as query
+            } else if (query.isNotEmpty) {
+              booksNotifier.searchBooks(query);
             } else {
               // If no query or category, clear search and load featured books
               booksNotifier.clearSearch();
@@ -68,13 +86,13 @@ class _SearchScreenContent extends HookConsumerWidget {
       return () {
         isInitialized = false;
       };
-    }, [searchQuery, category]); // Re-run effect if query or category changes
+    }, [query, cat]); // Re-run effect if query or category changes
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         title: Text(
-          category.isNotEmpty ? 'Category: $category' : 'Search',
+          cat.isNotEmpty ? 'Category: $cat' : 'Search',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.bold,
           ),
@@ -94,7 +112,7 @@ class _SearchScreenContent extends HookConsumerWidget {
       ),
       body: Column(
         children: [
-          if (category.isNotEmpty) ...[
+          if (cat.isNotEmpty) ...[
             Container(
               margin: const EdgeInsets.all(16),
               padding: const EdgeInsets.all(16),
@@ -114,7 +132,7 @@ class _SearchScreenContent extends HookConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Browsing $category',
+                          'Browsing $cat',
                           style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: Theme.of(context).colorScheme.onPrimaryContainer,
@@ -138,7 +156,7 @@ class _SearchScreenContent extends HookConsumerWidget {
                 ? _buildLoadingState(context)
                 : booksState.error != null
                     ? _buildErrorState(context, booksState.error!, ref)
-                    : _buildSearchResults(context, booksState, ref, category),
+                    : _buildSearchResults(context, booksState, ref, cat),
           ),
         ],
       ),
@@ -257,7 +275,11 @@ class _SearchScreenContent extends HookConsumerWidget {
                   onTap: () {
                     // Safely navigate to book detail
                     if (context.mounted) {
-                      context.push('/book/${book.id}');
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => BookDetailScreen(bookId: book.id),
+                        ),
+                      );
                     }
                   },
                 );

@@ -139,7 +139,7 @@ class HomeScreen extends HookConsumerWidget {
                 ref.read(booksProvider.notifier).searchBooks(controller.text);
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => SearchScreen(),
+                    builder: (context) => SearchScreen(searchQuery: controller.text),
                   ),
                 );
               }
@@ -162,7 +162,7 @@ class HomeScreen extends HookConsumerWidget {
             ref.read(booksProvider.notifier).searchBooks(query);
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => SearchScreen(),
+                builder: (context) => SearchScreen(searchQuery: query),
               ),
             );
           }
@@ -373,7 +373,7 @@ class HomeScreen extends HookConsumerWidget {
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => SearchScreen(),
+                      builder: (context) => SearchScreen(category: category['name'] as String),
                     ),
                   );
                 },
