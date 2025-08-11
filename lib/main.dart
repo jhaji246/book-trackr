@@ -6,6 +6,7 @@ import 'shared/providers/theme_provider.dart';
 import 'shared/providers/auth_provider.dart';
 import 'core/widgets/error_boundary.dart';
 import 'features/books/presentation/screens/home_screen.dart';
+import 'features/auth/presentation/screens/login_screen.dart';
 
 void main() async {
   try {
@@ -86,7 +87,7 @@ class _BookTrackrAppState extends ConsumerState<BookTrackrApp> {
       );
     }
 
-    // Show main app once ready - Simple approach without complex routing
+    // Show main app once ready - Check authentication state
     return MaterialApp(
       title: 'BookTrackr',
       debugShowCheckedModeBanner: false,
@@ -98,7 +99,36 @@ class _BookTrackrAppState extends ConsumerState<BookTrackrApp> {
           debugPrint('App Error: $error');
           debugPrint('App StackTrace: $stackTrace');
         },
-        child: const HomeScreen(),
+        child: Consumer(
+          builder: (context, ref, child) {
+            final authState = ref.watch(authProvider);
+            
+            // Show loading while auth is initializing
+            if (authState.isLoading) {
+              return const Scaffold(
+                backgroundColor: Colors.white,
+                body: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator(),
+                      SizedBox(height: 16),
+                      Text('Checking authentication...', style: TextStyle(fontSize: 16)),
+                    ],
+                  ),
+                ),
+              );
+            }
+            
+            // Show login screen if not authenticated
+            if (!authState.isAuthenticated) {
+              return const LoginScreen();
+            }
+            
+            // Show home screen if authenticated
+            return const HomeScreen();
+          },
+        ),
       ),
     );
   }
