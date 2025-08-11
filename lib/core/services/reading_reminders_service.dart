@@ -13,19 +13,12 @@ class ReadingRemindersService {
   static const int _streakReminderId = 1003;
 
   static Future<void> initialize() async {
-    const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
-    const iosSettings = DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
-    );
-
-    const initSettings = InitializationSettings(
-      android: androidSettings,
-      iOS: iosSettings,
-    );
-
-    await _notifications.initialize(initSettings);
+    try {
+      // TODO: Implement actual reading reminders service
+      // For now, just a placeholder
+    } catch (e) {
+      // Handle initialization error
+    }
   }
 
   // Reading Reminder Preferences

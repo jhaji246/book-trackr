@@ -17,43 +17,27 @@ class NotificationService {
   
   final FlutterLocalNotificationsPlugin _localNotifications = FlutterLocalNotificationsPlugin();
 
-  Future<void> initialize() async {
+  static Future<void> initialize() async {
     try {
-      // Request permission for iOS
-      NotificationSettings settings = await _firebaseMessagingInstance.requestPermission(
+      final messaging = FirebaseMessaging.instance;
+      
+      // Request permission
+      final settings = await messaging.requestPermission(
         alert: true,
         badge: true,
         sound: true,
       );
-
+      
       if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-        debugPrint('User granted permission');
-      } else {
-        debugPrint('User declined or has not accepted permission');
+        // Get FCM token
+        final token = await messaging.getToken();
+        if (token != null) {
+          // TODO: Send token to server
+        }
       }
-
-      // Initialize local notifications
-      await _initializeLocalNotifications();
-
-      // Handle background messages
-      FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
-      // Handle foreground messages
-      FirebaseMessaging.onMessage.listen(_handleForegroundMessage);
-
-      // Handle notification taps
-      FirebaseMessaging.onMessageOpenedApp.listen(_handleNotificationTap);
-
-      // Get FCM token
-      String? token = await _firebaseMessagingInstance.getToken();
-      debugPrint('FCM Token: $token');
-
-      // Subscribe to topics
-      await _firebaseMessagingInstance.subscribeToTopic('reading_reminders');
-      await _firebaseMessagingInstance.subscribeToTopic('new_books');
-
+      
     } catch (e) {
-      debugPrint('Failed to initialize notifications: $e');
+      // Handle notification initialization error
     }
   }
 
@@ -80,23 +64,17 @@ class NotificationService {
   }
 
   void _handleForegroundMessage(RemoteMessage message) {
-    debugPrint('Got a message whilst in the foreground!');
-    debugPrint('Message data: ${message.data}');
-
     if (message.notification != null) {
-      debugPrint('Message also contained a notification: ${message.notification}');
       _showLocalNotification(message);
     }
   }
 
   void _handleNotificationTap(RemoteMessage message) {
-    debugPrint('Notification tapped: ${message.data}');
     // Handle navigation based on notification type
     _handleNotificationNavigation(message.data);
   }
 
   void _onNotificationTapped(NotificationResponse response) {
-    debugPrint('Local notification tapped: ${response.payload}');
     // Handle local notification tap
   }
 
@@ -135,18 +113,15 @@ class NotificationService {
     switch (type) {
       case 'reading_reminder':
         // Navigate to book detail or reading progress
-        debugPrint('Navigate to reading reminder for book: $bookId');
         break;
       case 'new_book':
         // Navigate to new book or home screen
-        debugPrint('Navigate to new book: $bookId');
         break;
       case 'reading_goal':
         // Navigate to reading goals
-        debugPrint('Navigate to reading goals');
         break;
       default:
-        debugPrint('Unknown notification type: $type');
+        break;
     }
   }
 
@@ -254,6 +229,5 @@ class NotificationService {
 // Background message handler
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  debugPrint('Handling a background message: ${message.messageId}');
   // Handle background messages here
 } 

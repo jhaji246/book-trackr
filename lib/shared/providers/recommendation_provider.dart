@@ -45,37 +45,12 @@ class RecommendationNotifier extends StateNotifier<RecommendationState> {
 
   Future<void> generatePersonalizedRecommendations() async {
     try {
-      final bookshelfState = _ref.read(bookshelfProvider);
+      state = state.copyWith(isLoading: true, error: null);
       
-      // Get user's reading history
-      final completedBooks = bookshelfState.completed.map((userBook) => Book(
-        id: userBook.id,
-        title: userBook.title,
-        author: userBook.author,
-        coverUrl: userBook.coverUrl,
-        isbn: userBook.isbn,
-        pageCount: userBook.pageCount,
-        publishedDate: userBook.publishedDate,
-        description: userBook.description,
-        genres: userBook.genres,
-        averageRating: userBook.averageRating,
-        publisher: userBook.publisher,
-        language: userBook.language,
-        ratingCount: userBook.ratingCount,
-      )).toList();
-      
-      // Generate recommendations based on completed books
-      final recommendations = RecommendationService.getRecommendations(
-        completedBooks,
-        bookshelfState.books,
-      );
-      
-      // Get trending books
-      final trendingBooks = RecommendationService.getTrendingBooks(completedBooks);
+      final recommendations = await RecommendationService.getRecommendations();
       
       state = state.copyWith(
         personalizedRecommendations: recommendations,
-        trendingBooks: trendingBooks,
         isLoading: false,
       );
     } catch (e) {

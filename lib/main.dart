@@ -14,7 +14,6 @@ void main() async {
   try {
     await AppInitializer.initialize();
   } catch (e) {
-    debugPrint('Critical initialization failed: $e');
     // Continue anyway - app will show error state but won't be stuck
   }
   runApp(const ProviderScope(child: BookTrackrApp()));
@@ -43,7 +42,6 @@ class _BookTrackrAppState extends ConsumerState<BookTrackrApp> {
   Future<void> _initializeAuth() async {
     if (_isInitializing) {
       try {
-        debugPrint('BookTrackrApp: Starting authentication initialization...');
         final authNotifier = ref.read(authProvider.notifier);
         
         // Clear any persistent errors before initializing
@@ -62,12 +60,10 @@ class _BookTrackrAppState extends ConsumerState<BookTrackrApp> {
                 _isReady = true;
                 _isInitializing = false;
               });
-              debugPrint('BookTrackrApp: App is now ready');
             }
           });
         }
       } catch (e) {
-        debugPrint('BookTrackrApp: Authentication initialization failed: $e');
         // Even if auth fails, show the app - use addPostFrameCallback to prevent rebuild issues
         if (mounted) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -89,7 +85,6 @@ class _BookTrackrAppState extends ConsumerState<BookTrackrApp> {
 
     // Show loading screen until auth is initialized
     if (!_isReady || _isInitializing) {
-      debugPrint('BookTrackrApp: Rendering Initializing screen. _isReady: $_isReady, _isInitializing: $_isInitializing');
       return MaterialApp(
         title: 'BookTrackr',
         debugShowCheckedModeBanner: false,
@@ -137,7 +132,6 @@ class _BookTrackrAppState extends ConsumerState<BookTrackrApp> {
     }
 
     // Show main app once ready - Check authentication state
-    debugPrint('BookTrackrApp: Rendering main app. _isReady: $_isReady, _isInitializing: $_isInitializing');
     return MaterialApp(
       title: 'BookTrackr',
       debugShowCheckedModeBanner: false,
@@ -152,11 +146,9 @@ class _BookTrackrAppState extends ConsumerState<BookTrackrApp> {
         child: Consumer(
           builder: (context, ref, child) {
             final authState = ref.watch(authProvider);
-            debugPrint('BookTrackrApp Consumer: authState.isLoading: ${authState.isLoading}, authState.isAuthenticated: ${authState.isAuthenticated}');
             
             // Show loading while auth is initializing
             if (authState.isLoading) {
-              debugPrint('BookTrackrApp Consumer: Rendering Checking authentication screen.');
               return Scaffold(
                 backgroundColor: Colors.white,
                 body: Center(
@@ -198,12 +190,10 @@ class _BookTrackrAppState extends ConsumerState<BookTrackrApp> {
             
             // Show login screen if not authenticated
             if (!authState.isAuthenticated) {
-              debugPrint('BookTrackrApp Consumer: Rendering LoginScreen.');
               return const LoginScreen();
             }
             
             // Show home screen if authenticated
-            debugPrint('BookTrackrApp Consumer: Rendering HomeScreen.');
             return const HomeScreen();
           },
         ),

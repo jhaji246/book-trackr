@@ -6,14 +6,19 @@ import '../../shared/models/hive_adapters.dart';
 
 class HiveService {
   static Future<void> initialize() async {
-    await Hive.initFlutter();
-    
-    // Register adapters
-    Hive.registerAdapter(UserBookAdapter());
-    Hive.registerAdapter(ReadingStatusAdapter());
-    
-    // Open boxes
-    await Hive.openBox<UserBook>('userBooks');
+    try {
+      await Hive.initFlutter();
+      
+      // Register adapters
+      Hive.registerAdapter(UserBookAdapter());
+      Hive.registerAdapter(ReadingStatusAdapter());
+      
+      // Open boxes
+      await Hive.openBox<UserBook>('userBooks');
+      
+    } catch (e) {
+      rethrow;
+    }
   }
 
   // Box getters

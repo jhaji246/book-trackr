@@ -1,237 +1,146 @@
 import 'package:flutter/foundation.dart';
 
 /// Service for tracking user analytics and app usage.
-/// 
-/// This service provides a centralized way to track user interactions,
-/// app performance, and business metrics. It supports multiple analytics
-/// providers and can be easily extended to add new tracking capabilities.
-/// 
-/// Example usage:
-/// ```dart
-/// // Track a screen view
-/// AnalyticsService.trackScreenView('home_screen');
-/// 
-/// // Track a user action
-/// AnalyticsService.trackEvent('book_added', {
-///   'book_id': 'book123',
-///   'category': 'fiction',
-/// });
-/// ```
+/// This is a placeholder service that can be extended with actual analytics providers.
 class AnalyticsService {
   static bool _isInitialized = false;
   static bool _isEnabled = true;
 
   /// Initialize the analytics service.
-  /// 
-  /// This method should be called during app startup to configure
-  /// analytics providers and set up tracking.
   static Future<void> initialize() async {
     if (_isInitialized) return;
 
     try {
-      // Initialize analytics providers here
-      // For now, we'll just set up basic logging
+      // TODO: Implement actual analytics service
+      // For now, just a placeholder
       _isInitialized = true;
-      
-      if (kDebugMode) {
-        print('AnalyticsService initialized');
-      }
     } catch (e) {
-      if (kDebugMode) {
-        print('Failed to initialize AnalyticsService: $e');
-      }
+      // Handle initialization error
     }
   }
 
-  /// Enables or disables analytics tracking.
-  /// 
-  /// When disabled, all tracking calls will be ignored.
-  /// This is useful for respecting user privacy preferences.
-  static void setEnabled(bool enabled) {
-    _isEnabled = enabled;
-  }
-
-  /// Tracks a screen view.
-  /// 
-  /// Parameters:
-  /// - [screenName]: The name of the screen being viewed
-  /// - [parameters]: Additional parameters to track with the screen view
+  /// Track a screen view event.
   static void trackScreenView(String screenName, {Map<String, dynamic>? parameters}) {
     if (!_isEnabled || !_isInitialized) return;
 
     try {
       final eventData = {
         'screen_name': screenName,
-        'timestamp': DateTime.now().toIso8601String(),
         if (parameters != null) ...parameters,
       };
-
       _logEvent('screen_view', eventData);
     } catch (e) {
-      if (kDebugMode) {
-        print('Failed to track screen view: $e');
-      }
+      // Handle error
     }
   }
 
-  /// Tracks a user action or event.
-  /// 
-  /// Parameters:
-  /// - [eventName]: The name of the event being tracked
-  /// - [parameters]: Additional parameters to track with the event
+  /// Track a custom user event.
   static void trackEvent(String eventName, {Map<String, dynamic>? parameters}) {
     if (!_isEnabled || !_isInitialized) return;
 
     try {
       final eventData = {
         'event_name': eventName,
-        'timestamp': DateTime.now().toIso8601String(),
         if (parameters != null) ...parameters,
       };
-
       _logEvent('user_event', eventData);
     } catch (e) {
-      if (kDebugMode) {
-        print('Failed to track event: $e');
-      }
+      // Handle error
     }
   }
 
-  /// Tracks user engagement metrics.
-  /// 
-  /// Parameters:
-  /// - [metricName]: The name of the metric being tracked
-  /// - [value]: The value of the metric
-  /// - [parameters]: Additional parameters to track with the metric
-  static void trackMetric(String metricName, dynamic value, {Map<String, dynamic>? parameters}) {
+  /// Track a metric or measurement.
+  static void trackMetric(String metricName, dynamic value, {String? unit}) {
     if (!_isEnabled || !_isInitialized) return;
 
     try {
       final eventData = {
         'metric_name': metricName,
         'value': value,
-        'timestamp': DateTime.now().toIso8601String(),
-        if (parameters != null) ...parameters,
+        if (unit != null) 'unit': unit,
       };
-
       _logEvent('metric', eventData);
     } catch (e) {
-      if (kDebugMode) {
-        print('Failed to track metric: $e');
-      }
+      // Handle error
     }
   }
 
-  /// Tracks app performance metrics.
-  /// 
-  /// Parameters:
-  /// - [metricName]: The name of the performance metric
-  /// - [value]: The value of the metric (usually in milliseconds)
-  /// - [parameters]: Additional parameters to track with the metric
-  static void trackPerformance(String metricName, int value, {Map<String, dynamic>? parameters}) {
+  /// Track performance metrics.
+  static void trackPerformance(String metricName, Duration duration) {
     if (!_isEnabled || !_isInitialized) return;
 
     try {
       final eventData = {
         'metric_name': metricName,
-        'value': value,
-        'unit': 'milliseconds',
-        'timestamp': DateTime.now().toIso8601String(),
-        if (parameters != null) ...parameters,
+        'duration_ms': duration.inMilliseconds,
       };
-
       _logEvent('performance', eventData);
     } catch (e) {
-      if (kDebugMode) {
-        print('Failed to track performance: $e');
-      }
+      // Handle error
     }
   }
 
-  /// Tracks user errors and exceptions.
-  /// 
-  /// Parameters:
-  /// - [error]: The error that occurred
-  /// - [stackTrace]: The stack trace of the error
-  /// - [context]: Additional context about where the error occurred
-  static void trackError(Object error, StackTrace? stackTrace, {String? context}) {
+  /// Track errors and exceptions.
+  static void trackError(String errorType, String errorMessage, {StackTrace? stackTrace}) {
     if (!_isEnabled || !_isInitialized) return;
 
     try {
       final eventData = {
-        'error': error.toString(),
-        'stack_trace': stackTrace?.toString(),
-        'context': context,
-        'timestamp': DateTime.now().toIso8601String(),
+        'error_type': errorType,
+        'error_message': errorMessage,
+        if (stackTrace != null) 'stack_trace': stackTrace.toString(),
       };
-
       _logEvent('error', eventData);
     } catch (e) {
-      if (kDebugMode) {
-        print('Failed to track error: $e');
-      }
+      // Handle error
     }
   }
 
-  /// Tracks user session data.
-  /// 
-  /// Parameters:
-  /// - [sessionId]: The unique session identifier
-  /// - [duration]: The duration of the session in seconds
-  /// - [parameters]: Additional session parameters
-  static void trackSession(String sessionId, int duration, {Map<String, dynamic>? parameters}) {
+  /// Track user session events.
+  static void trackSession({String? sessionId, Map<String, dynamic>? parameters}) {
     if (!_isEnabled || !_isInitialized) return;
 
     try {
       final eventData = {
-        'session_id': sessionId,
-        'duration': duration,
-        'timestamp': DateTime.now().toIso8601String(),
+        'session_id': sessionId ?? DateTime.now().millisecondsSinceEpoch.toString(),
         if (parameters != null) ...parameters,
       };
-
       _logEvent('session', eventData);
     } catch (e) {
-      if (kDebugMode) {
-        print('Failed to track session: $e');
-      }
+      // Handle error
     }
   }
 
-  /// Tracks user properties and attributes.
-  /// 
-  /// Parameters:
-  /// - [properties]: Map of user properties to track
+  /// Set user properties for analytics.
   static void setUserProperties(Map<String, dynamic> properties) {
     if (!_isEnabled || !_isInitialized) return;
 
     try {
       final eventData = {
         'properties': properties,
-        'timestamp': DateTime.now().toIso8601String(),
       };
-
       _logEvent('user_properties', eventData);
     } catch (e) {
-      if (kDebugMode) {
-        print('Failed to set user properties: $e');
-      }
+      // Handle error
     }
   }
 
-  /// Logs an analytics event.
-  /// 
-  /// This is the internal method that handles the actual logging
-  /// of analytics events. In a production app, this would send
-  /// data to analytics providers like Firebase Analytics, Mixpanel, etc.
-  static void _logEvent(String eventType, Map<String, dynamic> eventData) {
-    if (kDebugMode) {
-      print('Analytics Event [$eventType]: $eventData');
-    }
+  /// Enable or disable analytics tracking.
+  static void setEnabled(bool enabled) {
+    _isEnabled = enabled;
+  }
 
+  /// Check if analytics is enabled.
+  static bool get isEnabled => _isEnabled;
+
+  /// Check if analytics is initialized.
+  static bool get isInitialized => _isInitialized;
+
+  /// Log events to analytics providers.
+  /// In production, this would send data to Firebase Analytics, Mixpanel, etc.
+  static void _logEvent(String eventType, Map<String, dynamic> eventData) {
     // TODO: Implement actual analytics provider integration
-    // For now, we just log to console in debug mode
-    // In production, this would send to Firebase Analytics, Mixpanel, etc.
+    // For now, this is just a placeholder
   }
 }
 

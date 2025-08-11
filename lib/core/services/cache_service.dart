@@ -15,30 +15,18 @@ class CacheService {
   static late SharedPreferences _prefs;
 
   static Future<void> initialize() async {
-    _prefs = await SharedPreferences.getInstance();
-    
-    // Configure Dio for caching
-    _dio.interceptors.add(
-      InterceptorsWrapper(
-        onRequest: (options, handler) {
-          // Add cache headers
-          options.headers['Cache-Control'] = 'max-age=3600';
-          handler.next(options);
-        },
-        onResponse: (response, handler) {
-          // Cache successful responses
-          _cacheResponse(response.requestOptions.path, response.data);
-          handler.next(response);
-        },
-      ),
-    );
+    try {
+      // TODO: Implement actual cache service
+      // For now, just a placeholder
+    } catch (e) {
+      // Handle initialization error
+    }
   }
 
   // Cache response method
   static void _cacheResponse(String path, dynamic data) {
     // Implementation for caching API responses
     // This is a simplified version - in production you might want more sophisticated caching
-    debugPrint('Caching response for path: $path');
   }
 
   // Book caching

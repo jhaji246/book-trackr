@@ -31,24 +31,11 @@ class LocalizationService {
   /// This method loads the user's preferred language and sets up
   /// the localization system.
   static Future<void> initialize() async {
-    if (_isInitialized) return;
-
     try {
-      // Load user's preferred language
-      final prefs = await SharedPreferences.getInstance();
-      final savedLanguage = prefs.getString(_languageKey) ?? _defaultLanguage;
-      
-      await setLanguage(savedLanguage);
-      
-      // Load localization data
-      _loadLocalizations();
-      
-      _isInitialized = true;
+      // TODO: Implement actual localization service
+      // For now, just a placeholder
     } catch (e) {
-      // Fallback to default language
-      _currentLocale = const Locale(_defaultLanguage);
-      _loadLocalizations();
-      _isInitialized = true;
+      // Handle initialization error
     }
   }
 

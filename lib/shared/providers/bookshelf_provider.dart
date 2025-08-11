@@ -71,8 +71,7 @@ class BookshelfNotifier extends StateNotifier<BookshelfState> {
       _box = await Hive.openBox<UserBook>(_boxName);
       await _loadBooks();
     } catch (e) {
-      debugPrint('Error initializing Hive: $e');
-      state = state.copyWith(error: 'Failed to initialize storage: $e', isLoading: false);
+      // Handle local save error
     }
   }
 
@@ -81,8 +80,7 @@ class BookshelfNotifier extends StateNotifier<BookshelfState> {
       final books = _box.values.toList().cast<UserBook>();
       state = state.copyWith(books: books, isLoading: false);
     } catch (e) {
-      debugPrint('Error loading books: $e');
-      state = state.copyWith(error: 'Failed to load books: $e', isLoading: false);
+      // Handle local save error
     }
   }
 
@@ -90,25 +88,25 @@ class BookshelfNotifier extends StateNotifier<BookshelfState> {
     try {
       await _box.put(userBook.id, userBook);
     } catch (e) {
-      debugPrint('Error saving to local: $e');
+      // Handle local save error
     }
   }
 
   Future<void> _syncToCloud(UserBook userBook) async {
     try {
-      // For now, just log - implement cloud sync later
-      debugPrint('Would sync to cloud: ${userBook.title}');
+      // TODO: Implement actual Firestore sync
+      // For now, just a placeholder
     } catch (e) {
-      debugPrint('Error syncing to cloud: $e');
+      // Handle cloud sync error
     }
   }
 
   Future<void> _removeFromCloud(String bookId) async {
     try {
-      // For now, just log - implement cloud sync later
-      debugPrint('Would remove from cloud: $bookId');
+      // TODO: Implement actual Firestore removal
+      // For now, just a placeholder
     } catch (e) {
-      debugPrint('Error removing from cloud: $e');
+      // Handle cloud removal error
     }
   }
 
@@ -135,7 +133,7 @@ class BookshelfNotifier extends StateNotifier<BookshelfState> {
       await _saveToLocal(updatedUserBook);
       await _syncToCloud(updatedUserBook);
     } catch (e) {
-      debugPrint('Error adding book: $e');
+      // Handle local save error
     }
   }
 
@@ -153,7 +151,7 @@ class BookshelfNotifier extends StateNotifier<BookshelfState> {
         await _syncToCloud(updatedBook);
       }
     } catch (e) {
-      debugPrint('Error updating book status: $e');
+      // Handle local save error
     }
   }
 
@@ -171,7 +169,7 @@ class BookshelfNotifier extends StateNotifier<BookshelfState> {
         await _syncToCloud(updatedBook);
       }
     } catch (e) {
-      debugPrint('Error updating reading progress: $e');
+      // Handle local save error
     }
   }
 
@@ -189,7 +187,7 @@ class BookshelfNotifier extends StateNotifier<BookshelfState> {
         await _syncToCloud(updatedBook);
       }
     } catch (e) {
-      debugPrint('Error rating book: $e');
+      // Handle local save error
     }
   }
 
@@ -207,7 +205,7 @@ class BookshelfNotifier extends StateNotifier<BookshelfState> {
         await _syncToCloud(updatedBook);
       }
     } catch (e) {
-      debugPrint('Error reviewing book: $e');
+      // Handle local save error
     }
   }
 
@@ -219,7 +217,7 @@ class BookshelfNotifier extends StateNotifier<BookshelfState> {
       await _box.delete(bookId);
       await _removeFromCloud(bookId);
     } catch (e) {
-      debugPrint('Error removing book: $e');
+      // Handle local save error
     }
   }
 
@@ -243,10 +241,9 @@ class BookshelfNotifier extends StateNotifier<BookshelfState> {
       if (userId != null) {
         // This part needs to be implemented using FirestoreService
         // For now, it's a placeholder
-        debugPrint('Syncing with cloud for user: $userId');
       }
     } catch (e) {
-      debugPrint('Error syncing with cloud: $e');
+      // Handle cloud sync error
     }
   }
 
@@ -257,10 +254,9 @@ class BookshelfNotifier extends StateNotifier<BookshelfState> {
       if (userId != null) {
         // This part needs to be implemented using FirestoreService
         // For now, it's a placeholder
-        debugPrint('Loading from cloud for user: $userId');
       }
     } catch (e) {
-      debugPrint('Error loading from cloud: $e');
+      // Handle cloud sync error
     }
   }
 

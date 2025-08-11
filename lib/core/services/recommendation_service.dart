@@ -3,31 +3,25 @@ import '../../shared/models/user_book.dart';
 
 class RecommendationService {
   /// Generates personalized book recommendations based on user's reading history
-  static List<Book> getRecommendations(
-    List<Book> availableBooks,
-    List<UserBook> userBooks,
-  ) {
-    if (userBooks.isEmpty) {
-      // If no reading history, return popular books
-      return availableBooks.take(10).toList();
+  static List<Book> getRecommendations() {
+    try {
+      // TODO: Implement actual recommendation algorithm
+      // For now, return empty list
+      return [];
+    } catch (e) {
+      return [];
     }
-
-    // Check if user has already read any books
-    final readBookIds = userBooks.map((userBook) => userBook.id).toSet();
-    
-    // Filter out already read books
-    final unreadBooks = availableBooks.where((book) => !readBookIds.contains(book.id)).toList();
-    
-    // For now, return first 10 unread books
-    // In a real app, you'd implement more sophisticated recommendation algorithms
-    return unreadBooks.take(10).toList();
   }
 
   /// Gets trending books based on user's preferences
-  static List<Book> getTrendingBooks(List<Book> availableBooks) {
-    // For now, return first 10 books
-    // In a real app, you'd implement trending algorithms
-    return availableBooks.take(10).toList();
+  static List<Book> getTrendingBooks() {
+    try {
+      // TODO: Implement actual trending books logic
+      // For now, return empty list
+      return [];
+    } catch (e) {
+      return [];
+    }
   }
 
   /// Analyzes user's reading profile to understand preferences

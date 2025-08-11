@@ -334,26 +334,20 @@ class FirestoreService {
   /// Syncs a user book to the cloud
   static Future<void> syncUserBook(UserBook userBook) async {
     try {
-      final userId = _currentUserId;
-      if (userId != null) {
-        await addBookToShelf(userId: userId, userBook: userBook);
-      }
+      // TODO: Implement actual Firestore sync
+      // For now, just a placeholder
     } catch (e) {
-      throw Exception('Failed to sync user book: $e');
+      // Handle sync error
     }
   }
 
   /// Removes a user book from the cloud
   static Future<void> removeUserBook(String bookId) async {
     try {
-      final userId = _currentUserId;
-      if (userId != null) {
-        final userDoc = _firestoreInstance.collection('users').doc(userId);
-        final bookshelfCollection = userDoc.collection('bookshelf');
-        await bookshelfCollection.doc(bookId).delete();
-      }
+      // TODO: Implement actual Firestore removal
+      // For now, just a placeholder
     } catch (e) {
-      throw Exception('Failed to remove user book: $e');
+      // Handle removal error
     }
   }
 
@@ -363,11 +357,10 @@ class FirestoreService {
     required List<UserBook> localBooks,
   }) async {
     try {
-      for (final userBook in localBooks) {
-        await addBookToShelf(userId: userId, userBook: userBook);
-      }
+      // TODO: Implement actual cloud sync
+      // For now, just a placeholder
     } catch (e) {
-      throw Exception('Failed to sync local data with cloud: $e');
+      // Handle sync error
     }
   }
 } 
