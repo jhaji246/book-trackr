@@ -86,7 +86,7 @@ class _BookTrackrAppState extends ConsumerState<BookTrackrApp> {
       );
     }
 
-    // Show main app once ready - ErrorBoundary is now inside MaterialApp
+    // Show main app once ready - Simple approach without complex routing
     return MaterialApp(
       title: 'BookTrackr',
       debugShowCheckedModeBanner: false,

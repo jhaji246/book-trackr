@@ -9,6 +9,9 @@ import '../../../../shared/models/book.dart';
 import '../widgets/book_card.dart';
 import '../widgets/recommendation_card.dart';
 import '../../../../core/widgets/theme_toggle.dart';
+import '../../../profile/presentation/screens/profile_screen.dart';
+import 'book_detail_screen.dart';
+import 'search_screen.dart';
 
 class HomeScreen extends HookConsumerWidget {
   const HomeScreen({super.key});
@@ -75,7 +78,11 @@ class HomeScreen extends HookConsumerWidget {
         actions: [
           const ThemeToggle(),
           IconButton(
-            onPressed: () => context.go('/profile'),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const ProfileScreen(),
+              ),
+            ),
             icon: CircleAvatar(
               backgroundColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
               child: Icon(
@@ -130,7 +137,11 @@ class HomeScreen extends HookConsumerWidget {
             onPressed: () {
               if (controller.text.isNotEmpty) {
                 ref.read(booksProvider.notifier).searchBooks(controller.text);
-                context.push('/search?q=${controller.text}');
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => SearchScreen(),
+                  ),
+                );
               }
             },
             icon: Icon(
@@ -149,7 +160,11 @@ class HomeScreen extends HookConsumerWidget {
         onSubmitted: (query) {
           if (query.isNotEmpty) {
             ref.read(booksProvider.notifier).searchBooks(query);
-            context.push('/search?q=$query');
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => SearchScreen(),
+              ),
+            );
           }
         },
       ),
@@ -245,7 +260,11 @@ class HomeScreen extends HookConsumerWidget {
                 title: '🤖 Recommended for You',
                 books: recommendationState.personalizedRecommendations,
                 getReasons: (book) => ref.read(recommendationProvider.notifier).getRecommendationReasons(book),
-                onBookTap: (book) => context.push('/book/${book.id}'),
+                onBookTap: (book) => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => BookDetailScreen(bookId: book.id),
+                  ),
+                ),
               ),
 
             // Trending Books Section
@@ -256,7 +275,11 @@ class HomeScreen extends HookConsumerWidget {
                 title: '🔥 Trending Now',
                 books: recommendationState.trendingBooks,
                 getReasons: (book) => ['Popular and highly rated'],
-                onBookTap: (book) => context.push('/book/${book.id}'),
+                onBookTap: (book) => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => BookDetailScreen(bookId: book.id),
+                  ),
+                ),
               ),
 
             // Featured Books Section
@@ -312,7 +335,11 @@ class HomeScreen extends HookConsumerWidget {
             margin: const EdgeInsets.only(right: 16),
             child: BookCard(
               book: book,
-              onTap: () => context.push('/book/${book.id}'),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => BookDetailScreen(bookId: book.id),
+                ),
+              ),
             ),
           );
         },
@@ -344,7 +371,11 @@ class HomeScreen extends HookConsumerWidget {
               ),
               child: InkWell(
                 onTap: () {
-                  context.push('/search?category=${category['name']}');
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => SearchScreen(),
+                    ),
+                  );
                 },
                 borderRadius: BorderRadius.circular(16),
                 child: Container(
