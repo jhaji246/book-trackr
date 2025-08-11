@@ -60,9 +60,14 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
   }
 
   void _handleError(Object error, StackTrace? stackTrace) {
-    setState(() {
-      _error = error;
-      _stackTrace = stackTrace;
+    // Use addPostFrameCallback to defer setState and prevent build phase issues
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        setState(() {
+          _error = error;
+          _stackTrace = stackTrace;
+        });
+      }
     });
 
     // Call the error callback if provided
@@ -78,9 +83,14 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
   }
 
   void _retry() {
-    setState(() {
-      _error = null;
-      _stackTrace = null;
+    // Use addPostFrameCallback to defer setState and prevent build phase issues
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        setState(() {
+          _error = null;
+          _stackTrace = null;
+        });
+      }
     });
   }
 
@@ -232,25 +242,38 @@ class _AsyncErrorBoundaryState extends State<AsyncErrorBoundary> {
 
   Future<void> _executeOperation() async {
     try {
-      setState(() {
-        _isLoading = true;
-        _error = null;
-        _stackTrace = null;
+      // Use addPostFrameCallback to defer setState and prevent build phase issues
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          setState(() {
+            _isLoading = true;
+            _error = null;
+            _stackTrace = null;
+          });
+        }
       });
 
       await widget.operation();
 
       if (mounted) {
-        setState(() {
-          _isLoading = false;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            setState(() {
+              _isLoading = false;
+            });
+          }
         });
       }
     } catch (error, stackTrace) {
       if (mounted) {
-        setState(() {
-          _isLoading = false;
-          _error = error;
-          _stackTrace = stackTrace;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            setState(() {
+              _isLoading = false;
+              _error = error;
+              _stackTrace = stackTrace;
+            });
+          }
         });
       }
 
@@ -264,7 +287,12 @@ class _AsyncErrorBoundaryState extends State<AsyncErrorBoundary> {
   }
 
   void _retry() {
-    _executeOperation();
+    // Use addPostFrameCallback to defer setState and prevent build phase issues
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _executeOperation();
+      }
+    });
   }
 
   @override
