@@ -84,34 +84,48 @@ final routerProvider = Provider<GoRouter>((ref) {
       // Main app routes
       GoRoute(
         path: '/',
-        builder: (context, state) => const HomeScreen(),
+        builder: (context, state) => const ScaffoldWithNavigationBar(
+          child: HomeScreen(),
+        ),
       ),
       GoRoute(
         path: '/search',
-        builder: (context, state) => const SearchScreen(),
+        builder: (context, state) => const ScaffoldWithNavigationBar(
+          child: SearchScreen(),
+        ),
       ),
       GoRoute(
         path: '/book/:id',
         builder: (context, state) {
           final bookId = state.pathParameters['id']!;
-          return BookDetailScreen(bookId: bookId);
+          return ScaffoldWithNavigationBar(
+            child: BookDetailScreen(bookId: bookId),
+          );
         },
       ),
       GoRoute(
         path: '/library',
-        builder: (context, state) => const LibraryScreen(),
+        builder: (context, state) => const ScaffoldWithNavigationBar(
+          child: LibraryScreen(),
+        ),
       ),
       GoRoute(
         path: '/profile',
-        builder: (context, state) => const ProfileScreen(),
+        builder: (context, state) => const ScaffoldWithNavigationBar(
+          child: ProfileScreen(),
+        ),
       ),
       GoRoute(
         path: '/statistics',
-        builder: (context, state) => const ReadingStatisticsScreen(),
+        builder: (context, state) => const ScaffoldWithNavigationBar(
+          child: ReadingStatisticsScreen(),
+        ),
       ),
       GoRoute(
         path: '/social',
-        builder: (context, state) => const SocialFeedScreen(),
+        builder: (context, state) => const ScaffoldWithNavigationBar(
+          child: SocialFeedScreen(),
+        ),
       ),
     ],
   );

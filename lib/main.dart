@@ -19,6 +19,8 @@ class BookTrackrApp extends ConsumerStatefulWidget {
 }
 
 class _BookTrackrAppState extends ConsumerState<BookTrackrApp> {
+  bool _isAuthInitialized = false;
+
   @override
   void initState() {
     super.initState();
@@ -34,6 +36,13 @@ class _BookTrackrAppState extends ConsumerState<BookTrackrApp> {
       final authNotifier = ref.read(authProvider.notifier);
       await authNotifier.initializeAuth();
       debugPrint('MainApp: Authentication initialization completed successfully');
+      
+      // Force a rebuild after auth is initialized
+      if (mounted) {
+        setState(() {
+          _isAuthInitialized = true;
+        });
+      }
     } catch (e) {
       debugPrint('MainApp: Authentication initialization failed: $e');
     }
@@ -43,6 +52,64 @@ class _BookTrackrAppState extends ConsumerState<BookTrackrApp> {
   Widget build(BuildContext context) {
     final router = ref.watch(routerProvider);
     final themeMode = ref.watch(themeProvider);
+    final authState = ref.watch(authProvider);
+
+    // Show loading screen while auth is initializing
+    if (!_isAuthInitialized || authState.isLoading) {
+      return MaterialApp(
+        home: Scaffold(
+          backgroundColor: Colors.white,
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // App Icon
+                Container(
+                  width: 80,
+                  height: 80,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF2196F3),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Icon(
+                    Icons.book,
+                    size: 40,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                
+                // App Name
+                const Text(
+                  'BookTrackr',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF2196F3),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                
+                // Loading Text
+                const Text(
+                  'Loading your reading journey...',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                
+                // Loading Indicator
+                const CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF2196F3)),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
 
     return ErrorBoundary(
       onError: (error, stackTrace) {
