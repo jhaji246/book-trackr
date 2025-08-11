@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import '../../../../shared/providers/auth_provider.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/widgets/animated_widgets.dart';
+import '../../../../core/widgets/custom_page_transition.dart';
 import '../../../../core/widgets/gradient_button.dart';
-import 'signup_screen.dart';
+import '../../../../shared/providers/auth_provider.dart';
 import 'forgot_password_screen.dart';
+import 'signup_screen.dart';
 
 class LoginScreen extends HookConsumerWidget {
   const LoginScreen({super.key});
@@ -16,6 +18,16 @@ class LoginScreen extends HookConsumerWidget {
     final passwordController = useTextEditingController();
     final authState = ref.watch(authProvider);
     final formKey = useMemoized(() => GlobalKey<FormState>());
+
+    // Clear any existing errors when the screen loads
+    useEffect(() {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (authState.error != null) {
+          ref.read(authProvider.notifier).clearAllErrors();
+        }
+      });
+      return null;
+    }, []);
 
     // Validation functions
     String? validateEmail(String? value) {
@@ -84,73 +96,88 @@ class LoginScreen extends HookConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   // Logo and Title
-                  Icon(
-                    Icons.book,
-                    size: 80,
-                    color: Theme.of(context).colorScheme.primary,
+                  AnimatedFadeIn(
+                    delay: const Duration(milliseconds: 100),
+                    child: Icon(
+                      Icons.book,
+                      size: 80,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
                   const SizedBox(height: AppConstants.paddingMedium),
-                  Text(
-                    'Welcome Back',
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.onSurface,
+                  AnimatedFadeIn(
+                    delay: const Duration(milliseconds: 200),
+                    child: Text(
+                      'Welcome Back',
+                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: AppConstants.paddingSmall),
-                  Text(
-                    'Sign in to continue your reading journey',
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                  AnimatedFadeIn(
+                    delay: const Duration(milliseconds: 300),
+                    child: Text(
+                      'Sign in to continue your reading journey',
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: AppConstants.paddingXLarge),
 
                   // Email Field
-                  TextFormField(
-                    controller: emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    autocorrect: false,
-                    enableSuggestions: false,
-                    validator: validateEmail,
-                    onChanged: (value) {
-                      // Clear error when user starts typing
-                      if (authState.error != null) {
-                        ref.read(authProvider.notifier).clearAuthError();
-                      }
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'Email',
-                      hintText: 'Enter your email',
-                      prefixIcon: const Icon(Icons.email_outlined),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(AppConstants.radiusMedium),
+                  AnimatedFadeIn(
+                    delay: const Duration(milliseconds: 400),
+                    child: TextFormField(
+                      controller: emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      autocorrect: false,
+                      enableSuggestions: false,
+                      validator: validateEmail,
+                      onChanged: (value) {
+                        // Clear error when user starts typing
+                        if (authState.error != null) {
+                          ref.read(authProvider.notifier).clearAuthError();
+                        }
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Email',
+                        hintText: 'Enter your email',
+                        prefixIcon: const Icon(Icons.email_outlined),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(AppConstants.radiusMedium),
+                        ),
                       ),
                     ),
                   ),
                   const SizedBox(height: AppConstants.paddingMedium),
 
                   // Password Field
-                  TextFormField(
-                    controller: passwordController,
-                    obscureText: true,
-                    enableSuggestions: false,
-                    autocorrect: false,
-                    validator: validatePassword,
-                    onChanged: (value) {
-                      // Clear error when user starts typing
-                      if (authState.error != null) {
-                        ref.read(authProvider.notifier).clearAuthError();
-                      }
-                    },
-                    decoration: InputDecoration(
-                      labelText: 'Password',
-                      hintText: 'Enter your password',
-                      prefixIcon: const Icon(Icons.lock_outlined),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(AppConstants.radiusMedium),
+                  AnimatedFadeIn(
+                    delay: const Duration(milliseconds: 500),
+                    child: TextFormField(
+                      controller: passwordController,
+                      obscureText: true,
+                      enableSuggestions: false,
+                      autocorrect: false,
+                      validator: validatePassword,
+                      onChanged: (value) {
+                        // Clear error when user starts typing
+                        if (authState.error != null) {
+                          ref.read(authProvider.notifier).clearAuthError();
+                        }
+                      },
+                      decoration: InputDecoration(
+                        labelText: 'Password',
+                        hintText: 'Enter your password',
+                        prefixIcon: const Icon(Icons.lock_outlined),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(AppConstants.radiusMedium),
+                        ),
                       ),
                     ),
                   ),
@@ -207,70 +234,79 @@ class LoginScreen extends HookConsumerWidget {
                   const SizedBox(height: AppConstants.paddingLarge),
 
                   // Sign Up Link
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Don't have an account? ",
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                  const SizedBox(height: AppConstants.paddingMedium),
+                  AnimatedFadeIn(
+                    delay: const Duration(milliseconds: 800),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Don't have an account? ",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                          ),
                         ),
-                      ),
-                      GradientTextButton(
-                        onPressed: () => Navigator.of(context).push(
-                          MaterialPageRoute(builder: (_) => const SignupScreen()),
+                        GradientTextButton(
+                          text: 'Sign Up',
+                          onPressed: () => Navigator.of(context).push(
+                            CustomPageTransitions.slideRight(
+                              child: const SignupScreen(),
+                            ),
+                          ),
+                          colors: [Colors.purple, Colors.purple.shade600],
                         ),
-                        text: 'Sign Up',
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
 
                   // Error Message
                   if (authState.error != null) ...[
                     const SizedBox(height: AppConstants.paddingMedium),
-                    Container(
-                      padding: const EdgeInsets.all(AppConstants.paddingMedium),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.errorContainer,
-                        borderRadius: BorderRadius.circular(AppConstants.radiusMedium),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.error_outline,
+                    AnimatedFadeIn(
+                      delay: const Duration(milliseconds: 700),
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.errorContainer,
+                          borderRadius: BorderRadius.circular(AppConstants.radiusMedium),
+                          border: Border.all(
                             color: Theme.of(context).colorScheme.error,
+                            width: 1,
                           ),
-                          const SizedBox(width: AppConstants.paddingSmall),
-                          Expanded(
-                            child: Text(
-                              authState.error!,
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.onErrorContainer,
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.error_outline,
+                              color: Theme.of(context).colorScheme.error,
+                              size: 20,
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                authState.error!,
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.onErrorContainer,
+                                  fontSize: 14,
+                                ),
                               ),
                             ),
-                          ),
-                          IconButton(
-                            icon: Icon(
-                              Icons.close,
-                              color: Theme.of(context).colorScheme.onErrorContainer,
+                            IconButton(
+                              icon: Icon(
+                                Icons.close,
+                                color: Theme.of(context).colorScheme.error,
+                                size: 18,
+                              ),
+                              onPressed: () => ref.read(authProvider.notifier).clearAuthError(),
+                              padding: EdgeInsets.zero,
+                              constraints: const BoxConstraints(
+                                minWidth: 24,
+                                minHeight: 24,
+                              ),
                             ),
-                            onPressed: () {
-                              ref.read(authProvider.notifier).clearAuthError();
-                            },
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-
-                  // Test Error Clearing Button (for debugging)
-                  if (authState.error != null) ...[
-                    const SizedBox(height: AppConstants.paddingSmall),
-                    GradientTextButton(
-                      onPressed: () {
-                        ref.read(authProvider.notifier).clearAllErrors();
-                      },
-                      text: 'Clear Error (Debug)',
                     ),
                   ],
                 ],

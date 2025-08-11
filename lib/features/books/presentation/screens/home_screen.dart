@@ -13,6 +13,17 @@ import '../../../../core/widgets/theme_toggle.dart';
 import '../../../profile/presentation/screens/profile_screen.dart';
 import 'book_detail_screen.dart';
 import 'search_screen.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../core/widgets/animated_widgets.dart';
+import '../../../../core/widgets/custom_page_transition.dart';
+import '../../../../shared/providers/bookshelf_provider.dart';
+import '../../../../shared/providers/reading_goals_provider.dart';
+import '../../../../shared/providers/theme_provider.dart';
+import '../../../goals/presentation/screens/reading_goals_screen.dart';
+import '../../../statistics/presentation/screens/reading_statistics_screen.dart';
+import '../../../social/presentation/screens/social_feed_screen.dart';
+import '../widgets/animated_book_card.dart';
+import 'library_screen.dart';
 
 class HomeScreen extends HookConsumerWidget {
   const HomeScreen({super.key});
@@ -262,8 +273,8 @@ class HomeScreen extends HookConsumerWidget {
                 books: recommendationState.personalizedRecommendations,
                 getReasons: (book) => ref.read(recommendationProvider.notifier).getRecommendationReasons(book),
                 onBookTap: (book) => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => BookDetailScreen(bookId: book.id, book: book),
+                  CustomPageTransitions.heroTransition(
+                    child: BookDetailScreen(bookId: book.id, book: book),
                   ),
                 ),
               ),
@@ -277,8 +288,8 @@ class HomeScreen extends HookConsumerWidget {
                 books: recommendationState.trendingBooks,
                 getReasons: (book) => ['Popular and highly rated'],
                 onBookTap: (book) => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => BookDetailScreen(bookId: book.id, book: book),
+                  CustomPageTransitions.heroTransition(
+                    child: BookDetailScreen(bookId: book.id, book: book),
                   ),
                 ),
               ),
@@ -334,11 +345,11 @@ class HomeScreen extends HookConsumerWidget {
           return Container(
             width: 120,
             margin: const EdgeInsets.only(right: 16),
-            child: BookCard(
+            child: AnimatedBookCard(
               book: book,
               onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => BookDetailScreen(bookId: book.id, book: book),
+                CustomPageTransitions.heroTransition(
+                  child: BookDetailScreen(bookId: book.id, book: book),
                 ),
               ),
             ),
@@ -373,8 +384,8 @@ class HomeScreen extends HookConsumerWidget {
               child: InkWell(
                 onTap: () {
                   Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => SearchScreen(category: category['name'] as String),
+                    CustomPageTransitions.slideRight(
+                      child: SearchScreen(category: category['name'] as String),
                     ),
                   );
                 },

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../../core/constants/app_constants.dart';
-import '../../../../core/widgets/error_boundary.dart';
+import '../../../../core/widgets/animated_widgets.dart';
+import '../../../../core/widgets/custom_page_transition.dart';
 import '../../../../core/widgets/gradient_button.dart';
-import '../../../../shared/providers/books_provider.dart';
 import '../../../../shared/models/book.dart';
+import '../../../../shared/providers/books_provider.dart';
 import '../widgets/book_card.dart';
 import 'book_detail_screen.dart';
 
@@ -21,13 +22,21 @@ class SearchScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ErrorBoundary(
-      onError: (error, stackTrace) {
-        // Log the error for debugging
-        debugPrint('SearchScreen Error: $error');
-        debugPrint('StackTrace: $stackTrace');
-      },
-      child: _SearchScreenContent(
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      appBar: AppBar(
+        title: Text(
+          searchQuery?.isNotEmpty == true ? 'Search Results' : 'Search Books',
+        ),
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        foregroundColor: Theme.of(context).colorScheme.onSurface,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
+      body: _SearchScreenContent(
         searchQuery: searchQuery,
         category: category,
       ),
@@ -89,30 +98,8 @@ class _SearchScreenContent extends HookConsumerWidget {
       };
     }, [query, cat]); // Re-run effect if query or category changes
 
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: AppBar(
-        title: Text(
-          cat.isNotEmpty ? 'Category: $cat' : 'Search',
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        foregroundColor: Theme.of(context).colorScheme.onSurface,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            // Safely navigate back
-            if (context.mounted) {
-              Navigator.of(context).pop();
-            }
-          },
-        ),
-      ),
-      body: Column(
-        children: [
+    return Column(
+      children: [
           if (cat.isNotEmpty) ...[
             Container(
               margin: const EdgeInsets.all(16),
@@ -160,8 +147,7 @@ class _SearchScreenContent extends HookConsumerWidget {
                     : _buildSearchResults(context, booksState, ref, cat),
           ),
         ],
-      ),
-    );
+      );
   }
 
   Widget _buildLoadingState(BuildContext context) {
@@ -271,18 +257,21 @@ class _SearchScreenContent extends HookConsumerWidget {
               itemCount: booksToShow.length,
               itemBuilder: (context, index) {
                 final book = booksToShow[index];
-                return BookCard(
-                  book: book,
-                  onTap: () {
-                    // Safely navigate to book detail
-                    if (context.mounted) {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => BookDetailScreen(bookId: book.id, book: book),
-                        ),
-                      );
-                    }
-                  },
+                return AnimatedListItem(
+                  index: index,
+                  child: BookCard(
+                    book: book,
+                    onTap: () {
+                      // Safely navigate to book detail
+                      if (context.mounted) {
+                        Navigator.of(context).push(
+                          CustomPageTransitions.heroTransition(
+                            child: BookDetailScreen(bookId: book.id, book: book),
+                          ),
+                        );
+                      }
+                    },
+                  ),
                 );
               },
             ),

@@ -7,6 +7,8 @@ import 'shared/providers/auth_provider.dart';
 import 'core/widgets/error_boundary.dart';
 import 'features/books/presentation/screens/home_screen.dart';
 import 'features/auth/presentation/screens/login_screen.dart';
+import 'core/constants/app_constants.dart';
+import 'core/widgets/animated_widgets.dart';
 
 void main() async {
   try {
@@ -46,6 +48,9 @@ class _BookTrackrAppState extends ConsumerState<BookTrackrApp> {
         
         // Clear any persistent errors before initializing
         authNotifier.clearAllErrors();
+        
+        // Wait a moment to ensure error clearing is processed
+        await Future.delayed(const Duration(milliseconds: 100));
         
         await authNotifier.initializeAuth();
         
@@ -91,15 +96,39 @@ class _BookTrackrAppState extends ConsumerState<BookTrackrApp> {
         themeMode: themeMode,
         theme: AppThemes.lightTheme,
         darkTheme: AppThemes.darkTheme,
-        home: const Scaffold(
+        home: Scaffold(
           backgroundColor: Colors.white,
           body: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircularProgressIndicator(),
-                SizedBox(height: 16),
-                Text('Initializing...', style: TextStyle(fontSize: 16)),
+                AnimatedFadeIn(
+                  delay: const Duration(milliseconds: 200),
+                  child: Icon(
+                    Icons.book,
+                    size: 80,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+                const SizedBox(height: 24),
+                AnimatedFadeIn(
+                  delay: const Duration(milliseconds: 400),
+                  child: AnimatedLoadingIndicator(
+                    size: 32,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                AnimatedFadeIn(
+                  delay: const Duration(milliseconds: 600),
+                  child: Text(
+                    'Initializing...',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -128,15 +157,39 @@ class _BookTrackrAppState extends ConsumerState<BookTrackrApp> {
             // Show loading while auth is initializing
             if (authState.isLoading) {
               debugPrint('BookTrackrApp Consumer: Rendering Checking authentication screen.');
-              return const Scaffold(
+              return Scaffold(
                 backgroundColor: Colors.white,
                 body: Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      CircularProgressIndicator(),
-                      SizedBox(height: 16),
-                      Text('Checking authentication...', style: TextStyle(fontSize: 16)),
+                      AnimatedFadeIn(
+                        delay: const Duration(milliseconds: 200),
+                        child: Icon(
+                          Icons.security,
+                          size: 80,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                      const SizedBox(height: 24),
+                      AnimatedFadeIn(
+                        delay: const Duration(milliseconds: 400),
+                        child: AnimatedLoadingIndicator(
+                          size: 32,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      AnimatedFadeIn(
+                        delay: const Duration(milliseconds: 600),
+                        child: Text(
+                          'Checking authentication...',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),

@@ -5,6 +5,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../../shared/providers/auth_provider.dart';
 import '../../../../shared/providers/bookshelf_provider.dart';
 import '../../../../core/widgets/gradient_button.dart';
+import '../../../../core/constants/app_constants.dart';
+import '../../../../core/widgets/animated_widgets.dart';
 import '../../../goals/presentation/screens/reading_goals_screen.dart';
 import '../../../statistics/presentation/screens/reading_statistics_screen.dart';
 import '../../../auth/presentation/screens/login_screen.dart';
@@ -35,22 +37,40 @@ class ProfileScreen extends ConsumerWidget {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: AppConstants.paddingLarge),
+            
             // Profile Header
-            _buildProfileHeader(context, authState),
-            const SizedBox(height: 32),
-
-            // Reading Stats
-            _buildReadingStats(context, bookshelfState),
-            const SizedBox(height: 24),
-
+            AnimatedFadeIn(
+              delay: const Duration(milliseconds: 100),
+              child: _buildProfileHeader(context, authState),
+            ),
+            
+            const SizedBox(height: AppConstants.paddingLarge),
+            
             // Quick Actions
-            _buildQuickActions(context, ref),
-            const SizedBox(height: 24),
-
-            // Settings
-            _buildSettings(context, ref),
+            AnimatedFadeIn(
+              delay: const Duration(milliseconds: 200),
+              child: _buildQuickActions(context, ref),
+            ),
+            
+            const SizedBox(height: AppConstants.paddingLarge),
+            
+            // Reading Stats
+            AnimatedFadeIn(
+              delay: const Duration(milliseconds: 300),
+              child: _buildReadingStats(context, bookshelfState),
+            ),
+            
+            const SizedBox(height: AppConstants.paddingLarge),
+            
+            // Sign Out Button
+            AnimatedFadeIn(
+              delay: const Duration(milliseconds: 400),
+              child: _buildSignOutButton(context, ref),
+            ),
+            
+            const SizedBox(height: AppConstants.paddingLarge),
           ],
         ),
       ),
@@ -387,6 +407,39 @@ class ProfileScreen extends ConsumerWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildSignOutButton(BuildContext context, WidgetRef ref) {
+    return Container(
+      width: double.infinity,
+      child: GradientButton(
+        text: 'Sign Out',
+        onPressed: () async {
+          try {
+            await ref.read(authProvider.notifier).signOut();
+            if (context.mounted) {
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (context) => const LoginScreen(),
+                ),
+                (route) => false,
+              );
+            }
+          } catch (e) {
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Sign out failed: $e'),
+                  backgroundColor: Theme.of(context).colorScheme.error,
+                ),
+              );
+            }
+          }
+        },
+        icon: Icons.logout,
+        colors: [Colors.red, Colors.red.shade600],
+      ),
     );
   }
 } 

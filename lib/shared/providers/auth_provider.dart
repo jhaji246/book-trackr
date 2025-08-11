@@ -83,7 +83,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
               debugPrint('Firebase type casting error in listener (handled gracefully): $e');
               // Don't set user-facing error for internal Firebase issues
               if (state.isLoading) {
-                state = state.copyWith(isLoading: false);
+                state = state.copyWith(isLoading: false, error: null); // Ensure error is null
               }
             } else {
               // Only set user-facing errors for non-internal issues
@@ -103,7 +103,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
             debugPrint('Firebase type casting error in listener (handled gracefully): $error');
             // Don't set user-facing error for internal Firebase issues
             if (state.isLoading) {
-              state = state.copyWith(isLoading: false);
+              state = state.copyWith(isLoading: false, error: null); // Ensure error is null
             }
           } else {
             // Only set user-facing errors for non-internal issues
@@ -119,7 +119,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       Future.delayed(const Duration(seconds: 10), () {
         if (state.isLoading) {
           debugPrint('AuthProvider: Timeout reached, forcing loading to false');
-          state = state.copyWith(isLoading: false);
+          state = state.copyWith(isLoading: false, error: null); // Ensure error is null
         }
       });
       
@@ -133,7 +133,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
           e.toString().contains('type cast')) {
         debugPrint('Firebase type casting error during initialization (handled gracefully): $e');
         // Don't set user-facing error for internal Firebase issues
-        state = state.copyWith(isLoading: false);
+        state = state.copyWith(isLoading: false, error: null); // Ensure error is null
       } else {
         // Only set user-facing errors for non-internal issues
         state = state.copyWith(
@@ -414,21 +414,24 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = state.copyWith(error: errorMessage);
   }
 
-  /// Clear error when user starts typing or takes action
+  /// Clear all errors and reset to clean state
+  void clearAllErrors() {
+    debugPrint('AuthProvider: All errors cleared');
+    state = state.copyWith(
+      error: null,
+      isLoading: false,
+    );
+  }
+
+  /// Clear authentication error
   void clearAuthError() {
     if (state.error != null) {
+      debugPrint('AuthProvider: Auth error cleared');
       state = state.copyWith(error: null);
-      debugPrint('AuthProvider: Error cleared');
     }
   }
 
-  /// Clear any persistent errors and reset to clean state
-  void clearAllErrors() {
-    state = state.copyWith(error: null);
-    debugPrint('AuthProvider: All errors cleared');
-  }
-
-  /// Clear error when user starts typing or takes action
+  /// Clear error (alias for clearAuthError)
   void clearError() {
     clearAuthError();
   }

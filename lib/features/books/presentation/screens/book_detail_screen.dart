@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../../core/constants/app_constants.dart';
+import '../../../../core/widgets/animated_widgets.dart';
 import '../../../../core/widgets/gradient_button.dart';
 import '../../../../shared/models/book.dart';
 import '../../../../shared/models/user_book.dart';
@@ -85,19 +86,32 @@ class BookDetailScreen extends HookConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildBookHeader(context, displayBook),
+            AnimatedFadeIn(
+              delay: const Duration(milliseconds: 100),
+              child: _buildBookHeader(context, displayBook),
+            ),
             const SizedBox(height: AppConstants.paddingLarge),
-            _buildBookDetails(context, displayBook),
+            AnimatedFadeIn(
+              delay: const Duration(milliseconds: 200),
+              child: _buildBookDetails(context, displayBook),
+            ),
             const SizedBox(height: AppConstants.paddingLarge),
-            if (userBook != null) _buildUserProgress(context, userBook),
+            if (userBook != null) 
+              AnimatedFadeIn(
+                delay: const Duration(milliseconds: 300),
+                child: _buildUserProgress(context, userBook),
+              ),
             const SizedBox(height: AppConstants.paddingLarge),
-            _buildActionButtons(
-              context,
-              ref,
-              displayBook,
-              currentStatus,
-              userBook,
-              readingGoalsState,
+            AnimatedFadeIn(
+              delay: const Duration(milliseconds: 400),
+              child: _buildActionButtons(
+                context,
+                ref,
+                displayBook,
+                currentStatus,
+                userBook,
+                readingGoalsState,
+              ),
             ),
           ],
         ),
