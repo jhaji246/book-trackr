@@ -15,7 +15,7 @@ class AuthState {
 
   const AuthState({
     this.user,
-    this.isLoading = false,
+    this.isLoading = true, // Start with loading true
     this.error,
     this.isAuthenticated = false,
   });
@@ -36,24 +36,42 @@ class AuthState {
 }
 
 class AuthNotifier extends StateNotifier<AuthState> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  FirebaseAuth? _auth;
+  GoogleSignIn? _googleSignIn;
 
   AuthNotifier() : super(const AuthState()) {
-    _initializeAuth();
+    // Don't initialize auth immediately - wait for Firebase to be ready
   }
 
-  void _initializeAuth() {
-    _auth.authStateChanges().listen((User? user) {
+  /// Initialize auth after Firebase is ready
+  Future<void> initializeAuth() async {
+    try {
+      _auth = FirebaseAuth.instance;
+      _googleSignIn = GoogleSignIn();
+      
+      // Set up auth state listener
+      _auth!.authStateChanges().listen((User? user) {
+        state = state.copyWith(
+          user: user,
+          isAuthenticated: user != null,
+          error: null,
+          isLoading: false, // Auth is now initialized
+        );
+      });
+    } catch (e) {
       state = state.copyWith(
-        user: user,
-        isAuthenticated: user != null,
-        error: null,
+        error: 'Failed to initialize authentication: $e',
+        isLoading: false,
       );
-    });
+    }
   }
 
   Future<void> signInWithEmail(String email, String password) async {
+    if (_auth == null) {
+      _handleAuthError('Authentication not initialized');
+      return;
+    }
+
     try {
       _setLoadingState(true);
       _clearError();
@@ -67,13 +85,18 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> _performEmailSignIn(String email, String password) async {
-    await _auth.signInWithEmailAndPassword(
+    await _auth!.signInWithEmailAndPassword(
       email: email.trim(),
       password: password,
     );
   }
 
   Future<void> signInWithGoogle() async {
+    if (_auth == null || _googleSignIn == null) {
+      _handleAuthError('Authentication not initialized');
+      return;
+    }
+
     try {
       _setLoadingState(true);
       _clearError();
@@ -87,7 +110,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> _performGoogleSignIn() async {
-    final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+    final GoogleSignInAccount? googleUser = await _googleSignIn!.signIn();
     if (googleUser == null) {
       throw Exception('Google sign in was cancelled');
     }
@@ -98,10 +121,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
       idToken: googleAuth.idToken,
     );
 
-    await _auth.signInWithCredential(credential);
+    await _auth!.signInWithCredential(credential);
   }
 
   Future<void> signUpWithEmail(String email, String password, String displayName) async {
+    if (_auth == null) {
+      _handleAuthError('Authentication not initialized');
+      return;
+    }
+
     try {
       _setLoadingState(true);
       _clearError();
@@ -115,7 +143,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> _performEmailSignUp(String email, String password, String displayName) async {
-    final userCredential = await _auth.createUserWithEmailAndPassword(
+    final userCredential = await _auth!.createUserWithEmailAndPassword(
       email: email.trim(),
       password: password,
     );
@@ -130,6 +158,11 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> signOut() async {
+    if (_auth == null || _googleSignIn == null) {
+      _handleAuthError('Authentication not initialized');
+      return;
+    }
+
     try {
       _setLoadingState(true);
       _clearError();
@@ -144,12 +177,17 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   Future<void> _performSignOut() async {
     await Future.wait([
-      _auth.signOut(),
-      _googleSignIn.signOut(),
+      _auth!.signOut(),
+      _googleSignIn!.signOut(),
     ]);
   }
 
   Future<void> resetPassword(String email) async {
+    if (_auth == null) {
+      _handleAuthError('Authentication not initialized');
+      return;
+    }
+
     try {
       _setLoadingState(true);
       _clearError();
@@ -163,7 +201,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> _performPasswordReset(String email) async {
-    await _auth.sendPasswordResetEmail(email: email.trim());
+    await _auth!.sendPasswordResetEmail(email: email.trim());
   }
 
   void _setLoadingState(bool isLoading) {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../shared/providers/auth_provider.dart';
+import '../../core/widgets/auth_loading_screen.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/signup_screen.dart';
 import '../../features/auth/presentation/screens/forgot_password_screen.dart';
@@ -19,10 +20,16 @@ final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: '/',
     redirect: (context, state) {
+      // Show loading screen while Firebase is initializing
+      if (authState.isLoading) {
+        return '/loading';
+      }
+
       final isAuthenticated = authState.isAuthenticated;
       final isAuthRoute = state.matchedLocation == '/login' || 
                          state.matchedLocation == '/signup' || 
-                         state.matchedLocation == '/forgot-password';
+                         state.matchedLocation == '/forgot-password' ||
+                         state.matchedLocation == '/loading';
 
       // If user is not authenticated and trying to access protected route
       if (!isAuthenticated && !isAuthRoute) {
@@ -37,6 +44,12 @@ final routerProvider = Provider<GoRouter>((ref) {
       return null;
     },
     routes: [
+      // Loading route
+      GoRoute(
+        path: '/loading',
+        builder: (context, state) => const AuthLoadingScreen(),
+      ),
+      
       // Auth routes
       GoRoute(
         path: '/login',

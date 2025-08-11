@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../firebase_options.dart';
 import 'services/hive_service.dart';
 import 'services/notification_service.dart';
@@ -8,6 +9,7 @@ import 'services/reading_reminders_service.dart';
 import 'services/cache_service.dart';
 import 'services/analytics_service.dart';
 import 'services/localization_service.dart';
+import '../../shared/providers/auth_provider.dart';
 
 /// Handles all app initialization logic
 class AppInitializer {
