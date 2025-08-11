@@ -117,7 +117,7 @@ class LoginScreen extends HookConsumerWidget {
                     onChanged: (value) {
                       // Clear error when user starts typing
                       if (authState.error != null) {
-                        ref.read(authProvider.notifier).clearError();
+                        ref.read(authProvider.notifier).clearAuthError();
                       }
                     },
                     decoration: InputDecoration(
@@ -141,7 +141,7 @@ class LoginScreen extends HookConsumerWidget {
                     onChanged: (value) {
                       // Clear error when user starts typing
                       if (authState.error != null) {
-                        ref.read(authProvider.notifier).clearError();
+                        ref.read(authProvider.notifier).clearAuthError();
                       }
                     },
                     decoration: InputDecoration(

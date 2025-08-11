@@ -51,17 +51,53 @@ class AuthNotifier extends StateNotifier<AuthState> {
       _auth = FirebaseAuth.instance;
       _googleSignIn = GoogleSignIn();
       
-      // Set up auth state listener
-      _auth!.authStateChanges().listen((User? user) {
-        debugPrint('AuthProvider: Auth state changed - User: ${user?.uid ?? 'null'}');
-        state = state.copyWith(
-          user: user,
-          isAuthenticated: user != null,
-          error: null,
-          isLoading: false, // Auth is now initialized
-        );
-        debugPrint('AuthProvider: State updated - isAuthenticated: ${state.isAuthenticated}, isLoading: ${state.isLoading}');
-      });
+      // Set up auth state listener with error handling
+      _auth!.authStateChanges().listen(
+        (User? user) {
+          try {
+            debugPrint('AuthProvider: Auth state changed - User: ${user?.uid ?? 'null'}');
+            state = state.copyWith(
+              user: user,
+              isAuthenticated: user != null,
+              error: null, // Clear any previous errors
+              isLoading: false, // Auth is now initialized
+            );
+            debugPrint('AuthProvider: State updated - isAuthenticated: ${state.isAuthenticated}, isLoading: ${state.isLoading}');
+          } catch (e) {
+            debugPrint('AuthProvider: Error in auth state listener: $e');
+            // Handle internal Firebase errors gracefully
+            if (e.toString().contains('PigeonUserDetails') || 
+                e.toString().contains('List<Object?>') ||
+                e.toString().contains('type cast')) {
+              state = state.copyWith(
+                error: 'Authentication service error. Please try again',
+                isLoading: false,
+              );
+            } else {
+              state = state.copyWith(
+                error: 'Authentication error: $e',
+                isLoading: false,
+              );
+            }
+          }
+        },
+        onError: (error) {
+          debugPrint('AuthProvider: Auth state listener error: $error');
+          // Handle Firebase internal errors
+          String errorMessage = 'Authentication service error. Please try again';
+          if (error.toString().contains('PigeonUserDetails') || 
+              error.toString().contains('List<Object?>') ||
+              error.toString().contains('type cast')) {
+            debugPrint('Firebase type casting error in listener: $error');
+          } else {
+            errorMessage = 'Authentication error: $error';
+          }
+          state = state.copyWith(
+            error: errorMessage,
+            isLoading: false,
+          );
+        },
+      );
       
       // Add a timeout to prevent infinite loading
       Future.delayed(const Duration(seconds: 10), () {
@@ -93,7 +129,28 @@ class AuthNotifier extends StateNotifier<AuthState> {
       
       await _performEmailSignIn(email, password);
     } catch (e) {
-      _handleAuthError('Email sign in failed: $e');
+      // Handle the error based on its type
+      if (e is FirebaseAuthException) {
+        if (e.code == 'custom-error') {
+          // This is our custom error message from _performEmailSignIn
+          _handleAuthError(e.message ?? 'Sign in failed');
+        } else {
+          // This is a standard Firebase error
+          _handleAuthError('Sign in failed: ${e.message ?? e.code}');
+        }
+      } else {
+        // Handle other types of errors
+        String errorMessage = 'Email sign in failed';
+        if (e.toString().contains('PigeonUserDetails') || 
+            e.toString().contains('List<Object?>') ||
+            e.toString().contains('type cast')) {
+          errorMessage = 'Authentication service error. Please try again';
+          debugPrint('Firebase type casting error: $e');
+        } else {
+          errorMessage = 'Sign in failed: $e';
+        }
+        _handleAuthError(errorMessage);
+      }
     } finally {
       _setLoadingState(false);
     }
@@ -132,7 +189,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
           default:
             // Handle PigeonUserDetails and other Firebase-specific errors
             if (e.message?.contains('PigeonUserDetails') == true || 
-                e.message?.contains('type cast') == true) {
+                e.message?.contains('type cast') == true ||
+                e.message?.contains('List<Object?>') == true) {
               errorMessage = 'Authentication service error. Please try again';
               debugPrint('Firebase type casting error: $e');
             } else {
@@ -140,11 +198,23 @@ class AuthNotifier extends StateNotifier<AuthState> {
             }
         }
       } else {
-        // Handle non-Firebase errors
-        errorMessage = 'Sign in failed: $e';
+        // Handle non-Firebase errors, including the specific PigeonUserDetails error
+        if (e.toString().contains('PigeonUserDetails') || 
+            e.toString().contains('List<Object?>') ||
+            e.toString().contains('type cast')) {
+          errorMessage = 'Authentication service error. Please try again';
+          debugPrint('Firebase type casting error: $e');
+        } else {
+          errorMessage = 'Sign in failed: $e';
+        }
       }
       
-      throw Exception(errorMessage);
+      // Instead of throwing a new exception, return the error message
+      // This will be handled by the calling method
+      throw FirebaseAuthException(
+        code: 'custom-error',
+        message: errorMessage,
+      );
     }
   }
 
@@ -317,6 +387,14 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   void clearError() {
     _clearError();
+  }
+
+  /// Clear error when user starts typing or takes action
+  void clearAuthError() {
+    if (state.error != null) {
+      state = state.copyWith(error: null);
+      debugPrint('AuthProvider: Error cleared');
+    }
   }
 
   UserModel? getCurrentUser() {
