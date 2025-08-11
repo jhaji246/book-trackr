@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../models/user_model.dart';
+import 'package:flutter/foundation.dart'; // Added for debugPrint
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   return AuthNotifier();
@@ -46,19 +47,33 @@ class AuthNotifier extends StateNotifier<AuthState> {
   /// Initialize auth after Firebase is ready
   Future<void> initializeAuth() async {
     try {
+      debugPrint('AuthProvider: Starting authentication initialization...');
       _auth = FirebaseAuth.instance;
       _googleSignIn = GoogleSignIn();
       
       // Set up auth state listener
       _auth!.authStateChanges().listen((User? user) {
+        debugPrint('AuthProvider: Auth state changed - User: ${user?.uid ?? 'null'}');
         state = state.copyWith(
           user: user,
           isAuthenticated: user != null,
           error: null,
           isLoading: false, // Auth is now initialized
         );
+        debugPrint('AuthProvider: State updated - isAuthenticated: ${state.isAuthenticated}, isLoading: ${state.isLoading}');
       });
+      
+      // Add a timeout to prevent infinite loading
+      Future.delayed(const Duration(seconds: 10), () {
+        if (state.isLoading) {
+          debugPrint('AuthProvider: Timeout reached, forcing loading to false');
+          state = state.copyWith(isLoading: false);
+        }
+      });
+      
+      debugPrint('AuthProvider: Authentication initialization completed successfully');
     } catch (e) {
+      debugPrint('AuthProvider: Authentication initialization failed: $e');
       state = state.copyWith(
         error: 'Failed to initialize authentication: $e',
         isLoading: false,

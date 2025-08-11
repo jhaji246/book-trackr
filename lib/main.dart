@@ -30,11 +30,12 @@ class _BookTrackrAppState extends ConsumerState<BookTrackrApp> {
 
   Future<void> _initializeAuth() async {
     try {
+      debugPrint('MainApp: Starting authentication initialization...');
       final authNotifier = ref.read(authProvider.notifier);
       await authNotifier.initializeAuth();
-      debugPrint('Authentication initialized successfully');
+      debugPrint('MainApp: Authentication initialization completed successfully');
     } catch (e) {
-      debugPrint('Authentication initialization failed: $e');
+      debugPrint('MainApp: Authentication initialization failed: $e');
     }
   }
 

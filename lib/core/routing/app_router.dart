@@ -20,8 +20,16 @@ final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: '/',
     redirect: (context, state) {
+      // Debug logging
+      debugPrint('Router redirect called:');
+      debugPrint('  Current location: ${state.matchedLocation}');
+      debugPrint('  Auth state - isLoading: ${authState.isLoading}');
+      debugPrint('  Auth state - isAuthenticated: ${authState.isAuthenticated}');
+      debugPrint('  Auth state - error: ${authState.error}');
+
       // Show loading screen while Firebase is initializing
       if (authState.isLoading) {
+        debugPrint('  Redirecting to /loading (Firebase initializing)');
         return '/loading';
       }
 
@@ -33,14 +41,23 @@ final routerProvider = Provider<GoRouter>((ref) {
 
       // If user is not authenticated and trying to access protected route
       if (!isAuthenticated && !isAuthRoute) {
+        debugPrint('  Redirecting to /login (not authenticated)');
         return '/login';
       }
 
       // If user is authenticated and trying to access auth routes
       if (isAuthenticated && isAuthRoute) {
+        debugPrint('  Redirecting to / (authenticated user on auth route)');
         return '/';
       }
 
+      // If user is authenticated and on loading route, go to home
+      if (isAuthenticated && state.matchedLocation == '/loading') {
+        debugPrint('  Redirecting to / (authenticated user on loading route)');
+        return '/';
+      }
+
+      debugPrint('  No redirect needed');
       return null;
     },
     routes: [
