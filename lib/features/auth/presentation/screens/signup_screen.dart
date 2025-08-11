@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../shared/providers/auth_provider.dart';
+import 'login_screen.dart';
+import '../../../books/presentation/screens/home_screen.dart';
 
 class SignupScreen extends HookConsumerWidget {
   const SignupScreen({super.key});
@@ -25,7 +26,9 @@ class SignupScreen extends HookConsumerWidget {
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             // Navigate back to login screen
-            context.go('/login');
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => const LoginScreen()),
+            );
           },
         ),
       ),
@@ -201,7 +204,9 @@ class SignupScreen extends HookConsumerWidget {
                           // Check if sign up was successful
                           if (ref.read(authProvider).isAuthenticated) {
                             if (context.mounted) {
-                              context.go('/');
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(builder: (context) => const HomeScreen()),
+                              );
                             }
                           }
                         } catch (e) {
@@ -248,7 +253,9 @@ class SignupScreen extends HookConsumerWidget {
                           // Check if sign in was successful
                           if (ref.read(authProvider).isAuthenticated) {
                             if (context.mounted) {
-                              context.go('/');
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(builder: (context) => const HomeScreen()),
+                              );
                             }
                           }
                         } catch (e) {
@@ -280,7 +287,9 @@ class SignupScreen extends HookConsumerWidget {
                 children: [
                   const Text('Already have an account? '),
                   TextButton(
-                    onPressed: () => context.go('/login'),
+                    onPressed: () => Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => const LoginScreen()),
+                    ),
                     child: const Text('Sign In'),
                   ),
                 ],
