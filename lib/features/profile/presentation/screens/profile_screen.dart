@@ -4,6 +4,9 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../shared/providers/auth_provider.dart';
 import '../../../../shared/providers/bookshelf_provider.dart';
+import '../../../goals/presentation/screens/reading_goals_screen.dart';
+import '../../../statistics/presentation/screens/reading_statistics_screen.dart';
+import '../../../auth/presentation/screens/login_screen.dart';
 
 
 class ProfileScreen extends ConsumerWidget {
@@ -222,7 +225,11 @@ class ProfileScreen extends ConsumerWidget {
           'Reading Goals',
           'Set and track your reading targets',
           Icons.flag,
-          () => context.push('/goals'),
+          () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const ReadingGoalsScreen(),
+            ),
+          ),
         ),
         const SizedBox(height: 12),
         _buildActionCard(
@@ -230,7 +237,11 @@ class ProfileScreen extends ConsumerWidget {
           'Reading Statistics',
           'View detailed reading analytics',
           Icons.analytics,
-          () => context.push('/statistics'),
+          () => Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => const ReadingStatisticsScreen(),
+            ),
+          ),
         ),
       ],
     );
@@ -330,9 +341,26 @@ class ProfileScreen extends ConsumerWidget {
                   size: 16,
                 ),
                 onTap: () async {
-                  await ref.read(authProvider.notifier).signOut();
-                  if (context.mounted) {
-                    context.go('/login');
+                  try {
+                    await ref.read(authProvider.notifier).signOut();
+                    if (context.mounted) {
+                      // Navigate to login screen and clear the navigation stack
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                          builder: (context) => const LoginScreen(),
+                        ),
+                        (route) => false, // This removes all previous routes
+                      );
+                    }
+                  } catch (e) {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Sign out failed: $e'),
+                          backgroundColor: Theme.of(context).colorScheme.error,
+                        ),
+                      );
+                    }
                   }
                 },
               ),
