@@ -363,15 +363,38 @@ class ReadingStatisticsScreen extends ConsumerWidget {
   }
 
   Widget _buildMonthlyProgress(BuildContext context, bookshelfState) {
-    // Mock monthly data - in a real app, this would come from actual reading data
-    final monthlyData = [
-      {'month': 'Jan', 'books': 3},
-      {'month': 'Feb', 'books': 5},
-      {'month': 'Mar', 'books': 2},
-      {'month': 'Apr', 'books': 7},
-      {'month': 'May', 'books': 4},
-      {'month': 'Jun', 'books': 6},
-    ];
+    // Get real monthly data from user's reading history
+    final monthlyData = _getMonthlyReadingData(bookshelfState);
+    
+    if (monthlyData.isEmpty) {
+      return Card(
+        child: Padding(
+          padding: const EdgeInsets.all(AppConstants.paddingLarge),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Monthly Progress',
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: AppConstants.paddingMedium),
+              const Center(
+                child: Text(
+                  'No reading data available yet.\nStart reading to see your progress!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
 
     return Card(
       child: Padding(
@@ -391,18 +414,21 @@ class ReadingStatisticsScreen extends ConsumerWidget {
               child: BarChart(
                 BarChartData(
                   alignment: BarChartAlignment.spaceAround,
-                  maxY: 10,
+                  maxY: _getMaxBooksCount(monthlyData).toDouble(),
                   barTouchData: BarTouchData(enabled: false),
                   titlesData: FlTitlesData(
                     show: true,
                     bottomTitles: AxisTitles(
                       sideTitles: SideTitles(
                         showTitles: true,
-                        getTitlesWidget: (value, meta) {
-                          return Text(
-                            monthlyData[value.toInt()]['month'] as String,
-                            style: const TextStyle(fontSize: 12),
-                          );
+                        getTitlesWidget: (value, index) {
+                          if (value.toInt() < monthlyData.length) {
+                            return Text(
+                              monthlyData[value.toInt()]['month'] as String,
+                              style: const TextStyle(fontSize: 12),
+                            );
+                          }
+                          return const Text('');
                         },
                       ),
                     ),
@@ -441,6 +467,58 @@ class ReadingStatisticsScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  /// Get real monthly reading data from user's bookshelf
+  List<Map<String, dynamic>> _getMonthlyReadingData(bookshelfState) {
+    final monthlyData = <Map<String, dynamic>>[];
+    final currentYear = DateTime.now().year;
+    
+    // Get all completed books from this year
+    final completedBooks = bookshelfState.completed.where((book) {
+      if (book.completedAt == null) return false;
+      return book.completedAt!.year == currentYear;
+    }).toList();
+    
+    // Group books by month
+    final monthlyCounts = <int, int>{};
+    for (int month = 1; month <= 12; month++) {
+      monthlyCounts[month] = 0;
+    }
+    
+    for (final book in completedBooks) {
+      final month = book.completedAt!.month;
+      monthlyCounts[month] = (monthlyCounts[month] ?? 0) + 1;
+    }
+    
+    // Convert to chart data format
+    final monthNames = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ];
+    
+    for (int month = 1; month <= 12; month++) {
+      if (monthlyCounts[month]! > 0) {
+        monthlyData.add({
+          'month': monthNames[month - 1],
+          'books': monthlyCounts[month],
+        });
+      }
+    }
+    
+    return monthlyData;
+  }
+  
+  /// Get the maximum number of books for chart scaling
+  int _getMaxBooksCount(List<Map<String, dynamic>> monthlyData) {
+    if (monthlyData.isEmpty) return 1;
+    
+    final maxBooks = monthlyData.fold<int>(
+      0,
+      (max, month) => month['books'] > max ? month['books'] : max,
+    );
+    
+    return maxBooks == 0 ? 1 : maxBooks;
   }
 
   Widget _buildInsights(BuildContext context, bookshelfState, goalsState) {

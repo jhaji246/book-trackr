@@ -60,50 +60,7 @@ class BooksNotifier extends StateNotifier<BooksState> {
         isLoading: false,
       );
     } catch (e) {
-      // In development, provide fallback data
-      if (Environment.isDebugMode) {
-        debugPrint('Error loading featured books: $e');
-        debugPrint('Using fallback data for development');
-        
-        final fallbackBooks = [
-          Book(
-            id: 'fallback_1',
-            title: 'The Great Gatsby',
-            author: 'F. Scott Fitzgerald',
-            description: 'A story of the fabulously wealthy Jay Gatsby and his love for the beautiful Daisy Buchanan.',
-            coverUrl: 'https://books.google.com/books/content?id=1',
-            averageRating: 4.2,
-            ratingCount: 1000,
-            pageCount: 180,
-            isbn: '978-0743273565',
-            publishedDate: '1925-04-10',
-            genres: ['Fiction', 'Classic'],
-            publisher: 'Scribner',
-            language: 'en',
-          ),
-          Book(
-            id: 'fallback_2',
-            title: 'To Kill a Mockingbird',
-            author: 'Harper Lee',
-            description: 'The story of young Scout Finch and her father Atticus in a racially divided Alabama town.',
-            coverUrl: 'https://books.google.com/books/content?id=2',
-            averageRating: 4.3,
-            ratingCount: 1200,
-            pageCount: 281,
-            isbn: '978-0446310789',
-            publishedDate: '1960-07-11',
-            genres: ['Fiction', 'Classic'],
-            publisher: 'Grand Central Publishing',
-            language: 'en',
-          ),
-        ];
-        
-        state = state.copyWith(
-          featuredBooks: fallbackBooks,
-          isLoading: false,
-        );
-        return;
-      }
+      debugPrint('Error loading featured books: $e');
       
       state = state.copyWith(
         isLoading: false,
