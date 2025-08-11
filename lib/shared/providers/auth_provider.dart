@@ -65,15 +65,18 @@ class AuthNotifier extends StateNotifier<AuthState> {
             debugPrint('AuthProvider: State updated - isAuthenticated: ${state.isAuthenticated}, isLoading: ${state.isLoading}');
           } catch (e) {
             debugPrint('AuthProvider: Error in auth state listener: $e');
-            // Handle internal Firebase errors gracefully
+            // Handle internal Firebase errors gracefully - don't show user-facing errors for internal issues
             if (e.toString().contains('PigeonUserDetails') || 
                 e.toString().contains('List<Object?>') ||
                 e.toString().contains('type cast')) {
+              debugPrint('Firebase type casting error in listener (handled gracefully): $e');
+              // Don't set user-facing error for internal Firebase issues
               state = state.copyWith(
-                error: 'Authentication service error. Please try again',
                 isLoading: false,
+                // Keep existing error state if any, don't override with internal errors
               );
             } else {
+              // Only set user-facing errors for non-internal issues
               state = state.copyWith(
                 error: 'Authentication error: $e',
                 isLoading: false,
@@ -83,19 +86,23 @@ class AuthNotifier extends StateNotifier<AuthState> {
         },
         onError: (error) {
           debugPrint('AuthProvider: Auth state listener error: $error');
-          // Handle Firebase internal errors
-          String errorMessage = 'Authentication service error. Please try again';
+          // Handle Firebase internal errors gracefully - don't show user-facing errors for internal issues
           if (error.toString().contains('PigeonUserDetails') || 
               error.toString().contains('List<Object?>') ||
               error.toString().contains('type cast')) {
-            debugPrint('Firebase type casting error in listener: $error');
+            debugPrint('Firebase type casting error in listener (handled gracefully): $error');
+            // Don't set user-facing error for internal Firebase issues
+            state = state.copyWith(
+              isLoading: false,
+              // Keep existing error state if any, don't override with internal errors
+            );
           } else {
-            errorMessage = 'Authentication error: $error';
+            // Only set user-facing errors for non-internal issues
+            state = state.copyWith(
+              error: 'Authentication error: $error',
+              isLoading: false,
+            );
           }
-          state = state.copyWith(
-            error: errorMessage,
-            isLoading: false,
-          );
         },
       );
       
@@ -191,7 +198,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
             if (e.message?.contains('PigeonUserDetails') == true || 
                 e.message?.contains('type cast') == true ||
                 e.message?.contains('List<Object?>') == true) {
-              errorMessage = 'Authentication service error. Please try again';
+              // For internal Firebase errors, provide a more helpful message
+              errorMessage = 'Sign in temporarily unavailable. Please try again in a moment.';
               debugPrint('Firebase type casting error: $e');
             } else {
               errorMessage = 'Sign in failed: ${e.message ?? e.code}';
@@ -202,7 +210,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
         if (e.toString().contains('PigeonUserDetails') || 
             e.toString().contains('List<Object?>') ||
             e.toString().contains('type cast')) {
-          errorMessage = 'Authentication service error. Please try again';
+          // For internal Firebase errors, provide a more helpful message
+          errorMessage = 'Sign in temporarily unavailable. Please try again in a moment.';
           debugPrint('Firebase type casting error: $e');
         } else {
           errorMessage = 'Sign in failed: $e';
@@ -385,16 +394,23 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = state.copyWith(error: errorMessage);
   }
 
-  void clearError() {
-    _clearError();
-  }
-
   /// Clear error when user starts typing or takes action
   void clearAuthError() {
     if (state.error != null) {
       state = state.copyWith(error: null);
       debugPrint('AuthProvider: Error cleared');
     }
+  }
+
+  /// Clear any persistent errors and reset to clean state
+  void clearAllErrors() {
+    state = state.copyWith(error: null);
+    debugPrint('AuthProvider: All errors cleared');
+  }
+
+  /// Clear error when user starts typing or takes action
+  void clearError() {
+    clearAuthError();
   }
 
   UserModel? getCurrentUser() {

@@ -39,6 +39,10 @@ class _BookTrackrAppState extends ConsumerState<BookTrackrApp> {
     try {
       debugPrint('BookTrackrApp: Starting authentication initialization...');
       final authNotifier = ref.read(authProvider.notifier);
+      
+      // Clear any persistent errors before initializing
+      authNotifier.clearAllErrors();
+      
       await authNotifier.initializeAuth();
       
       // Mark app as ready after auth initialization

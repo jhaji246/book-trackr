@@ -267,12 +267,32 @@ class LoginScreen extends HookConsumerWidget {
                             child: Text(
                               authState.error!,
                               style: TextStyle(
-                                color: Theme.of(context).colorScheme.error,
+                                color: Theme.of(context).colorScheme.onErrorContainer,
                               ),
                             ),
                           ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.close,
+                              color: Theme.of(context).colorScheme.onErrorContainer,
+                            ),
+                            onPressed: () {
+                              ref.read(authProvider.notifier).clearAuthError();
+                            },
+                          ),
                         ],
                       ),
+                    ),
+                  ],
+
+                  // Test Error Clearing Button (for debugging)
+                  if (authState.error != null) ...[
+                    const SizedBox(height: AppConstants.paddingSmall),
+                    TextButton(
+                      onPressed: () {
+                        ref.read(authProvider.notifier).clearAllErrors();
+                      },
+                      child: const Text('Clear Error (Debug)'),
                     ),
                   ],
                 ],
