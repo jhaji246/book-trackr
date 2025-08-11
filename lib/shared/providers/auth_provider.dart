@@ -100,10 +100,52 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> _performEmailSignIn(String email, String password) async {
-    await _auth!.signInWithEmailAndPassword(
-      email: email.trim(),
-      password: password,
-    );
+    try {
+      await _auth!.signInWithEmailAndPassword(
+        email: email.trim(),
+        password: password,
+      );
+    } catch (e) {
+      // Handle specific Firebase Auth errors
+      String errorMessage = 'Email sign in failed';
+      
+      if (e is FirebaseAuthException) {
+        switch (e.code) {
+          case 'user-not-found':
+            errorMessage = 'No user found with this email address';
+            break;
+          case 'wrong-password':
+            errorMessage = 'Incorrect password';
+            break;
+          case 'invalid-email':
+            errorMessage = 'Invalid email address';
+            break;
+          case 'user-disabled':
+            errorMessage = 'This account has been disabled';
+            break;
+          case 'too-many-requests':
+            errorMessage = 'Too many failed attempts. Please try again later';
+            break;
+          case 'network-request-failed':
+            errorMessage = 'Network error. Please check your connection';
+            break;
+          default:
+            // Handle PigeonUserDetails and other Firebase-specific errors
+            if (e.message?.contains('PigeonUserDetails') == true || 
+                e.message?.contains('type cast') == true) {
+              errorMessage = 'Authentication service error. Please try again';
+              debugPrint('Firebase type casting error: $e');
+            } else {
+              errorMessage = 'Sign in failed: ${e.message ?? e.code}';
+            }
+        }
+      } else {
+        // Handle non-Firebase errors
+        errorMessage = 'Sign in failed: $e';
+      }
+      
+      throw Exception(errorMessage);
+    }
   }
 
   Future<void> signInWithGoogle() async {
@@ -125,18 +167,60 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> _performGoogleSignIn() async {
-    final GoogleSignInAccount? googleUser = await _googleSignIn!.signIn();
-    if (googleUser == null) {
-      throw Exception('Google sign in was cancelled');
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn!.signIn();
+      if (googleUser == null) {
+        throw Exception('Google sign in was cancelled');
+      }
+
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      await _auth!.signInWithCredential(credential);
+    } catch (e) {
+      // Handle specific Google Sign-In and Firebase errors
+      String errorMessage = 'Google sign in failed';
+      
+      if (e is FirebaseAuthException) {
+        switch (e.code) {
+          case 'account-exists-with-different-credential':
+            errorMessage = 'An account already exists with this email using a different sign-in method';
+            break;
+          case 'invalid-credential':
+            errorMessage = 'Invalid Google credentials. Please try again';
+            break;
+          case 'operation-not-allowed':
+            errorMessage = 'Google sign in is not enabled for this app';
+            break;
+          case 'user-disabled':
+            errorMessage = 'This account has been disabled';
+            break;
+          case 'network-request-failed':
+            errorMessage = 'Network error. Please check your connection';
+            break;
+          default:
+            // Handle PigeonUserDetails and other Firebase-specific errors
+            if (e.message?.contains('PigeonUserDetails') == true || 
+                e.message?.contains('type cast') == true) {
+              errorMessage = 'Authentication service error. Please try again';
+              debugPrint('Firebase type casting error: $e');
+            } else {
+              errorMessage = 'Google sign in failed: ${e.message ?? e.code}';
+            }
+        }
+      } else if (e.toString().contains('network_error')) {
+        errorMessage = 'Network error. Please check your connection';
+      } else if (e.toString().contains('cancelled')) {
+        errorMessage = 'Google sign in was cancelled';
+      } else {
+        errorMessage = 'Google sign in failed: $e';
+      }
+      
+      throw Exception(errorMessage);
     }
-
-    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-
-    await _auth!.signInWithCredential(credential);
   }
 
   Future<void> signUpWithEmail(String email, String password, String displayName) async {

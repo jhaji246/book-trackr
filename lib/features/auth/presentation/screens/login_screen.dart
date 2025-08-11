@@ -114,6 +114,12 @@ class LoginScreen extends HookConsumerWidget {
                     autocorrect: false,
                     enableSuggestions: false,
                     validator: validateEmail,
+                    onChanged: (value) {
+                      // Clear error when user starts typing
+                      if (authState.error != null) {
+                        ref.read(authProvider.notifier).clearError();
+                      }
+                    },
                     decoration: InputDecoration(
                       labelText: 'Email',
                       hintText: 'Enter your email',
@@ -132,6 +138,12 @@ class LoginScreen extends HookConsumerWidget {
                     enableSuggestions: false,
                     autocorrect: false,
                     validator: validatePassword,
+                    onChanged: (value) {
+                      // Clear error when user starts typing
+                      if (authState.error != null) {
+                        ref.read(authProvider.notifier).clearError();
+                      }
+                    },
                     decoration: InputDecoration(
                       labelText: 'Password',
                       hintText: 'Enter your password',
