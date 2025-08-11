@@ -278,7 +278,7 @@ class _SearchScreenContent extends HookConsumerWidget {
                     if (context.mounted) {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => BookDetailScreen(bookId: book.id),
+                          builder: (context) => BookDetailScreen(bookId: book.id, book: book),
                         ),
                       );
                     }

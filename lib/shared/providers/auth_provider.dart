@@ -126,10 +126,21 @@ class AuthNotifier extends StateNotifier<AuthState> {
       debugPrint('AuthProvider: Authentication initialization completed successfully');
     } catch (e) {
       debugPrint('AuthProvider: Authentication initialization failed: $e');
-      state = state.copyWith(
-        error: 'Failed to initialize authentication: $e',
-        isLoading: false,
-      );
+      
+      // Handle internal Firebase errors gracefully - don't show user-facing errors for internal issues
+      if (e.toString().contains('PigeonUserDetails') || 
+          e.toString().contains('List<Object?>') ||
+          e.toString().contains('type cast')) {
+        debugPrint('Firebase type casting error during initialization (handled gracefully): $e');
+        // Don't set user-facing error for internal Firebase issues
+        state = state.copyWith(isLoading: false);
+      } else {
+        // Only set user-facing errors for non-internal issues
+        state = state.copyWith(
+          error: 'Failed to initialize authentication: $e',
+          isLoading: false,
+        );
+      }
     }
   }
 

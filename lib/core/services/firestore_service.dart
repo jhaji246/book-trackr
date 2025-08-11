@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
-import '../../shared/models/book.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import '../../shared/models/user_book.dart';
+import '../../shared/models/reading_status.dart';
 
 /// Service class for handling all Firebase Firestore operations.
 /// 
@@ -35,9 +36,9 @@ class FirestoreService {
   }
   
   /// Firebase Auth instance for user authentication - lazy loaded
-  static firebase_auth.FirebaseAuth? _auth;
-  static firebase_auth.FirebaseAuth get _authInstance {
-    _auth ??= firebase_auth.FirebaseAuth.instance;
+  static FirebaseAuth? _auth;
+  static FirebaseAuth get _authInstance {
+    _auth ??= FirebaseAuth.instance;
     return _auth!;
   }
 
@@ -140,43 +141,36 @@ class FirestoreService {
     }
   }
 
-  /// Adds a book to a user's bookshelf.
-  /// 
-  /// This method creates a new entry in the user's bookshelf collection,
-  /// storing both the book data and the user's interaction with it.
-  /// 
-  /// Parameters:
-  /// - [userId]: The unique identifier for the user
-  /// - [userBook]: The UserBook object containing book data and user interaction
-  /// 
-  /// Throws [Exception] if the operation fails.
+  /// Adds a book to the user's bookshelf
   static Future<void> addBookToShelf({
     required String userId,
     required UserBook userBook,
   }) async {
     try {
-      final docRef = _bookshelvesCollection.doc();
-      await docRef.set({
-        'userId': userId,
-        'bookId': userBook.book.id,
-        'status': userBook.status.toString().split('.').last,
-        'rating': userBook.rating,
-        'review': userBook.review,
+      final userDoc = _firestoreInstance.collection('users').doc(userId);
+      final bookshelfCollection = userDoc.collection('bookshelf');
+      
+      await bookshelfCollection.doc(userBook.id).set({
+        'id': userBook.id,
+        'title': userBook.title,
+        'author': userBook.author,
+        'description': userBook.description,
+        'coverUrl': userBook.coverUrl,
+        'averageRating': userBook.averageRating,
+        'ratingCount': userBook.ratingCount,
+        'pageCount': userBook.pageCount,
+        'isbn': userBook.isbn,
+        'publishedDate': userBook.publishedDate,
+        'genres': userBook.genres,
+        'publisher': userBook.publisher,
+        'language': userBook.language,
+        'status': userBook.status.toString(),
+        'dateAdded': userBook.dateAdded.toIso8601String(),
+        'dateStarted': userBook.dateStarted?.toIso8601String(),
+        'dateCompleted': userBook.dateCompleted?.toIso8601String(),
         'currentPage': userBook.currentPage,
-        'totalPages': userBook.book.pageCount,
-        'addedAt': FieldValue.serverTimestamp(),
-        'updatedAt': FieldValue.serverTimestamp(),
-        'bookData': {
-          'title': userBook.book.title,
-          'author': userBook.book.author,
-          'coverUrl': userBook.book.coverUrl,
-          'isbn': userBook.book.isbn,
-          'pageCount': userBook.book.pageCount,
-          'publishedDate': userBook.book.publishedDate,
-          'description': userBook.book.description,
-          'genres': userBook.book.genres,
-          'averageRating': userBook.book.averageRating,
-        },
+        'notes': userBook.notes,
+        'rating': userBook.rating,
       });
     } catch (e) {
       throw Exception('Failed to add book to shelf: $e');
@@ -337,47 +331,40 @@ class FirestoreService {
     return _usersCollection.doc(userId).snapshots();
   }
 
-  // Sync local data with cloud
+  /// Syncs a user book to the cloud
+  static Future<void> syncUserBook(UserBook userBook) async {
+    try {
+      final userId = _currentUserId;
+      if (userId != null) {
+        await addBookToShelf(userId: userId, userBook: userBook);
+      }
+    } catch (e) {
+      throw Exception('Failed to sync user book: $e');
+    }
+  }
+
+  /// Removes a user book from the cloud
+  static Future<void> removeUserBook(String bookId) async {
+    try {
+      final userId = _currentUserId;
+      if (userId != null) {
+        final userDoc = _firestoreInstance.collection('users').doc(userId);
+        final bookshelfCollection = userDoc.collection('bookshelf');
+        await bookshelfCollection.doc(bookId).delete();
+      }
+    } catch (e) {
+      throw Exception('Failed to remove user book: $e');
+    }
+  }
+
+  /// Syncs local data with the cloud
   static Future<void> syncLocalDataWithCloud({
     required String userId,
     required List<UserBook> localBooks,
   }) async {
     try {
-      // Get cloud bookshelf
-      final cloudBooks = await getUserBookshelf(userId);
-      
-      // Create maps for easy comparison
-      final cloudBookMap = {
-        for (var book in cloudBooks) book['bookId']: book
-      };
-
-      // Add new local books to cloud
-      for (final localBook in localBooks) {
-        if (!cloudBookMap.containsKey(localBook.book.id)) {
-          await addBookToShelf(userId: userId, userBook: localBook);
-        }
-      }
-
-      // Update existing books if local is newer
-      for (final localBook in localBooks) {
-        if (cloudBookMap.containsKey(localBook.book.id)) {
-          final cloudBook = cloudBookMap[localBook.book.id]!;
-          final cloudUpdatedAt = cloudBook['updatedAt'] as Timestamp;
-          final localUpdatedAt = localBook.updatedAt ?? DateTime.now();
-          
-          if (localUpdatedAt.isAfter(cloudUpdatedAt.toDate())) {
-            await updateBookInShelf(
-              userId: userId,
-              bookId: localBook.book.id,
-              data: {
-                'status': localBook.status.toString().split('.').last,
-                'rating': localBook.rating,
-                'review': localBook.review,
-                'currentPage': localBook.currentPage,
-              },
-            );
-          }
-        }
+      for (final userBook in localBooks) {
+        await addBookToShelf(userId: userId, userBook: userBook);
       }
     } catch (e) {
       throw Exception('Failed to sync local data with cloud: $e');

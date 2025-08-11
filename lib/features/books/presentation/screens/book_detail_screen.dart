@@ -12,10 +12,12 @@ import '../widgets/progress_dialog.dart';
 
 class BookDetailScreen extends HookConsumerWidget {
   final String bookId;
+  final Book? book; // Make book optional
 
   const BookDetailScreen({
     super.key,
     required this.bookId,
+    this.book, // Optional book parameter
   });
 
   @override
@@ -23,13 +25,16 @@ class BookDetailScreen extends HookConsumerWidget {
     final bookshelfState = ref.watch(bookshelfProvider);
     final readingGoalsState = ref.watch(readingGoalsProvider);
 
-    // Try to find book in bookshelf first, then create a placeholder
-    Book book;
+    // Use provided book, or find in bookshelf, or create a placeholder
+    Book displayBook;
     final userBook = bookshelfState.getUserBook(bookId);
     
-    if (userBook != null) {
+    if (book != null) {
+      // Use the book passed to the screen
+      displayBook = book!;
+    } else if (userBook != null) {
       // Convert UserBook back to Book for display
-      book = Book(
+      displayBook = Book(
         id: userBook.id,
         title: userBook.title,
         author: userBook.author,
@@ -45,8 +50,8 @@ class BookDetailScreen extends HookConsumerWidget {
         ratingCount: userBook.ratingCount,
       );
     } else {
-      // Create a placeholder book
-      book = Book(
+      // Create a placeholder book - this should rarely happen
+      displayBook = Book(
         id: bookId,
         title: 'Book not found',
         author: 'Unknown',
@@ -67,7 +72,7 @@ class BookDetailScreen extends HookConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(book.title),
+        title: Text(displayBook.title),
         backgroundColor: Theme.of(context).colorScheme.surface,
         foregroundColor: Theme.of(context).colorScheme.onSurface,
         leading: IconButton(
@@ -80,16 +85,16 @@ class BookDetailScreen extends HookConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildBookHeader(context, book),
+            _buildBookHeader(context, displayBook),
             const SizedBox(height: AppConstants.paddingLarge),
-            _buildBookDetails(context, book),
+            _buildBookDetails(context, displayBook),
             const SizedBox(height: AppConstants.paddingLarge),
             if (userBook != null) _buildUserProgress(context, userBook),
             const SizedBox(height: AppConstants.paddingLarge),
             _buildActionButtons(
               context,
               ref,
-              book,
+              displayBook,
               currentStatus,
               userBook,
               readingGoalsState,
@@ -277,8 +282,8 @@ class BookDetailScreen extends HookConsumerWidget {
   }
 
   Widget _buildUserProgress(BuildContext context, UserBook userBook) {
-    final progress = userBook.currentPage > 0 && userBook.book.pageCount > 0
-        ? (userBook.currentPage / userBook.book.pageCount * 100).round()
+    final progress = userBook.currentPage > 0 && userBook.pageCount > 0
+        ? (userBook.currentPage / userBook.pageCount * 100).round()
         : 0;
 
     return Card(
@@ -289,76 +294,48 @@ class BookDetailScreen extends HookConsumerWidget {
           children: [
             Text(
               'Your Progress',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: AppConstants.paddingMedium),
+            LinearProgressIndicator(
+              value: progress / 100,
+              backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+              valueColor: AlwaysStoppedAnimation<Color>(
+                Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            const SizedBox(height: AppConstants.paddingSmall),
+            Text(
+              '${userBook.currentPage} / ${userBook.pageCount} pages',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            const SizedBox(height: AppConstants.paddingMedium),
             Row(
               children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${userBook.currentPage} / ${userBook.book.pageCount} pages',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      const SizedBox(height: AppConstants.paddingSmall),
-                      LinearProgressIndicator(
-                        value: progress / 100,
-                        backgroundColor: Colors.grey[300],
-                        valueColor: AlwaysStoppedAnimation<Color>(AppConstants.primaryColor),
-                      ),
-                    ],
-                  ),
+                Icon(
+                  Icons.star,
+                  color: Colors.amber,
+                  size: 20,
                 ),
-                const SizedBox(width: AppConstants.paddingMedium),
-                Column(
-                  children: [
-                    Text(
-                      '$progress%',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppConstants.primaryColor,
-                      ),
-                    ),
-                    Text(
-                      'Complete',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                  ],
+                const SizedBox(width: AppConstants.paddingSmall),
+                Text(
+                  'Rating: ${userBook.rating > 0 ? userBook.rating : 'Not rated'}',
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ],
             ),
-            if (userBook.rating > 0) ...[
-              const SizedBox(height: AppConstants.paddingMedium),
-              Row(
-                children: [
-                  Text(
-                    'Your Rating: ',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                  ...List.generate(5, (index) {
-                    return Icon(
-                      index < userBook.rating ? Icons.star : Icons.star_border,
-                      color: Colors.amber,
-                      size: 20,
-                    );
-                  }),
-                ],
-              ),
-            ],
-            if (userBook.review.isNotEmpty) ...[
+            if (userBook.notes.isNotEmpty) ...[
               const SizedBox(height: AppConstants.paddingMedium),
               Text(
-                'Your Review:',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                'Your Review',
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: AppConstants.paddingSmall),
-              Text(userBook.review),
+              Text(userBook.notes),
             ],
           ],
         ),
@@ -370,7 +347,7 @@ class BookDetailScreen extends HookConsumerWidget {
     BuildContext context,
     WidgetRef ref,
     Book book,
-    BookStatus currentStatus,
+    ReadingStatus currentStatus,
     UserBook? userBook,
     ReadingGoalsState readingGoalsState,
   ) {
@@ -378,14 +355,14 @@ class BookDetailScreen extends HookConsumerWidget {
       children: [
         if (userBook == null) ...[
           GradientOutlinedButton(
-            onPressed: () => _addToShelf(context, ref, book, const BookStatus.wantToRead()),
+            onPressed: () => _addToShelf(context, ref, book, ReadingStatus.toRead),
             text: 'Add to Want to Read',
             icon: Icons.bookmark_add,
             colors: [Colors.blue, Colors.blue.shade600],
           ),
           const SizedBox(height: AppConstants.paddingSmall),
           GradientOutlinedButton(
-            onPressed: () => _addToShelf(context, ref, book, const BookStatus.reading()),
+            onPressed: () => _addToShelf(context, ref, book, ReadingStatus.reading),
             text: 'Start Reading',
             icon: Icons.play_arrow,
             colors: [Colors.green, Colors.green.shade600],
@@ -416,7 +393,7 @@ class BookDetailScreen extends HookConsumerWidget {
     );
   }
 
-  void _addToShelf(BuildContext context, WidgetRef ref, Book book, BookStatus status) {
+  void _addToShelf(BuildContext context, WidgetRef ref, Book book, ReadingStatus status) {
     ref.read(bookshelfProvider.notifier).addBook(book, status: status);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('Added to ${status.toString().split('.').last}')),
@@ -431,10 +408,10 @@ class BookDetailScreen extends HookConsumerWidget {
   }
 
   void _markAsCompleted(BuildContext context, WidgetRef ref, UserBook userBook, ReadingGoalsState readingGoalsState) {
-    ref.read(bookshelfProvider.notifier).updateBookStatus(userBook.book.id, const BookStatus.completed());
+    ref.read(bookshelfProvider.notifier).updateBookStatus(userBook.id, ReadingStatus.completed);
     
     // Record reading activity for goals
-    final pagesRead = userBook.book.pageCount - userBook.currentPage;
+    final pagesRead = userBook.pageCount - userBook.currentPage;
     if (pagesRead > 0) {
       ref.read(readingGoalsProvider.notifier).recordReadingActivity(
         pagesRead: pagesRead,

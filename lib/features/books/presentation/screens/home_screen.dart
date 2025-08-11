@@ -263,7 +263,7 @@ class HomeScreen extends HookConsumerWidget {
                 getReasons: (book) => ref.read(recommendationProvider.notifier).getRecommendationReasons(book),
                 onBookTap: (book) => Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => BookDetailScreen(bookId: book.id),
+                    builder: (context) => BookDetailScreen(bookId: book.id, book: book),
                   ),
                 ),
               ),
@@ -278,7 +278,7 @@ class HomeScreen extends HookConsumerWidget {
                 getReasons: (book) => ['Popular and highly rated'],
                 onBookTap: (book) => Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => BookDetailScreen(bookId: book.id),
+                    builder: (context) => BookDetailScreen(bookId: book.id, book: book),
                   ),
                 ),
               ),
@@ -338,7 +338,7 @@ class HomeScreen extends HookConsumerWidget {
               book: book,
               onTap: () => Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => BookDetailScreen(bookId: book.id),
+                  builder: (context) => BookDetailScreen(bookId: book.id, book: book),
                 ),
               ),
             ),

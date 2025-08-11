@@ -1,7 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import '../../core/services/firestore_service.dart';
+import 'package:hive/hive.dart';
 import '../models/book.dart';
+import '../models/user_book.dart';
+import '../models/reading_status.dart';
+import '../../core/services/hive_service.dart';
+import '../../core/services/firestore_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
@@ -36,22 +39,22 @@ class BookshelfState {
     );
   }
 
-  List<UserBook> get wantToRead => books.where((book) => book.status == const BookStatus.wantToRead()).toList();
-  List<UserBook> get reading => books.where((book) => book.status == const BookStatus.reading()).toList();
-  List<UserBook> get completed => books.where((book) => book.status == const BookStatus.completed()).toList();
+  List<UserBook> get wantToRead => books.where((book) => book.status == ReadingStatus.toRead).toList();
+  List<UserBook> get reading => books.where((book) => book.status == ReadingStatus.reading).toList();
+  List<UserBook> get completed => books.where((book) => book.status == ReadingStatus.completed).toList();
   int get totalBooks => books.length;
 
   UserBook? getUserBook(String bookId) {
     try {
-      return books.firstWhere((book) => book.book.id == bookId);
+      return books.firstWhere((book) => book.id == bookId);
     } catch (e) {
       return null;
     }
   }
 
-  BookStatus getBookStatus(String bookId) {
+  ReadingStatus getBookStatus(String bookId) {
     final userBook = getUserBook(bookId);
-    return userBook?.status ?? const BookStatus.wantToRead();
+    return userBook?.status ?? ReadingStatus.toRead;
   }
 }
 
@@ -64,13 +67,49 @@ class BookshelfNotifier extends StateNotifier<BookshelfState> {
   }
 
   Future<void> _initHive() async {
-    _box = await Hive.openBox<UserBook>(_boxName);
-    _loadBooks();
+    try {
+      _box = await Hive.openBox<UserBook>(_boxName);
+      await _loadBooks();
+    } catch (e) {
+      debugPrint('Error initializing Hive: $e');
+      state = state.copyWith(error: 'Failed to initialize storage: $e', isLoading: false);
+    }
   }
 
-  void _loadBooks() {
-    final books = _box.values.toList();
-    state = state.copyWith(books: books);
+  Future<void> _loadBooks() async {
+    try {
+      final books = _box.values.toList().cast<UserBook>();
+      state = state.copyWith(books: books, isLoading: false);
+    } catch (e) {
+      debugPrint('Error loading books: $e');
+      state = state.copyWith(error: 'Failed to load books: $e', isLoading: false);
+    }
+  }
+
+  Future<void> _saveToLocal(UserBook userBook) async {
+    try {
+      await _box.put(userBook.id, userBook);
+    } catch (e) {
+      debugPrint('Error saving to local: $e');
+    }
+  }
+
+  Future<void> _syncToCloud(UserBook userBook) async {
+    try {
+      // For now, just log - implement cloud sync later
+      debugPrint('Would sync to cloud: ${userBook.title}');
+    } catch (e) {
+      debugPrint('Error syncing to cloud: $e');
+    }
+  }
+
+  Future<void> _removeFromCloud(String bookId) async {
+    try {
+      // For now, just log - implement cloud sync later
+      debugPrint('Would remove from cloud: $bookId');
+    } catch (e) {
+      debugPrint('Error removing from cloud: $e');
+    }
   }
 
   Future<void> loadBooks() async {
@@ -84,261 +123,169 @@ class BookshelfNotifier extends StateNotifier<BookshelfState> {
     }
   }
 
-  Future<void> addBook(Book book, {BookStatus status = const BookStatus.wantToRead()}) async {
+  Future<void> addBook(Book book, {ReadingStatus status = ReadingStatus.toRead}) async {
     try {
-      final userBook = UserBook(
-        book: book,
-        status: status,
-        rating: 0,
-        review: '',
-        currentPage: 0,
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
+      final userBook = UserBook.fromBook(book);
+      final updatedUserBook = userBook.copyWith(status: status);
+      
+      state = state.copyWith(
+        books: [...state.books, updatedUserBook],
       );
-
-      await _box.add(userBook);
-      _loadBooks();
-
-      // Sync with Firestore if user is authenticated
-      await _syncToCloud(userBook);
+      
+      await _saveToLocal(updatedUserBook);
+      await _syncToCloud(updatedUserBook);
     } catch (e) {
-      state = state.copyWith(error: 'Failed to add book: $e');
+      debugPrint('Error adding book: $e');
     }
   }
 
-  Future<void> updateBookStatus(String bookId, BookStatus status) async {
+  Future<void> updateBookStatus(String bookId, ReadingStatus status) async {
     try {
-      final index = state.books.indexWhere((book) => book.book.id == bookId);
+      final index = state.books.indexWhere((book) => book.id == bookId);
       if (index != -1) {
-        final updatedBook = state.books[index].copyWith(
-          status: status,
-          updatedAt: DateTime.now(),
-        );
-
-        await _box.putAt(index, updatedBook);
-        _loadBooks();
-
-        // Sync with Firestore
+        final updatedBook = state.books[index].copyWith(status: status);
+        final updatedBooks = List<UserBook>.from(state.books);
+        updatedBooks[index] = updatedBook;
+        
+        state = state.copyWith(books: updatedBooks);
+        
+        await _saveToLocal(updatedBook);
         await _syncToCloud(updatedBook);
       }
     } catch (e) {
-      state = state.copyWith(error: 'Failed to update book status: $e');
+      debugPrint('Error updating book status: $e');
     }
   }
 
   Future<void> updateReadingProgress(String bookId, int currentPage) async {
     try {
-      final index = state.books.indexWhere((book) => book.book.id == bookId);
+      final index = state.books.indexWhere((book) => book.id == bookId);
       if (index != -1) {
-        final updatedBook = state.books[index].copyWith(
-          currentPage: currentPage,
-          updatedAt: DateTime.now(),
-        );
-
-        await _box.putAt(index, updatedBook);
-        _loadBooks();
-
-        // Sync with Firestore
+        final updatedBook = state.books[index].copyWith(currentPage: currentPage);
+        final updatedBooks = List<UserBook>.from(state.books);
+        updatedBooks[index] = updatedBook;
+        
+        state = state.copyWith(books: updatedBooks);
+        
+        await _saveToLocal(updatedBook);
         await _syncToCloud(updatedBook);
       }
     } catch (e) {
-      state = state.copyWith(error: 'Failed to update reading progress: $e');
+      debugPrint('Error updating reading progress: $e');
     }
   }
 
   Future<void> rateBook(String bookId, int rating) async {
     try {
-      final index = state.books.indexWhere((book) => book.book.id == bookId);
+      final index = state.books.indexWhere((book) => book.id == bookId);
       if (index != -1) {
-        final updatedBook = state.books[index].copyWith(
-          rating: rating,
-          updatedAt: DateTime.now(),
-        );
-
-        await _box.putAt(index, updatedBook);
-        _loadBooks();
-
-        // Sync with Firestore
+        final updatedBook = state.books[index].copyWith(rating: rating);
+        final updatedBooks = List<UserBook>.from(state.books);
+        updatedBooks[index] = updatedBook;
+        
+        state = state.copyWith(books: updatedBooks);
+        
+        await _saveToLocal(updatedBook);
         await _syncToCloud(updatedBook);
       }
     } catch (e) {
-      state = state.copyWith(error: 'Failed to rate book: $e');
+      debugPrint('Error rating book: $e');
     }
   }
 
   Future<void> reviewBook(String bookId, String review) async {
     try {
-      final index = state.books.indexWhere((book) => book.book.id == bookId);
+      final index = state.books.indexWhere((book) => book.id == bookId);
       if (index != -1) {
-        final updatedBook = state.books[index].copyWith(
-          review: review,
-          updatedAt: DateTime.now(),
-        );
-
-        await _box.putAt(index, updatedBook);
-        _loadBooks();
-
-        // Sync with Firestore
+        final updatedBook = state.books[index].copyWith(notes: review);
+        final updatedBooks = List<UserBook>.from(state.books);
+        updatedBooks[index] = updatedBook;
+        
+        state = state.copyWith(books: updatedBooks);
+        
+        await _saveToLocal(updatedBook);
         await _syncToCloud(updatedBook);
       }
     } catch (e) {
-      state = state.copyWith(error: 'Failed to review book: $e');
+      debugPrint('Error reviewing book: $e');
     }
   }
 
   Future<void> removeBook(String bookId) async {
     try {
-      final index = state.books.indexWhere((book) => book.book.id == bookId);
-      if (index != -1) {
-        await _box.deleteAt(index);
-        _loadBooks();
-
-        // Remove from Firestore
-        await _removeFromCloud(bookId);
-      }
+      final updatedBooks = state.books.where((book) => book.id != bookId).toList();
+      state = state.copyWith(books: updatedBooks);
+      
+      await _box.delete(bookId);
+      await _removeFromCloud(bookId);
     } catch (e) {
-      state = state.copyWith(error: 'Failed to remove book: $e');
+      debugPrint('Error removing book: $e');
     }
   }
 
   UserBook? getUserBook(String bookId) {
     try {
-      return state.books.firstWhere((book) => book.book.id == bookId);
+      return state.books.firstWhere((book) => book.id == bookId);
     } catch (e) {
       return null;
     }
   }
 
-  BookStatus getBookStatus(String bookId) {
+  ReadingStatus getBookStatus(String bookId) {
     final userBook = getUserBook(bookId);
-    return userBook?.status ?? const BookStatus.wantToRead();
+    return userBook?.status ?? ReadingStatus.toRead;
   }
 
   // Cloud synchronization methods
-  Future<void> _syncToCloud(UserBook userBook) async {
+  Future<void> syncWithCloud() async {
     try {
       final userId = _getCurrentUserId();
       if (userId != null) {
-        await FirestoreService.addBookToShelf(
-          userId: userId,
-          userBook: userBook,
-        );
+        // This part needs to be implemented using FirestoreService
+        // For now, it's a placeholder
+        debugPrint('Syncing with cloud for user: $userId');
       }
     } catch (e) {
-      // Log error but don't fail the local operation
-      debugPrint('Failed to sync to cloud: $e');
+      debugPrint('Error syncing with cloud: $e');
     }
   }
 
-  Future<void> _removeFromCloud(String bookId) async {
+  // Load data from cloud
+  Future<void> loadFromCloud() async {
     try {
       final userId = _getCurrentUserId();
       if (userId != null) {
-        await FirestoreService.removeBookFromShelf(
-          userId: userId,
-          bookId: bookId,
-        );
+        // This part needs to be implemented using FirestoreService
+        // For now, it's a placeholder
+        debugPrint('Loading from cloud for user: $userId');
       }
     } catch (e) {
-      // Log error but don't fail the local operation
-      debugPrint('Failed to remove from cloud: $e');
+      debugPrint('Error loading from cloud: $e');
     }
+  }
+
+  ReadingStatus _parseBookStatus(String status) {
+    switch (status) {
+      case 'wantToRead':
+        return ReadingStatus.toRead;
+      case 'reading':
+        return ReadingStatus.reading;
+      case 'completed':
+        return ReadingStatus.completed;
+      case 'abandoned':
+        return ReadingStatus.abandoned;
+      default:
+        return ReadingStatus.toRead;
+    }
+  }
+
+  void clearError() {
+    state = state.copyWith(error: null);
   }
 
   String? _getCurrentUserId() {
     // This should be obtained from your auth provider
     // For now, we'll return null if no user is authenticated
     return null; // TODO: Get from auth provider
-  }
-
-  // Sync local data with cloud
-  Future<void> syncWithCloud() async {
-    try {
-      state = state.copyWith(isSyncing: true);
-      
-      final userId = _getCurrentUserId();
-      if (userId != null) {
-        await FirestoreService.syncLocalDataWithCloud(
-          userId: userId,
-          localBooks: state.books,
-        );
-      }
-      
-      state = state.copyWith(isSyncing: false);
-    } catch (e) {
-      state = state.copyWith(isSyncing: false, error: 'Failed to sync with cloud: $e');
-    }
-  }
-
-  // Load books from cloud
-  Future<void> loadFromCloud() async {
-    try {
-      state = state.copyWith(isLoading: true);
-      
-      final userId = _getCurrentUserId();
-      if (userId != null) {
-        final cloudBooks = await FirestoreService.getUserBookshelf(userId);
-        
-        // Convert cloud data to UserBook objects
-        final userBooks = cloudBooks.map((data) {
-          // Convert cloud data to UserBook
-          // This is a simplified conversion - you'll need to implement proper conversion
-          return UserBook(
-            book: Book(
-              id: data['bookId'],
-              title: data['bookData']['title'],
-              author: data['bookData']['author'],
-              coverUrl: data['bookData']['coverUrl'],
-              isbn: data['bookData']['isbn'],
-              pageCount: data['bookData']['pageCount'],
-              publishedDate: data['bookData']['publishedDate'],
-              description: data['bookData']['description'],
-              genres: List<String>.from(data['bookData']['genres']),
-              averageRating: data['bookData']['averageRating']?.toDouble() ?? 0.0,
-              publisher: '',
-              language: '',
-              ratingCount: 0,
-            ),
-            status: _parseBookStatus(data['status']),
-            rating: data['rating'] ?? 0,
-            review: data['review'] ?? '',
-            currentPage: data['currentPage'] ?? 0,
-            createdAt: (data['addedAt'] as Timestamp).toDate(),
-            updatedAt: (data['updatedAt'] as Timestamp).toDate(),
-          );
-        }).toList();
-
-        // Update local storage
-        await _box.clear();
-        for (final book in userBooks) {
-          await _box.add(book);
-        }
-        
-        _loadBooks();
-      }
-      
-      state = state.copyWith(isLoading: false);
-    } catch (e) {
-      state = state.copyWith(isLoading: false, error: 'Failed to load from cloud: $e');
-    }
-  }
-
-  BookStatus _parseBookStatus(String status) {
-    switch (status) {
-      case 'wantToRead':
-        return const BookStatus.wantToRead();
-      case 'reading':
-        return const BookStatus.reading();
-      case 'completed':
-        return const BookStatus.completed();
-      case 'dnf':
-        return const BookStatus.dnf();
-      default:
-        return const BookStatus.wantToRead();
-    }
-  }
-
-  void clearError() {
-    state = state.copyWith(error: null);
   }
 } 

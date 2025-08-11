@@ -1,243 +1,97 @@
-import 'dart:math';
 import '../../shared/models/book.dart';
-
+import '../../shared/models/user_book.dart';
 
 class RecommendationService {
-  static const int _maxRecommendations = 10;
-  static const double _genreWeight = 0.4;
-  static const double _authorWeight = 0.3;
-  static const double _ratingWeight = 0.2;
-  static const double _popularityWeight = 0.1;
-
-  // Generate personalized recommendations
+  /// Generates personalized book recommendations based on user's reading history
   static List<Book> getRecommendations(
     List<Book> availableBooks,
+    List<UserBook> userBooks,
+  ) {
+    if (userBooks.isEmpty) {
+      // If no reading history, return popular books
+      return availableBooks.take(10).toList();
+    }
+
+    // Check if user has already read any books
+    final readBookIds = userBooks.map((userBook) => userBook.id).toSet();
+    
+    // Filter out already read books
+    final unreadBooks = availableBooks.where((book) => !readBookIds.contains(book.id)).toList();
+    
+    // For now, return first 10 unread books
+    // In a real app, you'd implement more sophisticated recommendation algorithms
+    return unreadBooks.take(10).toList();
+  }
+
+  /// Gets trending books based on user's preferences
+  static List<Book> getTrendingBooks(List<Book> availableBooks) {
+    // For now, return first 10 books
+    // In a real app, you'd implement trending algorithms
+    return availableBooks.take(10).toList();
+  }
+
+  /// Analyzes user's reading profile to understand preferences
+  static Map<String, dynamic> analyzeUserProfile(
     List<UserBook> userBooks,
     List<Book> completedBooks,
   ) {
     if (userBooks.isEmpty) {
-      return _getPopularBooks(availableBooks);
+      return {
+        'favoriteGenres': [],
+        'averageRating': 0.0,
+        'readingPace': 0,
+        'preferredAuthors': [],
+      };
     }
 
-    final userProfile = analyzeUserProfile(userBooks, completedBooks);
-    final scores = <Book, double>{};
-
-    for (final book in availableBooks) {
-      // Skip books user already has
-      if (userBooks.any((userBook) => userBook.book.id == book.id)) {
-        continue;
-      }
-
-      final score = _calculateRecommendationScore(book, userProfile);
-      scores[book] = score;
-    }
-
-    // Sort by score and return top recommendations
-    final sortedBooks = scores.entries.toList()
-      ..sort((a, b) => b.value.compareTo(a.value));
-
-    return sortedBooks
-        .take(_maxRecommendations)
-        .map((entry) => entry.key)
-        .toList();
-  }
-
-  // Analyze user's reading preferences
-  static UserProfile analyzeUserProfile(
-    List<UserBook> userBooks,
-    List<Book> completedBooks,
-  ) {
+    // Analyze genres
     final genreCounts = <String, int>{};
-    final authorCounts = <String, int>{};
-    final totalRating = completedBooks.fold<double>(
-      0.0,
-      (sum, book) => sum + book.averageRating,
-    );
-    final averageRating = completedBooks.isNotEmpty
-        ? totalRating / completedBooks.length
-        : 0.0;
-
-    // Analyze genres and authors from completed books
-    for (final book in completedBooks) {
+    for (final book in userBooks) {
       for (final genre in book.genres) {
         genreCounts[genre] = (genreCounts[genre] ?? 0) + 1;
       }
+    }
+
+    // Get favorite genres
+    final favoriteGenres = genreCounts.entries
+        .toList()
+        ..sort((a, b) => b.value.compareTo(a.value));
+    final topGenres = favoriteGenres.take(5).map((e) => e.key).toList();
+
+    // Calculate average rating
+    final totalRating = userBooks.fold<int>(0, (sum, book) => sum + book.rating);
+    final averageRating = userBooks.isNotEmpty ? totalRating / userBooks.length : 0.0;
+
+    // Analyze reading pace (books per month)
+    final readingPace = _calculateReadingPace(userBooks);
+
+    // Get preferred authors
+    final authorCounts = <String, int>{};
+    for (final book in userBooks) {
       authorCounts[book.author] = (authorCounts[book.author] ?? 0) + 1;
     }
+    final preferredAuthors = authorCounts.entries
+        .toList()
+        ..sort((a, b) => b.value.compareTo(a.value));
+    final topAuthors = preferredAuthors.take(5).map((e) => e.key).toList();
 
-    // Get top genres and authors
-    final topGenres = _getTopItems(genreCounts, 5);
-    final topAuthors = _getTopItems(authorCounts, 5);
-
-    return UserProfile(
-      favoriteGenres: topGenres,
-      favoriteAuthors: topAuthors,
-      averageRating: averageRating,
-      totalBooksRead: completedBooks.length,
-    );
+    return {
+      'favoriteGenres': topGenres,
+      'averageRating': averageRating,
+      'readingPace': readingPace,
+      'preferredAuthors': topAuthors,
+    };
   }
 
-  // Calculate recommendation score for a book
-  static double _calculateRecommendationScore(Book book, UserProfile profile) {
-    double score = 0.0;
+  /// Calculates user's reading pace (books per month)
+  static int _calculateReadingPace(List<UserBook> userBooks) {
+    if (userBooks.isEmpty) return 0;
 
-    // Genre matching
-    for (final genre in book.genres) {
-      if (profile.favoriteGenres.contains(genre)) {
-        score += _genreWeight;
-        break;
-      }
-    }
+    final now = DateTime.now();
+    final oldestBook = userBooks.reduce((a, b) => a.dateAdded.isBefore(b.dateAdded) ? a : b);
+    final monthsSinceFirstBook = now.difference(oldestBook.dateAdded).inDays / 30;
 
-    // Author matching
-    if (profile.favoriteAuthors.contains(book.author)) {
-      score += _authorWeight;
-    }
-
-    // Rating preference
-    final ratingDifference = (book.averageRating - profile.averageRating).abs();
-    if (ratingDifference <= 1.0) {
-      score += _ratingWeight;
-    }
-
-    // Popularity boost
-    if (book.ratingCount > 1000) {
-      score += _popularityWeight;
-    }
-
-    // Random factor for variety
-    score += Random().nextDouble() * 0.1;
-
-    return score;
+    if (monthsSinceFirstBook <= 0) return 0;
+    return (userBooks.length / monthsSinceFirstBook).round();
   }
-
-  // Get popular books for new users
-  static List<Book> _getPopularBooks(List<Book> availableBooks) {
-    final sortedBooks = List<Book>.from(availableBooks)
-      ..sort((a, b) => b.ratingCount.compareTo(a.ratingCount));
-    
-    return sortedBooks.take(_maxRecommendations).toList();
-  }
-
-  // Get top items from a map
-  static List<String> _getTopItems(Map<String, int> counts, int limit) {
-    final sorted = counts.entries.toList()
-      ..sort((a, b) => b.value.compareTo(a.value));
-    
-    return sorted.take(limit).map((entry) => entry.key).toList();
-  }
-
-  // Get recommendation reasons
-  static List<String> getRecommendationReasons(
-    Book book,
-    UserProfile profile,
-  ) {
-    final reasons = <String>[];
-
-    // Genre reasons
-    for (final genre in book.genres) {
-      if (profile.favoriteGenres.contains(genre)) {
-        reasons.add('You enjoy $genre books');
-        break;
-      }
-    }
-
-    // Author reasons
-    if (profile.favoriteAuthors.contains(book.author)) {
-      reasons.add('You liked other books by ${book.author}');
-    }
-
-    // Rating reasons
-    if ((book.averageRating - profile.averageRating).abs() <= 1.0) {
-      reasons.add('Matches your rating preferences');
-    }
-
-    // Popularity reasons
-    if (book.ratingCount > 1000) {
-      reasons.add('Highly rated by readers');
-    }
-
-    // Default reason
-    if (reasons.isEmpty) {
-      reasons.add('Based on your reading history');
-    }
-
-    return reasons;
-  }
-
-  // Get trending books
-  static List<Book> getTrendingBooks(List<Book> availableBooks) {
-    final sortedBooks = List<Book>.from(availableBooks)
-      ..sort((a, b) {
-        // Sort by rating count and average rating
-        final scoreA = a.ratingCount * a.averageRating;
-        final scoreB = b.ratingCount * b.averageRating;
-        return scoreB.compareTo(scoreA);
-      });
-    
-    return sortedBooks.take(5).toList();
-  }
-
-  // Get similar books
-  static List<Book> getSimilarBooks(
-    Book targetBook,
-    List<Book> availableBooks,
-    int limit,
-  ) {
-    final scores = <Book, double>{};
-
-    for (final book in availableBooks) {
-      if (book.id == targetBook.id) continue;
-
-      double score = 0.0;
-
-      // Genre similarity
-      for (final genre in targetBook.genres) {
-        if (book.genres.contains(genre)) {
-          score += 0.3;
-        }
-      }
-
-      // Author similarity
-      if (book.author == targetBook.author) {
-        score += 0.4;
-      }
-
-      // Rating similarity
-      final ratingDiff = (book.averageRating - targetBook.averageRating).abs();
-      if (ratingDiff <= 1.0) {
-        score += 0.2;
-      }
-
-      // Publisher similarity
-      if (book.publisher == targetBook.publisher) {
-        score += 0.1;
-      }
-
-      scores[book] = score;
-    }
-
-    final sortedBooks = scores.entries.toList()
-      ..sort((a, b) => b.value.compareTo(a.value));
-
-    return sortedBooks
-        .take(limit)
-        .map((entry) => entry.key)
-        .toList();
-  }
-}
-
-// User profile for recommendations
-class UserProfile {
-  final List<String> favoriteGenres;
-  final List<String> favoriteAuthors;
-  final double averageRating;
-  final int totalBooksRead;
-
-  const UserProfile({
-    required this.favoriteGenres,
-    required this.favoriteAuthors,
-    required this.averageRating,
-    required this.totalBooksRead,
-  });
 } 
