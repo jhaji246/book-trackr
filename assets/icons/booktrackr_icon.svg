@@ -1,0 +1,57 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle with gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6366F1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8B5CF6;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="bookGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#F3F4F6;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="pageGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FEF3C7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FDE68A;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="512" cy="512" r="480" fill="url(#bgGradient)" stroke="#4F46E5" stroke-width="8"/>
+  
+  <!-- Main book -->
+  <rect x="280" y="200" width="400" height="600" rx="20" fill="url(#bookGradient)" stroke="#E5E7EB" stroke-width="4"/>
+  
+  <!-- Book spine -->
+  <rect x="280" y="200" width="60" height="600" rx="20" fill="#E5E7EB"/>
+  
+  <!-- Book pages -->
+  <rect x="340" y="220" width="320" height="560" rx="15" fill="url(#pageGradient)"/>
+  
+  <!-- Reading progress bar -->
+  <rect x="360" y="300" width="280" height="8" rx="4" fill="#E5E7EB"/>
+  <rect x="360" y="300" width="200" height="8" rx="4" fill="#10B981"/>
+  
+  <!-- Bookmark -->
+  <path d="M 700 180 L 720 220 L 740 180 L 720 300 Z" fill="#EF4444"/>
+  <rect x="715" y="180" width="10" height="120" fill="#EF4444"/>
+  
+  <!-- Text lines representing reading content -->
+  <rect x="360" y="340" width="200" height="3" rx="1.5" fill="#6B7280"/>
+  <rect x="360" y="360" width="180" height="3" rx="1.5" fill="#6B7280"/>
+  <rect x="360" y="380" width="220" height="3" rx="1.5" fill="#6B7280"/>
+  <rect x="360" y="400" width="160" height="3" rx="1.5" fill="#6B7280"/>
+  
+  <!-- Reading glasses -->
+  <circle cx="480" cy="500" r="35" fill="none" stroke="#6B7280" stroke-width="6"/>
+  <circle cx="580" cy="500" r="35" fill="none" stroke="#6B7280" stroke-width="6"/>
+  <line x1="515" y1="500" x2="545" y2="500" stroke="#6B7280" stroke-width="6" stroke-linecap="round"/>
+  <path d="M 620 500 L 650 480" stroke="#6B7280" stroke-width="6" stroke-linecap="round"/>
+  
+  <!-- Small decorative elements -->
+  <circle cx="400" cy="600" r="8" fill="#8B5CF6"/>
+  <circle cx="450" cy="620" r="6" fill="#6366F1"/>
+  <circle cx="500" cy="610" r="7" fill="#10B981"/>
+  
+  <!-- App name text -->
+  <text x="512" y="750" font-family="Arial, sans-serif" font-size="48" font-weight="bold" text-anchor="middle" fill="white">BookTrackr</text>
+</svg> 
