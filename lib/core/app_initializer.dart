@@ -14,11 +14,12 @@ import '../../shared/providers/auth_provider.dart';
 /// Handles all app initialization logic
 class AppInitializer {
   static bool _isInitialized = false;
+  static bool _isFirebaseInitialized = false;
 
   /// Initialize all app services and dependencies
   static Future<void> initialize() async {
     try {
-      // Initialize Firebase first
+      // Initialize Firebase first - this is critical for authentication
       await _initializeFirebase();
       
       // Initialize local storage
@@ -27,45 +28,70 @@ class AppInitializer {
       // Initialize other services
       await _initializeServices();
       
+      _isInitialized = true;
+      
     } catch (e) {
-      // Only rethrow for critical errors that should prevent app from running
-      if (e.toString().contains('Hive') || e.toString().contains('local storage')) {
+      // Firebase initialization failed - this is critical for authentication
+      // But we can continue with other services
+      print('Firebase initialization failed: $e');
+      
+      try {
+        // Initialize local storage even if Firebase fails
+        await _initializeLocalStorage();
+        
+        // Initialize other services
+        await _initializeServices();
+        
+        _isInitialized = true;
+      } catch (localError) {
+        // If even local services fail, rethrow the original error
         rethrow;
       }
-      // For other errors, continue - app will show error state but won't be stuck
     }
   }
 
   /// Initialize Firebase services
   static Future<void> _initializeFirebase() async {
     try {
-      // More robust check for Firebase initialization
-      if (Firebase.apps.isNotEmpty) {
-        // Check if the default app exists
-        try {
-          Firebase.app();
-          return;
-        } catch (e) {
-          // Continue with initialization
-        }
+      // Check if Firebase is already initialized
+      try {
+        Firebase.app();
+        _isFirebaseInitialized = true;
+        return; // Already initialized
+      } catch (e) {
+        // Not initialized, continue with initialization
       }
-      
+
       // Initialize Firebase with proper error handling
       await Firebase.initializeApp(
         options: DefaultFirebaseOptions.currentPlatform,
       );
-    } catch (e) {
       
+      _isFirebaseInitialized = true;
+      
+    } catch (e) {
       // If it's a duplicate app error, try to get the existing app
       if (e.toString().contains('duplicate-app')) {
         try {
           Firebase.app();
+          _isFirebaseInitialized = true;
           return;
         } catch (getAppError) {
+          // Continue without Firebase
         }
       }
       
+      // Check if it's a configuration error
+      if (e.toString().contains('Firebase configuration is incomplete')) {
+        print('Firebase configuration is missing. Authentication will not work until configured.');
+        _isFirebaseInitialized = false;
+        return; // Don't rethrow, just continue without Firebase
+      }
+      
       // For other errors, continue without Firebase (app can still function)
+      print('Firebase initialization failed: $e');
+      _isFirebaseInitialized = false;
+      return; // Don't rethrow, just continue without Firebase
     }
   }
 
@@ -99,6 +125,37 @@ class AppInitializer {
       
     } catch (e) {
       // Continue with partial initialization
+      print('Service initialization warning: $e');
     }
   }
+
+  /// Check if Firebase is properly configured
+  static bool get isFirebaseConfigured {
+    try {
+      DefaultFirebaseOptions.currentPlatform;
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /// Check if Firebase was successfully initialized
+  static bool get isFirebaseInitialized => _isFirebaseInitialized;
+
+  /// Get Firebase configuration status message
+  static String get firebaseConfigStatus {
+    try {
+      DefaultFirebaseOptions.currentPlatform;
+      if (_isFirebaseInitialized) {
+        return 'Firebase is properly configured and initialized';
+      } else {
+        return 'Firebase is configured but not initialized';
+      }
+    } catch (e) {
+      return 'Firebase configuration error: $e';
+    }
+  }
+
+  /// Get overall initialization status
+  static bool get isInitialized => _isInitialized;
 } 

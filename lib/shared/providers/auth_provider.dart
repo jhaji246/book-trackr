@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../models/user_model.dart';
 import 'package:flutter/foundation.dart'; // Added for debugPrint
+import 'package:firebase_core/firebase_core.dart'; // Added for Firebase.app()
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   return AuthNotifier();
@@ -47,6 +48,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
   /// Initialize auth after Firebase is ready
   Future<void> initializeAuth() async {
     try {
+      // Check if Firebase is properly configured first
+      if (!_isFirebaseAvailable()) {
+        state = state.copyWith(
+          isLoading: false,
+          error: null, // Don't show error immediately, only when auth is attempted
+        );
+        return;
+      }
+
       _auth = FirebaseAuth.instance;
       _googleSignIn = GoogleSignIn();
       
@@ -54,15 +64,23 @@ class AuthNotifier extends StateNotifier<AuthState> {
       _auth!.authStateChanges().listen(
         (User? user) {
           try {
+            print('Auth state changed: ${user?.email ?? 'No user'}');
+            
             // Only update state if there's an actual change to prevent unnecessary rebuilds
             final newIsAuthenticated = user != null;
             if (state.isAuthenticated != newIsAuthenticated || state.user?.uid != user?.uid) {
               state = state.copyWith(
                 user: user,
                 isAuthenticated: newIsAuthenticated,
-                error: null, // Clear any previous errors
+                error: null, // Clear any previous errors on successful auth
                 isLoading: false, // Auth is now initialized
               );
+              
+              if (newIsAuthenticated) {
+                print('User authenticated successfully: ${user?.email}');
+              } else {
+                print('User signed out');
+              }
             } else {
               // Just update loading state if no other changes
               if (state.isLoading) {
@@ -70,6 +88,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
               }
             }
           } catch (e) {
+            print('Error in auth state listener: $e');
             // Handle internal Firebase errors gracefully - don't show user-facing errors for internal issues
             if (e.toString().contains('PigeonUserDetails') || 
                 e.toString().contains('List<Object?>') ||
@@ -88,6 +107,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
           }
         },
         onError: (error) {
+          print('Auth state listener error: $error');
           // Handle Firebase internal errors gracefully - don't show user-facing errors for internal issues
           if (error.toString().contains('PigeonUserDetails') || 
               error.toString().contains('List<Object?>') ||
@@ -130,18 +150,47 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
+  /// Check if Firebase is available and properly configured
+  bool _isFirebaseAvailable() {
+    try {
+      // Try to access Firebase to see if it's initialized
+      Firebase.app();
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /// Get a helpful error message for Firebase configuration issues
+  String _getFirebaseConfigErrorMessage() {
+    return 'Firebase is not properly configured. Please:\n'
+           '1. Copy env.example to .env\n'
+           '2. Fill in your Firebase project credentials\n'
+           '3. Restart the app\n\n'
+           'Or run: ./scripts/setup-firebase.sh';
+  }
+
   Future<void> signInWithEmail(String email, String password) async {
+    if (!_isFirebaseAvailable()) {
+      _handleAuthError(_getFirebaseConfigErrorMessage());
+      return;
+    }
+
     if (_auth == null) {
       _handleAuthError('Authentication not initialized');
       return;
     }
 
     try {
+      print('Attempting email sign in for: $email');
       _setLoadingState(true);
       _clearError();
       
       await _performEmailSignIn(email, password);
+      print('Email sign in completed successfully');
+      
     } catch (e) {
+      print('Email sign in error: $e');
       // Handle the error based on its type
       if (e is FirebaseAuthException) {
         if (e.code == 'custom-error') {
@@ -170,10 +219,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   Future<void> _performEmailSignIn(String email, String password) async {
     try {
-      await _auth!.signInWithEmailAndPassword(
+      final userCredential = await _auth!.signInWithEmailAndPassword(
         email: email.trim(),
         password: password,
       );
+      
+      // If we get here, sign in was successful
+      // The auth state listener will handle updating the state
+      print('Sign in successful for user: ${userCredential.user?.email}');
+      
     } catch (e) {
       // Handle specific Firebase Auth errors
       String errorMessage = 'Email sign in failed';
@@ -198,31 +252,28 @@ class AuthNotifier extends StateNotifier<AuthState> {
           case 'network-request-failed':
             errorMessage = 'Network error. Please check your connection';
             break;
+          case 'invalid-credential':
+            errorMessage = 'Invalid email or password';
+            break;
+          case 'operation-not-allowed':
+            errorMessage = 'Email/password sign in is not enabled';
+            break;
           default:
-            // Handle PigeonUserDetails and other Firebase-specific errors
-            if (e.message?.contains('PigeonUserDetails') == true || 
-                e.message?.contains('type cast') == true ||
-                e.message?.contains('List<Object?>') == true) {
-              // For internal Firebase errors, provide a more helpful message
-              errorMessage = 'Sign in temporarily unavailable. Please try again in a moment.';
-            } else {
-              errorMessage = 'Sign in failed: ${e.message ?? e.code}';
-            }
+            // For other Firebase errors, provide the actual error message
+            errorMessage = 'Sign in failed: ${e.message ?? e.code}';
         }
       } else {
-        // Handle non-Firebase errors, including the specific PigeonUserDetails error
+        // Handle non-Firebase errors
         if (e.toString().contains('PigeonUserDetails') || 
             e.toString().contains('List<Object?>') ||
             e.toString().contains('type cast')) {
-          // For internal Firebase errors, provide a more helpful message
-          errorMessage = 'Sign in temporarily unavailable. Please try again in a moment.';
+          errorMessage = 'Authentication service error. Please try again';
         } else {
           errorMessage = 'Sign in failed: $e';
         }
       }
       
-      // Instead of throwing a new exception, return the error message
-      // This will be handled by the calling method
+      // Throw the error with the proper message
       throw FirebaseAuthException(
         code: 'custom-error',
         message: errorMessage,
@@ -231,6 +282,11 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> signInWithGoogle() async {
+    if (!_isFirebaseAvailable()) {
+      _handleAuthError(_getFirebaseConfigErrorMessage());
+      return;
+    }
+
     if (_auth == null || _googleSignIn == null) {
       _handleAuthError('Authentication not initialized');
       return;
@@ -261,7 +317,11 @@ class AuthNotifier extends StateNotifier<AuthState> {
         idToken: googleAuth.idToken,
       );
 
-      await _auth!.signInWithCredential(credential);
+      final userCredential = await _auth!.signInWithCredential(credential);
+      
+      // If we get here, sign in was successful
+      print('Google sign in successful for user: ${userCredential.user?.email}');
+      
     } catch (e) {
       // Handle specific Google Sign-In and Firebase errors
       String errorMessage = 'Google sign in failed';
@@ -284,13 +344,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
             errorMessage = 'Network error. Please check your connection';
             break;
           default:
-            // Handle PigeonUserDetails and other Firebase-specific errors
-            if (e.message?.contains('PigeonUserDetails') == true || 
-                e.message?.contains('type cast') == true) {
-              errorMessage = 'Authentication service error. Please try again';
-            } else {
-              errorMessage = 'Google sign in failed: ${e.message ?? e.code}';
-            }
+            // For other Firebase errors, provide the actual error message
+            errorMessage = 'Google sign in failed: ${e.message ?? e.code}';
         }
       } else if (e.toString().contains('network_error')) {
         errorMessage = 'Network error. Please check your connection';

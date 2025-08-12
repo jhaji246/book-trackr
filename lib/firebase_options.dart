@@ -44,40 +44,69 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static FirebaseOptions get android => FirebaseOptions(
-    apiKey: Environment.firebaseApiKey,
-    appId: Environment.firebaseAppId,
-    messagingSenderId: Environment.firebaseMessagingSenderId,
-    projectId: Environment.firebaseProjectId,
-    storageBucket: '${Environment.firebaseProjectId}.firebasestorage.app',
-  );
+  static FirebaseOptions get android {
+    _validateFirebaseConfig();
+    return FirebaseOptions(
+      apiKey: Environment.firebaseApiKey,
+      appId: Environment.firebaseAppId,
+      messagingSenderId: Environment.firebaseMessagingSenderId,
+      projectId: Environment.firebaseProjectId,
+      storageBucket: '${Environment.firebaseProjectId}.firebasestorage.app',
+    );
+  }
 
-  static FirebaseOptions get ios => FirebaseOptions(
-    apiKey: Environment.firebaseApiKey,
-    appId: Environment.firebaseAppId,
-    messagingSenderId: Environment.firebaseMessagingSenderId,
-    projectId: Environment.firebaseProjectId,
-    storageBucket: '${Environment.firebaseProjectId}.firebasestorage.app',
-    iosClientId: '${Environment.firebaseMessagingSenderId}-${Environment.firebaseAppId}.apps.googleusercontent.com',
-    iosBundleId: 'com.example.bookTracker',
-  );
+  static FirebaseOptions get ios {
+    _validateFirebaseConfig();
+    return FirebaseOptions(
+      apiKey: Environment.firebaseApiKey,
+      appId: Environment.firebaseAppId,
+      messagingSenderId: Environment.firebaseMessagingSenderId,
+      projectId: Environment.firebaseProjectId,
+      storageBucket: '${Environment.firebaseProjectId}.firebasestorage.app',
+      iosClientId: '${Environment.firebaseMessagingSenderId}-${Environment.firebaseAppId}.apps.googleusercontent.com',
+      iosBundleId: 'com.example.bookTracker',
+    );
+  }
 
-  static FirebaseOptions get macos => FirebaseOptions(
-    apiKey: Environment.firebaseApiKey,
-    appId: Environment.firebaseAppId,
-    messagingSenderId: Environment.firebaseMessagingSenderId,
-    projectId: Environment.firebaseProjectId,
-    storageBucket: '${Environment.firebaseProjectId}.firebasestorage.app',
-    iosClientId: '${Environment.firebaseMessagingSenderId}-${Environment.firebaseAppId}.apps.googleusercontent.com',
-    iosBundleId: 'com.example.bookTracker',
-  );
+  static FirebaseOptions get macos {
+    _validateFirebaseConfig();
+    return FirebaseOptions(
+      apiKey: Environment.firebaseApiKey,
+      appId: Environment.firebaseAppId,
+      messagingSenderId: Environment.firebaseMessagingSenderId,
+      projectId: Environment.firebaseProjectId,
+      storageBucket: '${Environment.firebaseProjectId}.firebasestorage.app',
+      iosClientId: '${Environment.firebaseMessagingSenderId}-${Environment.firebaseAppId}.apps.googleusercontent.com',
+      iosBundleId: 'com.example.bookTracker',
+    );
+  }
 
-  static FirebaseOptions get web => FirebaseOptions(
-    apiKey: Environment.firebaseApiKey,
-    appId: Environment.firebaseAppId,
-    messagingSenderId: Environment.firebaseMessagingSenderId,
-    projectId: Environment.firebaseProjectId,
-    storageBucket: '${Environment.firebaseProjectId}.firebasestorage.app',
-    authDomain: '${Environment.firebaseProjectId}.firebaseapp.com',
-  );
+  static FirebaseOptions get web {
+    _validateFirebaseConfig();
+    return FirebaseOptions(
+      apiKey: Environment.firebaseApiKey,
+      appId: Environment.firebaseAppId,
+      messagingSenderId: Environment.firebaseMessagingSenderId,
+      projectId: Environment.firebaseProjectId,
+      storageBucket: '${Environment.firebaseProjectId}.firebasestorage.app',
+      authDomain: '${Environment.firebaseProjectId}.firebaseapp.com',
+    );
+  }
+
+  /// Validate that Firebase configuration is properly set up
+  static void _validateFirebaseConfig() {
+    if (Environment.firebaseApiKey.isEmpty ||
+        Environment.firebaseProjectId.isEmpty ||
+        Environment.firebaseMessagingSenderId.isEmpty ||
+        Environment.firebaseAppId.isEmpty) {
+      throw StateError(
+        'Firebase configuration is incomplete. Please check your .env file and ensure all Firebase environment variables are set:\n'
+        'FIREBASE_API_KEY: ${Environment.firebaseApiKey.isEmpty ? "MISSING" : "SET"}\n'
+        'FIREBASE_PROJECT_ID: ${Environment.firebaseProjectId.isEmpty ? "MISSING" : "SET"}\n'
+        'FIREBASE_MESSAGING_SENDER_ID: ${Environment.firebaseMessagingSenderId.isEmpty ? "MISSING" : "SET"}\n'
+        'FIREBASE_APP_ID: ${Environment.firebaseAppId.isEmpty ? "MISSING" : "SET"}\n\n'
+        'Copy env.example to .env and fill in your Firebase project details.'
+      );
+    }
+  }
 } 

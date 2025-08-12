@@ -4,25 +4,11 @@ class Environment {
     defaultValue: '',
   );
   
-  static const String firebaseApiKey = String.fromEnvironment(
-    'FIREBASE_API_KEY',
-    defaultValue: '',
-  );
-  
-  static const String firebaseProjectId = String.fromEnvironment(
-    'FIREBASE_PROJECT_ID',
-    defaultValue: '',
-  );
-  
-  static const String firebaseMessagingSenderId = String.fromEnvironment(
-    'FIREBASE_MESSAGING_SENDER_ID',
-    defaultValue: '',
-  );
-  
-  static const String firebaseAppId = String.fromEnvironment(
-    'FIREBASE_APP_ID',
-    defaultValue: '',
-  );
+  // Firebase Configuration - Using actual values from your project
+  static const String firebaseApiKey = 'AIzaSyB4y3t2_5AqOKVgCl7AMdmlFongOvaJ_c8';
+  static const String firebaseProjectId = 'booktrackr-app';
+  static const String firebaseMessagingSenderId = '957194839317';
+  static const String firebaseAppId = '1:957194839317:android:913293f13975d4f459f51c';
   
   static const bool isDevelopment = bool.fromEnvironment(
     'FLUTTER_DEBUG',

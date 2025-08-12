@@ -12,11 +12,107 @@ import 'core/widgets/animated_widgets.dart';
 
 void main() async {
   try {
-    await AppInitializer.initialize();
+    WidgetsFlutterBinding.ensureInitialized();
+    
+    // Initialize all app services (even if Firebase fails)
+    try {
+      await AppInitializer.initialize();
+    } catch (e) {
+      // Continue without Firebase - show login page with error handling
+      print('Firebase initialization failed: $e');
+    }
+    
+    runApp(const ProviderScope(child: BookTrackrApp()));
   } catch (e) {
-    // Continue anyway - app will show error state but won't be stuck
+    // Critical initialization failed
+    runApp(FirebaseInitErrorApp(error: e.toString()));
   }
-  runApp(const ProviderScope(child: BookTrackrApp()));
+}
+
+/// App shown when critical initialization fails
+class FirebaseInitErrorApp extends StatelessWidget {
+  final String error;
+  
+  const FirebaseInitErrorApp({super.key, required this.error});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'BookTrackr - Initialization Error',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.red,
+        useMaterial3: true,
+      ),
+      home: Scaffold(
+        body: SafeArea(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    size: 64,
+                    color: Colors.red,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'App Initialization Failed',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Unable to initialize the app. Please check your internet connection and try again.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(height: 24),
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.red.shade50,
+                      borderRadius: BorderRadius.circular(8),
+                      border: Border.all(color: Colors.red.shade200),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Error Details:',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.red.shade800,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          error,
+                          style: TextStyle(fontSize: 12),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Restart the app
+                      main();
+                    },
+                    child: Text('Retry'),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class BookTrackrApp extends ConsumerStatefulWidget {
@@ -50,6 +146,7 @@ class _BookTrackrAppState extends ConsumerState<BookTrackrApp> {
         // Wait a moment to ensure error clearing is processed
         await Future.delayed(const Duration(milliseconds: 100));
         
+        // Try to initialize auth (this will fail gracefully if Firebase isn't configured)
         await authNotifier.initializeAuth();
         
         // Mark app as ready after auth initialization - use addPostFrameCallback to prevent rebuild issues

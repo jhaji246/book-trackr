@@ -6,6 +6,7 @@ import '../../../../core/widgets/animated_widgets.dart';
 import '../../../../core/widgets/custom_page_transition.dart';
 import '../../../../core/widgets/gradient_button.dart';
 import '../../../../shared/providers/auth_provider.dart';
+import '../../../../core/app_initializer.dart';
 import 'forgot_password_screen.dart';
 import 'signup_screen.dart';
 
@@ -28,6 +29,9 @@ class LoginScreen extends HookConsumerWidget {
       });
       return null;
     }, []);
+
+    // Check if Firebase is configured
+    final isFirebaseConfigured = AppInitializer.isFirebaseConfigured;
 
     // Validation functions
     String? validateEmail(String? value) {
@@ -95,6 +99,98 @@ class LoginScreen extends HookConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  // Firebase Configuration Warning Banner
+                  if (!isFirebaseConfigured) ...[
+                    AnimatedFadeIn(
+                      delay: const Duration(milliseconds: 50),
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.orange.shade50,
+                          borderRadius: BorderRadius.circular(AppConstants.radiusMedium),
+                          border: Border.all(color: Colors.orange.shade200),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.warning_amber_rounded,
+                                  color: Colors.orange.shade700,
+                                  size: 20,
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  'Firebase Not Configured',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.orange.shade800,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Authentication will not work until Firebase is configured.',
+                              style: TextStyle(
+                                color: Colors.orange.shade700,
+                                fontSize: 14,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    'Run: ./scripts/setup-firebase.sh',
+                                    style: TextStyle(
+                                      color: Colors.orange.shade600,
+                                      fontSize: 12,
+                                      fontFamily: 'monospace',
+                                    ),
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        title: Text('Firebase Setup'),
+                                        content: Text(
+                                          'To fix this issue:\n\n'
+                                          '1. Copy env.example to .env\n'
+                                          '2. Fill in your Firebase project credentials\n'
+                                          '3. Restart the app\n\n'
+                                          'Or run the setup script:\n'
+                                          './scripts/setup-firebase.sh'
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () => Navigator.of(context).pop(),
+                                            child: Text('OK'),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                  child: Text('Show Details'),
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: Colors.orange.shade700,
+                                    padding: EdgeInsets.zero,
+                                    minimumSize: Size.zero,
+                                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: AppConstants.paddingMedium),
+                  ],
+
                   // Logo and Title
                   AnimatedFadeIn(
                     delay: const Duration(milliseconds: 100),
