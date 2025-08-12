@@ -47,36 +47,43 @@ class BookCard extends StatelessWidget {
                   width: 70,
                   height: 90,
                   borderRadius: BorderRadius.circular(8),
+                  fallbackText: '${book.title} by ${book.author}',
                 ),
               ),
               const SizedBox(height: 8),
 
               // Book Title
               Flexible(
-                child: Text(
-                  book.title,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 10,
+                child: Container(
+                  constraints: const BoxConstraints(maxHeight: 32),
+                  child: Text(
+                    book.title,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 10,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
                   ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
                 ),
               ),
               const SizedBox(height: 2),
 
               // Author
               Flexible(
-                child: Text(
-                  book.author,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
-                    fontSize: 8,
+                child: Container(
+                  constraints: const BoxConstraints(maxHeight: 16),
+                  child: Text(
+                    book.author,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                      fontSize: 8,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
                 ),
               ),
               const SizedBox(height: 4),

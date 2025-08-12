@@ -265,34 +265,32 @@ class HomeScreen extends HookConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // AI Recommendations Section
-            if (recommendationState.personalizedRecommendations.isNotEmpty)
-              _buildSectionHeader(context, '🤖 Recommended for You', 'Based on your reading history'),
-            if (recommendationState.personalizedRecommendations.isNotEmpty)
-              RecommendationSection(
-                title: '🤖 Recommended for You',
-                books: recommendationState.personalizedRecommendations,
-                getReasons: (book) => ref.read(recommendationProvider.notifier).getRecommendationReasons(book),
-                onBookTap: (book) => Navigator.of(context).push(
-                  CustomPageTransitions.heroTransition(
-                    child: BookDetailScreen(bookId: book.id, book: book),
-                  ),
+            _buildSectionHeader(context, '🤖 Recommended for You', 'Based on your reading history'),
+            RecommendationSection(
+              title: '🤖 Recommended for You',
+              books: recommendationState.personalizedRecommendations,
+              isLoading: recommendationState.isLoading,
+              getReasons: (book) => ref.read(recommendationProvider.notifier).getRecommendationReasons(book),
+              onBookTap: (book) => Navigator.of(context).push(
+                CustomPageTransitions.heroTransition(
+                  child: BookDetailScreen(bookId: book.id, book: book),
                 ),
               ),
+            ),
 
             // Trending Books Section
-            if (recommendationState.trendingBooks.isNotEmpty)
-              _buildSectionHeader(context, '🔥 Trending Now', 'Popular books everyone is reading'),
-            if (recommendationState.trendingBooks.isNotEmpty)
-              RecommendationSection(
-                title: '🔥 Trending Now',
-                books: recommendationState.trendingBooks,
-                getReasons: (book) => ['Popular and highly rated'],
-                onBookTap: (book) => Navigator.of(context).push(
-                  CustomPageTransitions.heroTransition(
-                    child: BookDetailScreen(bookId: book.id, book: book),
-                  ),
+            _buildSectionHeader(context, '🔥 Trending Now', 'Popular books everyone is reading'),
+            RecommendationSection(
+              title: '🔥 Trending Now',
+              books: recommendationState.trendingBooks,
+              isLoading: recommendationState.isLoading,
+              getReasons: (book) => ['Popular and highly rated'],
+              onBookTap: (book) => Navigator.of(context).push(
+                CustomPageTransitions.heroTransition(
+                  child: BookDetailScreen(bookId: book.id, book: book),
                 ),
               ),
+            ),
 
             // Featured Books Section
             if (booksState.featuredBooks.isNotEmpty) ...[
@@ -335,7 +333,7 @@ class HomeScreen extends HookConsumerWidget {
 
   Widget _buildFeaturedBooks(BuildContext context, List<Book> books) {
     return SizedBox(
-      height: 200,
+      height: 250,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -363,7 +361,7 @@ class HomeScreen extends HookConsumerWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Container(
-        height: 280, // Fixed height to prevent overflow
+        height: 300, // Increased height to prevent overflow
         child: GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),

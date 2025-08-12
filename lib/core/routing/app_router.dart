@@ -10,9 +10,13 @@ import '../../features/books/presentation/screens/home_screen.dart';
 import '../../features/books/presentation/screens/search_screen.dart';
 import '../../features/books/presentation/screens/book_detail_screen.dart';
 import '../../features/books/presentation/screens/library_screen.dart';
+import '../../features/books/presentation/screens/reading_lists_screen.dart';
+import '../../features/books/presentation/screens/book_reviews_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/statistics/presentation/screens/reading_statistics_screen.dart';
 import '../../features/social/presentation/screens/social_feed_screen.dart';
+import '../../shared/models/user_book.dart';
+import '../../shared/models/reading_status.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authProvider);
@@ -21,15 +25,11 @@ final routerProvider = Provider<GoRouter>((ref) {
     initialLocation: '/',
     redirect: (context, state) {
       // Debug logging
-      debugPrint('Router redirect called:');
-      debugPrint('  Current location: ${state.matchedLocation}');
-      debugPrint('  Auth state - isLoading: ${authState.isLoading}');
-      debugPrint('  Auth state - isAuthenticated: ${authState.isAuthenticated}');
-      debugPrint('  Auth state - error: ${authState.error}');
+      
 
       // Show loading screen while Firebase is initializing
       if (authState.isLoading) {
-        debugPrint('  Redirecting to /loading (Firebase initializing)');
+
         return '/loading';
       }
 
@@ -41,23 +41,23 @@ final routerProvider = Provider<GoRouter>((ref) {
 
       // If user is not authenticated and trying to access protected route
       if (!isAuthenticated && !isAuthRoute) {
-        debugPrint('  Redirecting to /login (not authenticated)');
+
         return '/login';
       }
 
       // If user is authenticated and trying to access auth routes
       if (isAuthenticated && isAuthRoute) {
-        debugPrint('  Redirecting to / (authenticated user on auth route)');
+
         return '/';
       }
 
       // If user is authenticated and on loading route, go to home
       if (isAuthenticated && state.matchedLocation == '/loading') {
-        debugPrint('  Redirecting to / (authenticated user on loading route)');
+
         return '/';
       }
 
-      debugPrint('  No redirect needed');
+      
       return null;
     },
     routes: [
@@ -104,9 +104,26 @@ final routerProvider = Provider<GoRouter>((ref) {
         },
       ),
       GoRoute(
+        path: '/book/:id/reviews',
+        builder: (context, state) {
+          final bookId = state.pathParameters['id']!;
+          // TODO: Get book data from provider or pass as parameter
+          // For now, create a placeholder book
+          return ScaffoldWithNavigationBar(
+            child: BookReviewsScreen(book: _createPlaceholderBook(bookId)),
+          );
+        },
+      ),
+      GoRoute(
         path: '/library',
         builder: (context, state) => const ScaffoldWithNavigationBar(
           child: LibraryScreen(),
+        ),
+      ),
+      GoRoute(
+        path: '/reading-lists',
+        builder: (context, state) => const ScaffoldWithNavigationBar(
+          child: ReadingListsScreen(),
         ),
       ),
       GoRoute(
@@ -131,6 +148,30 @@ final routerProvider = Provider<GoRouter>((ref) {
   );
 });
 
+// Temporary placeholder function - will be replaced with actual book data
+UserBook _createPlaceholderBook(String bookId) {
+  return UserBook(
+    id: bookId,
+    title: 'Book Title',
+    author: 'Author Name',
+    description: 'Book description',
+    coverUrl: 'https://via.placeholder.com/150x200',
+    averageRating: 4.0,
+    ratingCount: 0,
+    pageCount: 300,
+    isbn: '1234567890',
+    publishedDate: '2024-01-01',
+    genres: ['Fiction'],
+    publisher: 'Publisher',
+    language: 'en',
+    status: ReadingStatus.toRead,
+    dateAdded: DateTime.now(),
+    currentPage: 0,
+    notes: '',
+    rating: 0,
+  );
+}
+
 class ScaffoldWithNavigationBar extends ConsumerWidget {
   final Widget child;
 
@@ -153,9 +194,12 @@ class ScaffoldWithNavigationBar extends ConsumerWidget {
               context.go('/library');
               break;
             case 2:
-              context.go('/search');
+              context.go('/reading-lists');
               break;
             case 3:
+              context.go('/search');
+              break;
+            case 4:
               context.go('/profile');
               break;
           }
@@ -169,6 +213,10 @@ class ScaffoldWithNavigationBar extends ConsumerWidget {
           NavigationDestination(
             icon: Icon(Icons.library_books),
             label: 'Library',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.bookmark),
+            label: 'Lists',
           ),
           NavigationDestination(
             icon: Icon(Icons.search),
@@ -190,10 +238,12 @@ class ScaffoldWithNavigationBar extends ConsumerWidget {
         return 0;
       case '/library':
         return 1;
-      case '/search':
+      case '/reading-lists':
         return 2;
-      case '/profile':
+      case '/search':
         return 3;
+      case '/profile':
+        return 4;
       default:
         return 0;
     }

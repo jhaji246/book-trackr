@@ -33,7 +33,6 @@ class AppInitializer {
     } catch (e) {
       // Firebase initialization failed - this is critical for authentication
       // But we can continue with other services
-      print('Firebase initialization failed: $e');
       
       try {
         // Initialize local storage even if Firebase fails
@@ -83,13 +82,11 @@ class AppInitializer {
       
       // Check if it's a configuration error
       if (e.toString().contains('Firebase configuration is incomplete')) {
-        print('Firebase configuration is missing. Authentication will not work until configured.');
         _isFirebaseInitialized = false;
         return; // Don't rethrow, just continue without Firebase
       }
       
       // For other errors, continue without Firebase (app can still function)
-      print('Firebase initialization failed: $e');
       _isFirebaseInitialized = false;
       return; // Don't rethrow, just continue without Firebase
     }
@@ -125,7 +122,6 @@ class AppInitializer {
       
     } catch (e) {
       // Continue with partial initialization
-      print('Service initialization warning: $e');
     }
   }
 

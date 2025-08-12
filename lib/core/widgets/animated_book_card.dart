@@ -85,6 +85,7 @@ class AnimatedBookCard extends HookConsumerWidget {
                           // Book Cover Image
                           CachedNetworkImageWidget(
                             imageUrl: book.coverUrl,
+        fallbackText: '${book.title} by ${book.author}',
                             width: double.infinity,
                             height: double.infinity,
                           ),

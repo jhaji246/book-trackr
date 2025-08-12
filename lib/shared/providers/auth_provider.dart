@@ -64,7 +64,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       _auth!.authStateChanges().listen(
         (User? user) {
           try {
-            print('Auth state changed: ${user?.email ?? 'No user'}');
+
             
             // Only update state if there's an actual change to prevent unnecessary rebuilds
             final newIsAuthenticated = user != null;
@@ -77,9 +77,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
               );
               
               if (newIsAuthenticated) {
-                print('User authenticated successfully: ${user?.email}');
+                // User authenticated successfully
               } else {
-                print('User signed out');
+                // User signed out
               }
             } else {
               // Just update loading state if no other changes
@@ -88,7 +88,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
               }
             }
           } catch (e) {
-            print('Error in auth state listener: $e');
             // Handle internal Firebase errors gracefully - don't show user-facing errors for internal issues
             if (e.toString().contains('PigeonUserDetails') || 
                 e.toString().contains('List<Object?>') ||
@@ -107,7 +106,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
           }
         },
         onError: (error) {
-          print('Auth state listener error: $error');
           // Handle Firebase internal errors gracefully - don't show user-facing errors for internal issues
           if (error.toString().contains('PigeonUserDetails') || 
               error.toString().contains('List<Object?>') ||
@@ -182,15 +180,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
 
     try {
-      print('Attempting email sign in for: $email');
+  
       _setLoadingState(true);
       _clearError();
       
       await _performEmailSignIn(email, password);
-      print('Email sign in completed successfully');
+      
       
     } catch (e) {
-      print('Email sign in error: $e');
+
       // Handle the error based on its type
       if (e is FirebaseAuthException) {
         if (e.code == 'custom-error') {
@@ -226,7 +224,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       
       // If we get here, sign in was successful
       // The auth state listener will handle updating the state
-      print('Sign in successful for user: ${userCredential.user?.email}');
+      
       
     } catch (e) {
       // Handle specific Firebase Auth errors
@@ -320,7 +318,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       final userCredential = await _auth!.signInWithCredential(credential);
       
       // If we get here, sign in was successful
-      print('Google sign in successful for user: ${userCredential.user?.email}');
+      
       
     } catch (e) {
       // Handle specific Google Sign-In and Firebase errors

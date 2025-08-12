@@ -244,7 +244,7 @@ class SignupScreen extends HookConsumerWidget {
                           }
                         } catch (e) {
                           // Error is already handled by the provider
-                          debugPrint('Google sign up error: $e');
+                  
                         }
                       },
                 icon: Icons.g_mobiledata,

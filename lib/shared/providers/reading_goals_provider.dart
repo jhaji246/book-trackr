@@ -120,7 +120,7 @@ class ReadingGoalsNotifier extends StateNotifier<ReadingGoalsState> {
       }
     } catch (e) {
       // Log error but don't fail the local operation
-      debugPrint('Failed to load goals from cloud: $e');
+      
     }
   }
 
@@ -160,7 +160,7 @@ class ReadingGoalsNotifier extends StateNotifier<ReadingGoalsState> {
         await FirestoreService.updateReadingGoals(userId: userId, goals: goals);
       }
     } catch (e) {
-      debugPrint('Failed to save goals to cloud: $e');
+      
     }
   }
 
@@ -244,7 +244,7 @@ class ReadingGoalsNotifier extends StateNotifier<ReadingGoalsState> {
         );
       }
     } catch (e) {
-      debugPrint('Failed to update cloud progress: $e');
+      
     }
   }
 
@@ -260,7 +260,7 @@ class ReadingGoalsNotifier extends StateNotifier<ReadingGoalsState> {
         currentBookTotalPages: null,
       );
     } catch (e) {
-      debugPrint('Failed to update reminders: $e');
+      
     }
   }
 

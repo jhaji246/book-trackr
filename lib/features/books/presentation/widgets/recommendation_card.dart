@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../../shared/models/book.dart';
+import '../../../../core/widgets/cached_network_image_widget.dart';
 
 
 class RecommendationCard extends ConsumerWidget {
@@ -83,26 +84,13 @@ class RecommendationCard extends ConsumerWidget {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(6),
-                  child: Image.network(
-                    book.coverUrl,
+                  child: CachedNetworkImageWidget(
+                    imageUrl: book.coverUrl,
                     width: 45,
                     height: 55,
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        width: 45,
-                        height: 55,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.surfaceVariant,
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Icon(
-                          Icons.book,
-                          size: 16,
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        ),
-                      );
-                    },
+                    borderRadius: BorderRadius.circular(6),
+                    fallbackText: '${book.title} by ${book.author}',
                   ),
                 ),
               ),
@@ -110,30 +98,36 @@ class RecommendationCard extends ConsumerWidget {
 
               // Book Title
               Flexible(
-                child: Text(
-                  book.title,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 9,
+                child: Container(
+                  constraints: const BoxConstraints(maxHeight: 32),
+                  child: Text(
+                    book.title,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 9,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
                   ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
                 ),
               ),
               const SizedBox(height: 2),
 
               // Author
               Flexible(
-                child: Text(
-                  book.author,
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
-                    fontSize: 7,
+                child: Container(
+                  constraints: const BoxConstraints(maxHeight: 16),
+                  child: Text(
+                    book.author,
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
+                      fontSize: 7,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
                 ),
               ),
               const SizedBox(height: 3),
@@ -170,6 +164,7 @@ class RecommendationSection extends ConsumerWidget {
   final List<Book> books;
   final List<String> Function(Book) getReasons;
   final void Function(Book)? onBookTap;
+  final bool isLoading;
 
   const RecommendationSection({
     super.key,
@@ -177,12 +172,11 @@ class RecommendationSection extends ConsumerWidget {
     required this.books,
     required this.getReasons,
     this.onBookTap,
+    this.isLoading = false,
   });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (books.isEmpty) return const SizedBox.shrink();
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -196,28 +190,129 @@ class RecommendationSection extends ConsumerWidget {
           ),
         ),
         SizedBox(
-          height: 140,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            itemCount: books.length,
-            itemBuilder: (context, index) {
-              final book = books[index];
-              final reasons = getReasons(book);
-
-              return Container(
-                width: 110,
-                margin: const EdgeInsets.only(right: 8),
-                child: RecommendationCard(
-                  book: book,
-                  reasons: reasons,
-                  onTap: onBookTap != null ? () => onBookTap!(book) : null,
-                ),
-              );
-            },
-          ),
+          height: 160,
+          child: _buildContent(),
         ),
       ],
+    );
+  }
+
+  Widget _buildContent() {
+    if (isLoading) {
+      return _buildLoadingState();
+    }
+    
+    if (books.isEmpty) {
+      return _buildEmptyState();
+    }
+    
+    return _buildBookList();
+  }
+
+  Widget _buildLoadingState() {
+    return ListView.builder(
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      itemCount: 3,
+      itemBuilder: (context, index) {
+        return Container(
+          width: 110,
+          margin: const EdgeInsets.only(right: 8),
+          child: Card(
+            elevation: 2,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                children: [
+                  // Loading placeholder for image
+                  Container(
+                    width: 60,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Center(
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.grey),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  // Loading placeholder for title
+                  Container(
+                    height: 12,
+                    width: 80,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  // Loading placeholder for author
+                  Container(
+                    height: 10,
+                    width: 60,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildEmptyState() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.book_outlined,
+            size: 40,
+            color: Colors.grey[400],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'No recommendations yet',
+            style: const TextStyle(
+              color: Colors.grey,
+              fontSize: 14,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBookList() {
+    return ListView.builder(
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      itemCount: books.length,
+      itemBuilder: (context, index) {
+        final book = books[index];
+        final reasons = getReasons(book);
+
+        return Container(
+          width: 110,
+          margin: const EdgeInsets.only(right: 8),
+          child: RecommendationCard(
+            book: book,
+            reasons: reasons,
+            onTap: onBookTap != null ? () => onBookTap!(book) : null,
+          ),
+        );
+      },
     );
   }
 } 

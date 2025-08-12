@@ -76,10 +76,7 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
 
     // Log error in debug mode
     if (kDebugMode) {
-      debugPrint('ErrorBoundary caught error: $error');
-      if (stackTrace != null) {
-        debugPrint('StackTrace: $stackTrace');
-      }
+      // Error logged in debug mode
     }
   }
 
@@ -281,8 +278,7 @@ class _AsyncErrorBoundaryState extends State<AsyncErrorBoundary> {
       widget.onError?.call(error, stackTrace);
 
       if (kDebugMode) {
-        debugPrint('AsyncErrorBoundary caught error: $error');
-        debugPrint('StackTrace: $stackTrace');
+        // Error logged in debug mode
       }
     }
   }

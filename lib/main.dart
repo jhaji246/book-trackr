@@ -19,7 +19,7 @@ void main() async {
       await AppInitializer.initialize();
     } catch (e) {
       // Continue without Firebase - show login page with error handling
-      print('Firebase initialization failed: $e');
+  
     }
     
     runApp(const ProviderScope(child: BookTrackrApp()));
@@ -237,8 +237,7 @@ class _BookTrackrAppState extends ConsumerState<BookTrackrApp> {
       darkTheme: AppThemes.darkTheme,
       home: ErrorBoundary(
         onError: (error, stackTrace) {
-          debugPrint('App Error: $error');
-          debugPrint('App StackTrace: $stackTrace');
+          
         },
         child: Consumer(
           builder: (context, ref, child) {

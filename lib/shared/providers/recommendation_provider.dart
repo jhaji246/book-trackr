@@ -40,7 +40,20 @@ class RecommendationNotifier extends StateNotifier<RecommendationState> {
   final Ref _ref;
 
   RecommendationNotifier(this._ref) : super(const RecommendationState()) {
-    generatePersonalizedRecommendations();
+    // Initialize with sample data immediately to avoid loading state
+    _initializeWithSampleData();
+  }
+
+  void _initializeWithSampleData() {
+    // Set sample data immediately to show content
+    final sampleRecommendations = RecommendationService.getRecommendations();
+    final sampleTrendingBooks = RecommendationService.getTrendingBooks();
+    
+    state = state.copyWith(
+      personalizedRecommendations: sampleRecommendations,
+      trendingBooks: sampleTrendingBooks,
+      isLoading: false,
+    );
   }
 
   Future<void> generatePersonalizedRecommendations() async {
@@ -63,12 +76,31 @@ class RecommendationNotifier extends StateNotifier<RecommendationState> {
 
   Future<void> refreshRecommendations() async {
     state = state.copyWith(isLoading: true);
-    await generatePersonalizedRecommendations();
+    
+    try {
+      await generatePersonalizedRecommendations();
+      await generateTrendingBooks();
+    } catch (e) {
+      // If refresh fails, fall back to sample data
+      _initializeWithSampleData();
+    }
   }
 
   List<String> getRecommendationReasons(Book book) {
     // For now, return a simple reason
     // In a real app, you'd implement more sophisticated logic
     return ['Based on your reading history'];
+  }
+
+  Future<void> generateTrendingBooks() async {
+    try {
+      final trendingBooks = await RecommendationService.getTrendingBooks();
+      
+      state = state.copyWith(
+        trendingBooks: trendingBooks,
+      );
+    } catch (e) {
+      // Keep existing trending books if there's an error
+    }
   }
 } 

@@ -130,7 +130,7 @@ class ForgotPasswordScreen extends HookConsumerWidget {
                         }
                       } catch (e) {
                         // Error is already handled by the provider
-                        debugPrint('Password reset error: $e');
+                
                       }
                     },
               text: 'Send Reset Link',
