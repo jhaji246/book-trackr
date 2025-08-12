@@ -140,6 +140,7 @@ class Collaborator with _$Collaborator {
   factory Collaborator.fromJson(Map<String, dynamic> json) => _$CollaboratorFromJson(json);
 }
 
+
 /// Collaborator roles
 enum CollaboratorRole {
   owner('Owner'),
