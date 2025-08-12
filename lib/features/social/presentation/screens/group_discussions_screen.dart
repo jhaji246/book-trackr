@@ -256,7 +256,7 @@ class GroupDiscussionsScreen extends HookConsumerWidget {
       case DiscussionCategory.bookDiscussion:
         return Icons.book;
       case DiscussionCategory.chapterDiscussion:
-        return Icons.chapter;
+        return Icons.bookmark;
       case DiscussionCategory.readingProgress:
         return Icons.trending_up;
       default:

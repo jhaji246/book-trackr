@@ -30,6 +30,8 @@ _$CollaborativeReadingListImpl _$$CollaborativeReadingListImplFromJson(
       settings: ListSettings.fromJson(json['settings'] as Map<String, dynamic>),
       statistics:
           ListStatistics.fromJson(json['statistics'] as Map<String, dynamic>),
+      viewCount: (json['viewCount'] as num?)?.toInt() ?? 0,
+      favoriteCount: (json['favoriteCount'] as num?)?.toInt() ?? 0,
     );
 
 Map<String, dynamic> _$$CollaborativeReadingListImplToJson(
@@ -50,6 +52,8 @@ Map<String, dynamic> _$$CollaborativeReadingListImplToJson(
       'isActive': instance.isActive,
       'settings': instance.settings,
       'statistics': instance.statistics,
+      'viewCount': instance.viewCount,
+      'favoriteCount': instance.favoriteCount,
     };
 
 const _$ListPrivacyEnumMap = {

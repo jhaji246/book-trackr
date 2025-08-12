@@ -133,9 +133,6 @@ class CachedNetworkImageWidget extends StatelessWidget {
           fit: fit,
           placeholder: (context, url) => _buildLoadingPlaceholder(),
           errorWidget: (context, url, error) {
-            debugPrint('Image loading failed for URL: $url');
-            debugPrint('Error: $error');
-            
             // Use custom book cover placeholder if fallbackText is provided
             if (fallbackText != null && fallbackText!.isNotEmpty) {
               final parts = fallbackText!.split(' by ');

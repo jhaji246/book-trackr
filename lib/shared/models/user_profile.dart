@@ -141,8 +141,10 @@ class UserProfile with _$UserProfile {
         readingGroupUpdates: true,
         reviewNotifications: true,
         achievementNotifications: true,
-        notificationFrequency: NotificationFrequency.immediate,
+        notificationFrequency: NotificationFrequency.immediately,
       ),
+      achievements: [],
+      readingProgressVisibility: ReadingProgressVisibility.public,
     );
   }
 }

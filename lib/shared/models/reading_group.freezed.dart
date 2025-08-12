@@ -96,6 +96,9 @@ mixin _$ReadingGroup {
   /// Group's meeting schedule (if applicable)
   MeetingSchedule? get meetingSchedule => throw _privateConstructorUsedError;
 
+  /// Group's favorite genres
+  List<String> get favoriteGenres => throw _privateConstructorUsedError;
+
   /// Serializes this ReadingGroup to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
@@ -137,7 +140,8 @@ abstract class $ReadingGroupCopyWith<$Res> {
       GroupStatus status,
       String language,
       String? timezone,
-      MeetingSchedule? meetingSchedule});
+      MeetingSchedule? meetingSchedule,
+      List<String> favoriteGenres});
 
   $GroupBookSelectionCopyWith<$Res> get currentBook;
   $ReadingScheduleCopyWith<$Res> get readingSchedule;
@@ -184,6 +188,7 @@ class _$ReadingGroupCopyWithImpl<$Res, $Val extends ReadingGroup>
     Object? language = null,
     Object? timezone = freezed,
     Object? meetingSchedule = freezed,
+    Object? favoriteGenres = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -286,6 +291,10 @@ class _$ReadingGroupCopyWithImpl<$Res, $Val extends ReadingGroup>
           ? _value.meetingSchedule
           : meetingSchedule // ignore: cast_nullable_to_non_nullable
               as MeetingSchedule?,
+      favoriteGenres: null == favoriteGenres
+          ? _value.favoriteGenres
+          : favoriteGenres // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ) as $Val);
   }
 
@@ -357,7 +366,8 @@ abstract class _$$ReadingGroupImplCopyWith<$Res>
       GroupStatus status,
       String language,
       String? timezone,
-      MeetingSchedule? meetingSchedule});
+      MeetingSchedule? meetingSchedule,
+      List<String> favoriteGenres});
 
   @override
   $GroupBookSelectionCopyWith<$Res> get currentBook;
@@ -405,6 +415,7 @@ class __$$ReadingGroupImplCopyWithImpl<$Res>
     Object? language = null,
     Object? timezone = freezed,
     Object? meetingSchedule = freezed,
+    Object? favoriteGenres = null,
   }) {
     return _then(_$ReadingGroupImpl(
       id: null == id
@@ -507,6 +518,10 @@ class __$$ReadingGroupImplCopyWithImpl<$Res>
           ? _value.meetingSchedule
           : meetingSchedule // ignore: cast_nullable_to_non_nullable
               as MeetingSchedule?,
+      favoriteGenres: null == favoriteGenres
+          ? _value._favoriteGenres
+          : favoriteGenres // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -539,14 +554,16 @@ class _$ReadingGroupImpl implements _ReadingGroup {
       required this.status,
       required this.language,
       this.timezone,
-      this.meetingSchedule})
+      this.meetingSchedule,
+      final List<String> favoriteGenres = const []})
       : _tags = tags,
         _discussionTopics = discussionTopics,
         _rules = rules,
         _achievements = achievements,
         _moderators = moderators,
         _members = members,
-        _pendingRequests = pendingRequests;
+        _pendingRequests = pendingRequests,
+        _favoriteGenres = favoriteGenres;
 
   factory _$ReadingGroupImpl.fromJson(Map<String, dynamic> json) =>
       _$$ReadingGroupImplFromJson(json);
@@ -701,9 +718,21 @@ class _$ReadingGroupImpl implements _ReadingGroup {
   @override
   final MeetingSchedule? meetingSchedule;
 
+  /// Group's favorite genres
+  final List<String> _favoriteGenres;
+
+  /// Group's favorite genres
+  @override
+  @JsonKey()
+  List<String> get favoriteGenres {
+    if (_favoriteGenres is EqualUnmodifiableListView) return _favoriteGenres;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_favoriteGenres);
+  }
+
   @override
   String toString() {
-    return 'ReadingGroup(id: $id, name: $name, description: $description, coverImageUrl: $coverImageUrl, primaryGenre: $primaryGenre, tags: $tags, privacy: $privacy, maxMembers: $maxMembers, memberCount: $memberCount, readingPace: $readingPace, currentBook: $currentBook, readingSchedule: $readingSchedule, discussionTopics: $discussionTopics, rules: $rules, achievements: $achievements, moderators: $moderators, members: $members, pendingRequests: $pendingRequests, dateCreated: $dateCreated, dateUpdated: $dateUpdated, isActive: $isActive, status: $status, language: $language, timezone: $timezone, meetingSchedule: $meetingSchedule)';
+    return 'ReadingGroup(id: $id, name: $name, description: $description, coverImageUrl: $coverImageUrl, primaryGenre: $primaryGenre, tags: $tags, privacy: $privacy, maxMembers: $maxMembers, memberCount: $memberCount, readingPace: $readingPace, currentBook: $currentBook, readingSchedule: $readingSchedule, discussionTopics: $discussionTopics, rules: $rules, achievements: $achievements, moderators: $moderators, members: $members, pendingRequests: $pendingRequests, dateCreated: $dateCreated, dateUpdated: $dateUpdated, isActive: $isActive, status: $status, language: $language, timezone: $timezone, meetingSchedule: $meetingSchedule, favoriteGenres: $favoriteGenres)';
   }
 
   @override
@@ -753,7 +782,9 @@ class _$ReadingGroupImpl implements _ReadingGroup {
             (identical(other.timezone, timezone) ||
                 other.timezone == timezone) &&
             (identical(other.meetingSchedule, meetingSchedule) ||
-                other.meetingSchedule == meetingSchedule));
+                other.meetingSchedule == meetingSchedule) &&
+            const DeepCollectionEquality()
+                .equals(other._favoriteGenres, _favoriteGenres));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -784,7 +815,8 @@ class _$ReadingGroupImpl implements _ReadingGroup {
         status,
         language,
         timezone,
-        meetingSchedule
+        meetingSchedule,
+        const DeepCollectionEquality().hash(_favoriteGenres)
       ]);
 
   /// Create a copy of ReadingGroup
@@ -829,7 +861,8 @@ abstract class _ReadingGroup implements ReadingGroup {
       required final GroupStatus status,
       required final String language,
       final String? timezone,
-      final MeetingSchedule? meetingSchedule}) = _$ReadingGroupImpl;
+      final MeetingSchedule? meetingSchedule,
+      final List<String> favoriteGenres}) = _$ReadingGroupImpl;
 
   factory _ReadingGroup.fromJson(Map<String, dynamic> json) =
       _$ReadingGroupImpl.fromJson;
@@ -933,6 +966,10 @@ abstract class _ReadingGroup implements ReadingGroup {
   /// Group's meeting schedule (if applicable)
   @override
   MeetingSchedule? get meetingSchedule;
+
+  /// Group's favorite genres
+  @override
+  List<String> get favoriteGenres;
 
   /// Create a copy of ReadingGroup
   /// with the given fields replaced by the non-null parameter values.

@@ -37,6 +37,8 @@ _$GroupDiscussionImpl _$$GroupDiscussionImplFromJson(
       badges: (json['badges'] as List<dynamic>)
           .map((e) => DiscussionBadge.fromJson(e as Map<String, dynamic>))
           .toList(),
+      qualityScore: (json['qualityScore'] as num?)?.toDouble() ?? 0.0,
+      helpfulnessScore: (json['helpfulnessScore'] as num?)?.toDouble() ?? 0.0,
     );
 
 Map<String, dynamic> _$$GroupDiscussionImplToJson(
@@ -64,6 +66,8 @@ Map<String, dynamic> _$$GroupDiscussionImplToJson(
       'moderators': instance.moderators,
       'rules': instance.rules,
       'badges': instance.badges,
+      'qualityScore': instance.qualityScore,
+      'helpfulnessScore': instance.helpfulnessScore,
     };
 
 const _$DiscussionCategoryEnumMap = {

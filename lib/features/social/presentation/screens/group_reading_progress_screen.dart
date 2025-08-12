@@ -597,11 +597,11 @@ class GroupReadingProgressScreen extends HookConsumerWidget {
       case MilestoneType.startReading:
         return Icons.play_arrow;
       case MilestoneType.quarterComplete:
-        return Icons.one_quarter;
+        return Icons.looks_one;
       case MilestoneType.halfway:
-        return Icons.half;
+        return Icons.looks_two;
       case MilestoneType.threeQuarters:
-        return Icons.three_quarters;
+        return Icons.looks_3;
       case MilestoneType.finished:
         return Icons.flag;
       case MilestoneType.custom:

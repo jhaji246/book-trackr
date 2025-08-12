@@ -51,6 +51,12 @@ class CollaborativeReadingList with _$CollaborativeReadingList {
     
     /// List statistics
     required ListStatistics statistics,
+    
+    /// List view count
+    @Default(0) int viewCount,
+    
+    /// List favorite count
+    @Default(0) int favoriteCount,
   }) = _CollaborativeReadingList;
 
   factory CollaborativeReadingList.fromJson(Map<String, dynamic> json) => _$CollaborativeReadingListFromJson(json);

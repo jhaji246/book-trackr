@@ -86,6 +86,12 @@ mixin _$GroupDiscussion {
   /// Discussion achievements/badges
   List<DiscussionBadge> get badges => throw _privateConstructorUsedError;
 
+  /// Discussion quality score (0.0 - 5.0)
+  double get qualityScore => throw _privateConstructorUsedError;
+
+  /// Discussion helpfulness score (0.0 - 5.0)
+  double get helpfulnessScore => throw _privateConstructorUsedError;
+
   /// Serializes this GroupDiscussion to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
@@ -124,7 +130,9 @@ abstract class $GroupDiscussionCopyWith<$Res> {
       List<String> participants,
       List<String> moderators,
       List<String> rules,
-      List<DiscussionBadge> badges});
+      List<DiscussionBadge> badges,
+      double qualityScore,
+      double helpfulnessScore});
 }
 
 /// @nodoc
@@ -164,6 +172,8 @@ class _$GroupDiscussionCopyWithImpl<$Res, $Val extends GroupDiscussion>
     Object? moderators = null,
     Object? rules = null,
     Object? badges = null,
+    Object? qualityScore = null,
+    Object? helpfulnessScore = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -254,6 +264,14 @@ class _$GroupDiscussionCopyWithImpl<$Res, $Val extends GroupDiscussion>
           ? _value.badges
           : badges // ignore: cast_nullable_to_non_nullable
               as List<DiscussionBadge>,
+      qualityScore: null == qualityScore
+          ? _value.qualityScore
+          : qualityScore // ignore: cast_nullable_to_non_nullable
+              as double,
+      helpfulnessScore: null == helpfulnessScore
+          ? _value.helpfulnessScore
+          : helpfulnessScore // ignore: cast_nullable_to_non_nullable
+              as double,
     ) as $Val);
   }
 }
@@ -288,7 +306,9 @@ abstract class _$$GroupDiscussionImplCopyWith<$Res>
       List<String> participants,
       List<String> moderators,
       List<String> rules,
-      List<DiscussionBadge> badges});
+      List<DiscussionBadge> badges,
+      double qualityScore,
+      double helpfulnessScore});
 }
 
 /// @nodoc
@@ -326,6 +346,8 @@ class __$$GroupDiscussionImplCopyWithImpl<$Res>
     Object? moderators = null,
     Object? rules = null,
     Object? badges = null,
+    Object? qualityScore = null,
+    Object? helpfulnessScore = null,
   }) {
     return _then(_$GroupDiscussionImpl(
       id: null == id
@@ -416,6 +438,14 @@ class __$$GroupDiscussionImplCopyWithImpl<$Res>
           ? _value._badges
           : badges // ignore: cast_nullable_to_non_nullable
               as List<DiscussionBadge>,
+      qualityScore: null == qualityScore
+          ? _value.qualityScore
+          : qualityScore // ignore: cast_nullable_to_non_nullable
+              as double,
+      helpfulnessScore: null == helpfulnessScore
+          ? _value.helpfulnessScore
+          : helpfulnessScore // ignore: cast_nullable_to_non_nullable
+              as double,
     ));
   }
 }
@@ -445,7 +475,9 @@ class _$GroupDiscussionImpl implements _GroupDiscussion {
       required final List<String> participants,
       required final List<String> moderators,
       required final List<String> rules,
-      required final List<DiscussionBadge> badges})
+      required final List<DiscussionBadge> badges,
+      this.qualityScore = 0.0,
+      this.helpfulnessScore = 0.0})
       : _tags = tags,
         _participants = participants,
         _moderators = moderators,
@@ -578,9 +610,19 @@ class _$GroupDiscussionImpl implements _GroupDiscussion {
     return EqualUnmodifiableListView(_badges);
   }
 
+  /// Discussion quality score (0.0 - 5.0)
+  @override
+  @JsonKey()
+  final double qualityScore;
+
+  /// Discussion helpfulness score (0.0 - 5.0)
+  @override
+  @JsonKey()
+  final double helpfulnessScore;
+
   @override
   String toString() {
-    return 'GroupDiscussion(id: $id, groupId: $groupId, title: $title, content: $content, category: $category, creatorId: $creatorId, dateCreated: $dateCreated, lastActivity: $lastActivity, replyCount: $replyCount, viewCount: $viewCount, tags: $tags, isPinned: $isPinned, isLocked: $isLocked, isFeatured: $isFeatured, status: $status, bookId: $bookId, chapterReference: $chapterReference, spoilerLevel: $spoilerLevel, participants: $participants, moderators: $moderators, rules: $rules, badges: $badges)';
+    return 'GroupDiscussion(id: $id, groupId: $groupId, title: $title, content: $content, category: $category, creatorId: $creatorId, dateCreated: $dateCreated, lastActivity: $lastActivity, replyCount: $replyCount, viewCount: $viewCount, tags: $tags, isPinned: $isPinned, isLocked: $isLocked, isFeatured: $isFeatured, status: $status, bookId: $bookId, chapterReference: $chapterReference, spoilerLevel: $spoilerLevel, participants: $participants, moderators: $moderators, rules: $rules, badges: $badges, qualityScore: $qualityScore, helpfulnessScore: $helpfulnessScore)';
   }
 
   @override
@@ -622,7 +664,11 @@ class _$GroupDiscussionImpl implements _GroupDiscussion {
             const DeepCollectionEquality()
                 .equals(other._moderators, _moderators) &&
             const DeepCollectionEquality().equals(other._rules, _rules) &&
-            const DeepCollectionEquality().equals(other._badges, _badges));
+            const DeepCollectionEquality().equals(other._badges, _badges) &&
+            (identical(other.qualityScore, qualityScore) ||
+                other.qualityScore == qualityScore) &&
+            (identical(other.helpfulnessScore, helpfulnessScore) ||
+                other.helpfulnessScore == helpfulnessScore));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -650,7 +696,9 @@ class _$GroupDiscussionImpl implements _GroupDiscussion {
         const DeepCollectionEquality().hash(_participants),
         const DeepCollectionEquality().hash(_moderators),
         const DeepCollectionEquality().hash(_rules),
-        const DeepCollectionEquality().hash(_badges)
+        const DeepCollectionEquality().hash(_badges),
+        qualityScore,
+        helpfulnessScore
       ]);
 
   /// Create a copy of GroupDiscussion
@@ -693,7 +741,9 @@ abstract class _GroupDiscussion implements GroupDiscussion {
       required final List<String> participants,
       required final List<String> moderators,
       required final List<String> rules,
-      required final List<DiscussionBadge> badges}) = _$GroupDiscussionImpl;
+      required final List<DiscussionBadge> badges,
+      final double qualityScore,
+      final double helpfulnessScore}) = _$GroupDiscussionImpl;
 
   factory _GroupDiscussion.fromJson(Map<String, dynamic> json) =
       _$GroupDiscussionImpl.fromJson;
@@ -785,6 +835,14 @@ abstract class _GroupDiscussion implements GroupDiscussion {
   /// Discussion achievements/badges
   @override
   List<DiscussionBadge> get badges;
+
+  /// Discussion quality score (0.0 - 5.0)
+  @override
+  double get qualityScore;
+
+  /// Discussion helpfulness score (0.0 - 5.0)
+  @override
+  double get helpfulnessScore;
 
   /// Create a copy of GroupDiscussion
   /// with the given fields replaced by the non-null parameter values.

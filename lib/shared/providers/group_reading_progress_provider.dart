@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../models/group_reading_progress.dart';
-import '../models/reading_group.dart';
+import '../models/group_reading_progress.dart' as progress;
+import '../models/reading_group.dart' as group;
 import 'auth_provider.dart';
 import 'reading_groups_provider.dart';
 
@@ -12,9 +12,9 @@ final groupReadingProgressProvider = StateNotifierProvider<GroupReadingProgressN
 
 /// State for group reading progress
 class GroupReadingProgressState {
-  final Map<String, GroupBookSelection> bookSelectionsByGroup;
-  final Map<String, List<MemberReadingProgress>> memberProgressByGroup;
-  final Map<String, List<GroupReadingChallenge>> challengesByGroup;
+  final Map<String, progress.GroupBookSelection> bookSelectionsByGroup;
+  final Map<String, List<progress.MemberReadingProgress>> memberProgressByGroup;
+  final Map<String, List<progress.GroupReadingChallenge>> challengesByGroup;
   final String? selectedGroupId;
   final bool isLoading;
   final String? error;
@@ -31,9 +31,9 @@ class GroupReadingProgressState {
   });
 
   GroupReadingProgressState copyWith({
-    Map<String, GroupBookSelection>? bookSelectionsByGroup,
-    Map<String, List<MemberReadingProgress>>? memberProgressByGroup,
-    Map<String, List<GroupReadingChallenge>>? challengesByGroup,
+    Map<String, progress.GroupBookSelection>? bookSelectionsByGroup,
+    Map<String, List<progress.MemberReadingProgress>>? memberProgressByGroup,
+    Map<String, List<progress.GroupReadingChallenge>>? challengesByGroup,
     String? selectedGroupId,
     bool? isLoading,
     String? error,
@@ -51,35 +51,35 @@ class GroupReadingProgressState {
   }
 
   /// Get book selection for a specific group
-  GroupBookSelection? getBookSelectionForGroup(String groupId) {
+  progress.GroupBookSelection? getBookSelectionForGroup(String groupId) {
     return bookSelectionsByGroup[groupId];
   }
 
   /// Get member progress for a specific group
-  List<MemberReadingProgress> getMemberProgressForGroup(String groupId) {
+  List<progress.MemberReadingProgress> getMemberProgressForGroup(String groupId) {
     return memberProgressByGroup[groupId] ?? [];
   }
 
   /// Get challenges for a specific group
-  List<GroupReadingChallenge> getChallengesForGroup(String groupId) {
+  List<progress.GroupReadingChallenge> getChallengesForGroup(String groupId) {
     return challengesByGroup[groupId] ?? [];
   }
 
   /// Get the currently selected group's book selection
-  GroupBookSelection? get selectedGroupBookSelection {
+  progress.GroupBookSelection? get selectedGroupBookSelection {
     if (selectedGroupId == null) return null;
     return getBookSelectionForGroup(selectedGroupId!);
   }
 
   /// Get the currently selected group's member progress
-  List<MemberReadingProgress> get selectedGroupMemberProgress {
+  List<progress.MemberReadingProgress> get selectedGroupMemberProgress {
     if (selectedGroupId == null) return [];
     return getMemberProgressForGroup(selectedGroupId!);
   }
 
   /// Get active challenges across all groups
-  List<GroupReadingChallenge> get activeChallenges {
-    final allChallenges = <GroupReadingChallenge>[];
+  List<progress.GroupReadingChallenge> get activeChallenges {
+    final allChallenges = <progress.GroupReadingChallenge>[];
     for (final challenges in challengesByGroup.values) {
       allChallenges.addAll(challenges.where((c) => c.isActive));
     }
@@ -111,8 +111,8 @@ class GroupReadingProgressNotifier extends StateNotifier<GroupReadingProgressSta
   }
 
   /// Add or update a book selection for a group
-  void updateBookSelection(String groupId, GroupBookSelection bookSelection) {
-    final newBookSelectionsByGroup = Map<String, GroupBookSelection>.from(state.bookSelectionsByGroup);
+  void updateBookSelection(String groupId, progress.GroupBookSelection bookSelection) {
+    final newBookSelectionsByGroup = Map<String, progress.GroupBookSelection>.from(state.bookSelectionsByGroup);
     newBookSelectionsByGroup[groupId] = bookSelection;
     
     state = state.copyWith(
@@ -123,7 +123,7 @@ class GroupReadingProgressNotifier extends StateNotifier<GroupReadingProgressSta
 
   /// Remove book selection for a group
   void removeBookSelection(String groupId) {
-    final newBookSelectionsByGroup = Map<String, GroupBookSelection>.from(state.bookSelectionsByGroup);
+    final newBookSelectionsByGroup = Map<String, progress.GroupBookSelection>.from(state.bookSelectionsByGroup);
     newBookSelectionsByGroup.remove(groupId);
     
     state = state.copyWith(
@@ -142,7 +142,7 @@ class GroupReadingProgressNotifier extends StateNotifier<GroupReadingProgressSta
     required int totalPages,
     required int pagesPerWeek,
   }) {
-    final newBookSelection = GroupBookSelection.defaultSelection(
+    final newBookSelection = progress.GroupBookSelection.defaultSelection(
       bookId: bookId,
       title: title,
       author: author,
@@ -168,9 +168,9 @@ class GroupReadingProgressNotifier extends StateNotifier<GroupReadingProgressSta
   }
 
   /// Add or update member reading progress
-  void updateMemberProgress(String groupId, MemberReadingProgress progress) {
-    final newMemberProgressByGroup = Map<String, List<MemberReadingProgress>>.from(state.memberProgressByGroup);
-    final groupProgress = List<MemberReadingProgress>.from(
+  void updateMemberProgress(String groupId, progress.MemberReadingProgress progress) {
+    final newMemberProgressByGroup = Map<String, List<progress.MemberReadingProgress>>.from(state.memberProgressByGroup);
+    final groupProgress = List<progress.MemberReadingProgress>.from(
       newMemberProgressByGroup[groupId] ?? []
     );
     
@@ -212,7 +212,7 @@ class GroupReadingProgressNotifier extends StateNotifier<GroupReadingProgressSta
       readingSpeed: readingSpeed,
       isOnTrack: isOnTrack,
       daysOffSchedule: daysOffSchedule,
-      status: newPage > 0 ? ReadingStatus.inProgress : ReadingStatus.notStarted,
+      status: newPage > 0 ? progress.ReadingStatus.inProgress : progress.ReadingStatus.notStarted,
     );
     
     updateMemberProgress(groupId, updatedProgress);
@@ -249,9 +249,9 @@ class GroupReadingProgressNotifier extends StateNotifier<GroupReadingProgressSta
   }
 
   /// Add or update a reading challenge
-  void updateChallenge(String groupId, GroupReadingChallenge challenge) {
-    final newChallengesByGroup = Map<String, List<GroupReadingChallenge>>.from(state.challengesByGroup);
-    final groupChallenges = List<GroupReadingChallenge>.from(
+  void updateChallenge(String groupId, progress.GroupReadingChallenge challenge) {
+    final newChallengesByGroup = Map<String, List<progress.GroupReadingChallenge>>.from(state.challengesByGroup);
+    final groupChallenges = List<progress.GroupReadingChallenge>.from(
       newChallengesByGroup[groupId] ?? []
     );
     
@@ -275,14 +275,14 @@ class GroupReadingProgressNotifier extends StateNotifier<GroupReadingProgressSta
     required String groupId,
     required String name,
     required String description,
-    required ChallengeType type,
-    required ChallengeDifficulty difficulty,
+    required progress.ChallengeType type,
+    required progress.ChallengeDifficulty difficulty,
     required DateTime startDate,
     required DateTime endDate,
     required List<String> rules,
     required List<String> rewards,
   }) {
-    final newChallenge = GroupReadingChallenge(
+    final newChallenge = progress.GroupReadingChallenge(
       id: DateTime.now().millisecondsSinceEpoch.toString(),
       name: name,
       description: description,
@@ -294,7 +294,7 @@ class GroupReadingProgressNotifier extends StateNotifier<GroupReadingProgressSta
       type: type,
       difficulty: difficulty,
       isActive: true,
-      progress: ChallengeProgress(
+      progress: progress.ChallengeProgress(
         totalParticipants: 0,
         participantsCompleted: 0,
         averageProgress: 0.0,
@@ -315,7 +315,7 @@ class GroupReadingProgressNotifier extends StateNotifier<GroupReadingProgressSta
     final challenges = state.getChallengesForGroup(groupId);
     final challenge = challenges.firstWhere((c) => c.id == challengeId);
     
-    final newParticipant = ChallengeParticipant(
+    final newParticipant = progress.ChallengeParticipant(
       userId: _currentUserId!,
       displayName: 'Current User', // TODO: Get from user profile
       progress: 0,
@@ -389,13 +389,13 @@ class GroupReadingProgressNotifier extends StateNotifier<GroupReadingProgressSta
   }
 
   /// Check if member is on track with group pace
-  bool _checkIfOnTrack(int currentPage, GroupBookSelection bookSelection) {
+  bool _checkIfOnTrack(int currentPage, progress.GroupBookSelection bookSelection) {
     final expectedPage = (bookSelection.currentProgress * bookSelection.totalPages).round();
     return currentPage >= expectedPage;
   }
 
   /// Calculate days ahead/behind schedule
-  int _calculateDaysOffSchedule(int currentPage, GroupBookSelection bookSelection) {
+  int _calculateDaysOffSchedule(int currentPage, progress.GroupBookSelection bookSelection) {
     final expectedPage = (bookSelection.currentProgress * bookSelection.totalPages).round();
     final pageDifference = currentPage - expectedPage;
     final daysDifference = (pageDifference / bookSelection.pagesPerWeek * 7).round();
@@ -408,7 +408,7 @@ class GroupReadingProgressNotifier extends StateNotifier<GroupReadingProgressSta
     if (memberProgress.isEmpty) return;
     
     final averageProgress = memberProgress.map((p) => p.progressPercentage).reduce((a, b) => a + b) / memberProgress.length;
-    final membersFinished = memberProgress.where((p) => p.status == ReadingStatus.completed).length;
+    final membersFinished = memberProgress.where((p) => p.status == progress.ReadingStatus.completed).length;
     
     final bookSelection = state.getBookSelectionForGroup(groupId);
     if (bookSelection == null) return;
@@ -423,13 +423,13 @@ class GroupReadingProgressNotifier extends StateNotifier<GroupReadingProgressSta
   }
 
   /// Calculate challenge score based on progress and difficulty
-  int _calculateChallengeScore(int progress, ChallengeDifficulty difficulty) {
+  int _calculateChallengeScore(int progress, progress.ChallengeDifficulty difficulty) {
     final baseScore = progress;
     final difficultyMultiplier = switch (difficulty) {
-      ChallengeDifficulty.easy => 1.0,
-      ChallengeDifficulty.medium => 1.5,
-      ChallengeDifficulty.hard => 2.0,
-      ChallengeDifficulty.expert => 3.0,
+      progress.ChallengeDifficulty.easy => 1.0,
+      progress.ChallengeDifficulty.medium => 1.5,
+      progress.ChallengeDifficulty.hard => 2.0,
+      progress.ChallengeDifficulty.expert => 3.0,
     };
     return (baseScore * difficultyMultiplier).round();
   }

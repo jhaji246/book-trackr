@@ -121,7 +121,7 @@ class ReadingGroupsNotifier extends StateNotifier<ReadingGroupsState> {
 
   /// Remove a reading group
   void removeGroup(String groupId) {
-    final newGroupsById = Map<String, List<ReadingGroup>>.from(state.groupsById);
+    final newGroupsById = Map<String, ReadingGroup>.from(state.groupsById);
     newGroupsById.remove(groupId);
     
     final newUserGroups = state.userGroups.where((group) => group.id != groupId).toList();

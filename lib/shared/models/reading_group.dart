@@ -81,6 +81,9 @@ class ReadingGroup with _$ReadingGroup {
     
     /// Group's meeting schedule (if applicable)
     MeetingSchedule? meetingSchedule,
+    
+    /// Group's favorite genres
+    @Default([]) List<String> favoriteGenres,
   }) = _ReadingGroup;
 
   /// Creates a ReadingGroup instance from JSON data

@@ -48,6 +48,10 @@ _$ReadingGroupImpl _$$ReadingGroupImplFromJson(Map<String, dynamic> json) =>
           ? null
           : MeetingSchedule.fromJson(
               json['meetingSchedule'] as Map<String, dynamic>),
+      favoriteGenres: (json['favoriteGenres'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$$ReadingGroupImplToJson(_$ReadingGroupImpl instance) =>
@@ -77,6 +81,7 @@ Map<String, dynamic> _$$ReadingGroupImplToJson(_$ReadingGroupImpl instance) =>
       'language': instance.language,
       'timezone': instance.timezone,
       'meetingSchedule': instance.meetingSchedule,
+      'favoriteGenres': instance.favoriteGenres,
     };
 
 const _$GroupPrivacyEnumMap = {

@@ -72,6 +72,12 @@ class GroupDiscussion with _$GroupDiscussion {
     
     /// Discussion achievements/badges
     required List<DiscussionBadge> badges,
+    
+    /// Discussion quality score (0.0 - 5.0)
+    @Default(0.0) double qualityScore,
+    
+    /// Discussion helpfulness score (0.0 - 5.0)
+    @Default(0.0) double helpfulnessScore,
   }) = _GroupDiscussion;
 
   factory GroupDiscussion.fromJson(Map<String, dynamic> json) => _$GroupDiscussionFromJson(json);

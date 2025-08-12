@@ -49,7 +49,7 @@ class AppInitializer {
     }
   }
 
-  /// Initialize Firebase services
+  /// Initialize Firebase with proper error handling
   static Future<void> _initializeFirebase() async {
     try {
       // Check if Firebase is already initialized
@@ -69,6 +69,9 @@ class AppInitializer {
       _isFirebaseInitialized = true;
       
     } catch (e) {
+      // Log the specific error for debugging
+      print('Firebase initialization error: $e');
+      
       // If it's a duplicate app error, try to get the existing app
       if (e.toString().contains('duplicate-app')) {
         try {
@@ -76,17 +79,35 @@ class AppInitializer {
           _isFirebaseInitialized = true;
           return;
         } catch (getAppError) {
+          print('Failed to get existing Firebase app: $getAppError');
           // Continue without Firebase
         }
       }
       
       // Check if it's a configuration error
       if (e.toString().contains('Firebase configuration is incomplete')) {
+        print('Firebase configuration is incomplete');
         _isFirebaseInitialized = false;
         return; // Don't rethrow, just continue without Firebase
       }
       
+      // Check for specific Firebase errors
+      if (e.toString().contains('network') || e.toString().contains('connection')) {
+        print('Firebase network/connection error');
+        _isFirebaseInitialized = false;
+        return; // Network issues - continue without Firebase
+      }
+      
+      // Check for Google Services configuration issues
+      if (e.toString().contains('google-services.json') || 
+          e.toString().contains('GoogleServicesJson')) {
+        print('Google Services configuration error: $e');
+        _isFirebaseInitialized = false;
+        return;
+      }
+      
       // For other errors, continue without Firebase (app can still function)
+      print('Unknown Firebase error, continuing without Firebase: $e');
       _isFirebaseInitialized = false;
       return; // Don't rethrow, just continue without Firebase
     }

@@ -66,6 +66,12 @@ mixin _$CollaborativeReadingList {
   /// List statistics
   ListStatistics get statistics => throw _privateConstructorUsedError;
 
+  /// List view count
+  int get viewCount => throw _privateConstructorUsedError;
+
+  /// List favorite count
+  int get favoriteCount => throw _privateConstructorUsedError;
+
   /// Serializes this CollaborativeReadingList to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
@@ -97,7 +103,9 @@ abstract class $CollaborativeReadingListCopyWith<$Res> {
       DateTime dateUpdated,
       bool isActive,
       ListSettings settings,
-      ListStatistics statistics});
+      ListStatistics statistics,
+      int viewCount,
+      int favoriteCount});
 
   $ListSettingsCopyWith<$Res> get settings;
   $ListStatisticsCopyWith<$Res> get statistics;
@@ -134,6 +142,8 @@ class _$CollaborativeReadingListCopyWithImpl<$Res,
     Object? isActive = null,
     Object? settings = null,
     Object? statistics = null,
+    Object? viewCount = null,
+    Object? favoriteCount = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -196,6 +206,14 @@ class _$CollaborativeReadingListCopyWithImpl<$Res,
           ? _value.statistics
           : statistics // ignore: cast_nullable_to_non_nullable
               as ListStatistics,
+      viewCount: null == viewCount
+          ? _value.viewCount
+          : viewCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      favoriteCount: null == favoriteCount
+          ? _value.favoriteCount
+          : favoriteCount // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 
@@ -244,7 +262,9 @@ abstract class _$$CollaborativeReadingListImplCopyWith<$Res>
       DateTime dateUpdated,
       bool isActive,
       ListSettings settings,
-      ListStatistics statistics});
+      ListStatistics statistics,
+      int viewCount,
+      int favoriteCount});
 
   @override
   $ListSettingsCopyWith<$Res> get settings;
@@ -282,6 +302,8 @@ class __$$CollaborativeReadingListImplCopyWithImpl<$Res>
     Object? isActive = null,
     Object? settings = null,
     Object? statistics = null,
+    Object? viewCount = null,
+    Object? favoriteCount = null,
   }) {
     return _then(_$CollaborativeReadingListImpl(
       id: null == id
@@ -344,6 +366,14 @@ class __$$CollaborativeReadingListImplCopyWithImpl<$Res>
           ? _value.statistics
           : statistics // ignore: cast_nullable_to_non_nullable
               as ListStatistics,
+      viewCount: null == viewCount
+          ? _value.viewCount
+          : viewCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      favoriteCount: null == favoriteCount
+          ? _value.favoriteCount
+          : favoriteCount // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -366,7 +396,9 @@ class _$CollaborativeReadingListImpl implements _CollaborativeReadingList {
       required this.dateUpdated,
       required this.isActive,
       required this.settings,
-      required this.statistics})
+      required this.statistics,
+      this.viewCount = 0,
+      this.favoriteCount = 0})
       : _collaborators = collaborators,
         _books = books,
         _tags = tags;
@@ -455,9 +487,19 @@ class _$CollaborativeReadingListImpl implements _CollaborativeReadingList {
   @override
   final ListStatistics statistics;
 
+  /// List view count
+  @override
+  @JsonKey()
+  final int viewCount;
+
+  /// List favorite count
+  @override
+  @JsonKey()
+  final int favoriteCount;
+
   @override
   String toString() {
-    return 'CollaborativeReadingList(id: $id, name: $name, description: $description, creatorId: $creatorId, collaborators: $collaborators, privacy: $privacy, books: $books, tags: $tags, coverImageUrl: $coverImageUrl, themeColor: $themeColor, dateCreated: $dateCreated, dateUpdated: $dateUpdated, isActive: $isActive, settings: $settings, statistics: $statistics)';
+    return 'CollaborativeReadingList(id: $id, name: $name, description: $description, creatorId: $creatorId, collaborators: $collaborators, privacy: $privacy, books: $books, tags: $tags, coverImageUrl: $coverImageUrl, themeColor: $themeColor, dateCreated: $dateCreated, dateUpdated: $dateUpdated, isActive: $isActive, settings: $settings, statistics: $statistics, viewCount: $viewCount, favoriteCount: $favoriteCount)';
   }
 
   @override
@@ -489,7 +531,11 @@ class _$CollaborativeReadingListImpl implements _CollaborativeReadingList {
             (identical(other.settings, settings) ||
                 other.settings == settings) &&
             (identical(other.statistics, statistics) ||
-                other.statistics == statistics));
+                other.statistics == statistics) &&
+            (identical(other.viewCount, viewCount) ||
+                other.viewCount == viewCount) &&
+            (identical(other.favoriteCount, favoriteCount) ||
+                other.favoriteCount == favoriteCount));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -510,7 +556,9 @@ class _$CollaborativeReadingListImpl implements _CollaborativeReadingList {
       dateUpdated,
       isActive,
       settings,
-      statistics);
+      statistics,
+      viewCount,
+      favoriteCount);
 
   /// Create a copy of CollaborativeReadingList
   /// with the given fields replaced by the non-null parameter values.
@@ -531,22 +579,23 @@ class _$CollaborativeReadingListImpl implements _CollaborativeReadingList {
 
 abstract class _CollaborativeReadingList implements CollaborativeReadingList {
   const factory _CollaborativeReadingList(
-          {required final String id,
-          required final String name,
-          required final String description,
-          required final String creatorId,
-          required final List<Collaborator> collaborators,
-          required final ListPrivacy privacy,
-          required final List<CollaborativeBookEntry> books,
-          required final List<String> tags,
-          final String? coverImageUrl,
-          required final String themeColor,
-          required final DateTime dateCreated,
-          required final DateTime dateUpdated,
-          required final bool isActive,
-          required final ListSettings settings,
-          required final ListStatistics statistics}) =
-      _$CollaborativeReadingListImpl;
+      {required final String id,
+      required final String name,
+      required final String description,
+      required final String creatorId,
+      required final List<Collaborator> collaborators,
+      required final ListPrivacy privacy,
+      required final List<CollaborativeBookEntry> books,
+      required final List<String> tags,
+      final String? coverImageUrl,
+      required final String themeColor,
+      required final DateTime dateCreated,
+      required final DateTime dateUpdated,
+      required final bool isActive,
+      required final ListSettings settings,
+      required final ListStatistics statistics,
+      final int viewCount,
+      final int favoriteCount}) = _$CollaborativeReadingListImpl;
 
   factory _CollaborativeReadingList.fromJson(Map<String, dynamic> json) =
       _$CollaborativeReadingListImpl.fromJson;
@@ -610,6 +659,14 @@ abstract class _CollaborativeReadingList implements CollaborativeReadingList {
   /// List statistics
   @override
   ListStatistics get statistics;
+
+  /// List view count
+  @override
+  int get viewCount;
+
+  /// List favorite count
+  @override
+  int get favoriteCount;
 
   /// Create a copy of CollaborativeReadingList
   /// with the given fields replaced by the non-null parameter values.

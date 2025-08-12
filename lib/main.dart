@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/app_initializer.dart';
-import 'core/routing/app_router.dart';
 import 'shared/providers/theme_provider.dart';
 import 'shared/providers/auth_provider.dart';
 import 'core/widgets/error_boundary.dart';
 import 'features/books/presentation/screens/home_screen.dart';
 import 'features/auth/presentation/screens/login_screen.dart';
-import 'core/constants/app_constants.dart';
 import 'core/widgets/animated_widgets.dart';
 
 void main() async {
@@ -16,14 +14,17 @@ void main() async {
     
     // Initialize all app services (even if Firebase fails)
     try {
+      print('Starting app initialization...');
       await AppInitializer.initialize();
+      print('App initialization completed successfully');
     } catch (e) {
+      print('App initialization failed: $e');
       // Continue without Firebase - show login page with error handling
-  
     }
     
     runApp(const ProviderScope(child: BookTrackrApp()));
   } catch (e) {
+    print('Critical initialization failed: $e');
     // Critical initialization failed
     runApp(FirebaseInitErrorApp(error: e.toString()));
   }

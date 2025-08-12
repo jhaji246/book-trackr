@@ -53,6 +53,19 @@ class BooksApiService {
     }
   }
 
+  static Future<Map<String, dynamic>> getFeaturedBooks() async {
+    // Search for featured books by using popular categories
+    const featuredQueries = [
+      'bestseller fiction',
+      'award winning books',
+      'classic literature',
+      'new releases 2024',
+    ];
+    
+    final randomQuery = featuredQueries[DateTime.now().millisecond % featuredQueries.length];
+    return await searchBooks(query: randomQuery, maxResults: 20);
+  }
+
   static Future<Map<String, dynamic>> getPopularBooks() async {
     // Search for popular books by using common terms
     const popularQueries = [

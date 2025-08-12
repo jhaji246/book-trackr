@@ -68,6 +68,9 @@ class LoginScreen extends HookConsumerWidget {
         final email = emailController.text.trim();
         final password = passwordController.text;
         
+        // Clear any previous errors before attempting sign in
+        ref.read(authProvider.notifier).clearAuthError();
+        
         // Additional validation
         if (email.isEmpty || password.isEmpty) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -84,6 +87,8 @@ class LoginScreen extends HookConsumerWidget {
     }
 
     void handleGoogleSignIn() async {
+      // Clear any previous errors before attempting Google sign in
+      ref.read(authProvider.notifier).clearAuthError();
       await ref.read(authProvider.notifier).signInWithGoogle();
     }
 

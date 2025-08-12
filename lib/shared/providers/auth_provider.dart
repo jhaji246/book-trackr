@@ -1,9 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import '../models/user_model.dart';
-import 'package:flutter/foundation.dart'; // Added for debugPrint
 import 'package:firebase_core/firebase_core.dart'; // Added for Firebase.app()
+import '../../core/app_initializer.dart'; // Added for AppInitializer
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   return AuthNotifier();
@@ -64,8 +65,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
       _auth!.authStateChanges().listen(
         (User? user) {
           try {
-
-            
             // Only update state if there's an actual change to prevent unnecessary rebuilds
             final newIsAuthenticated = user != null;
             if (state.isAuthenticated != newIsAuthenticated || state.user?.uid != user?.uid) {
@@ -132,17 +131,27 @@ class AuthNotifier extends StateNotifier<AuthState> {
       });
       
     } catch (e) {
-      // Handle internal Firebase errors gracefully - don't show user-facing errors for internal issues
-      if (e.toString().contains('PigeonUserDetails') || 
-          e.toString().contains('List<Object?>') ||
-          e.toString().contains('type cast')) {
-        // Don't set user-facing error for internal Firebase issues
-        state = state.copyWith(isLoading: false, error: null); // Ensure error is null
-      } else {
-        // Only set user-facing errors for non-internal issues
+      // Handle initialization errors gracefully
+      if (e.toString().contains('Firebase configuration is incomplete') ||
+          e.toString().contains('Firebase not configured')) {
+        // Firebase is not configured - this is expected in development
         state = state.copyWith(
-          error: 'Failed to initialize authentication: $e',
           isLoading: false,
+          error: null, // Don't show error for missing Firebase config
+        );
+      } else if (e.toString().contains('PigeonUserDetails') || 
+                 e.toString().contains('List<Object?>') ||
+                 e.toString().contains('type cast')) {
+        // Don't set user-facing error for internal Firebase issues
+        state = state.copyWith(
+          isLoading: false,
+          error: null,
+        );
+      } else {
+        // For other initialization errors, show a helpful message
+        state = state.copyWith(
+          isLoading: false,
+          error: 'Authentication service not available. Please check your connection and try again.',
         );
       }
     }
@@ -155,17 +164,22 @@ class AuthNotifier extends StateNotifier<AuthState> {
       Firebase.app();
       return true;
     } catch (e) {
+      print('Firebase not available: $e');
       return false;
     }
   }
 
   /// Get a helpful error message for Firebase configuration issues
   String _getFirebaseConfigErrorMessage() {
-    return 'Firebase is not properly configured. Please:\n'
-           '1. Copy env.example to .env\n'
-           '2. Fill in your Firebase project credentials\n'
-           '3. Restart the app\n\n'
-           'Or run: ./scripts/setup-firebase.sh';
+    if (!AppInitializer.isFirebaseConfigured) {
+      return 'Firebase is not properly configured. Please check your configuration.';
+    }
+    
+    if (!AppInitializer.isFirebaseInitialized) {
+      return 'Firebase failed to initialize. Please check your connection and try again.';
+    }
+    
+    return 'Firebase is not available. Please try again later.';
   }
 
   Future<void> signInWithEmail(String email, String password) async {
@@ -205,6 +219,16 @@ class AuthNotifier extends StateNotifier<AuthState> {
             e.toString().contains('List<Object?>') ||
             e.toString().contains('type cast')) {
           errorMessage = 'Authentication service error. Please try again';
+        } else if (e.toString().contains('Firebase configuration is incomplete') ||
+                   e.toString().contains('Firebase not configured')) {
+          errorMessage = 'Firebase is not configured. Please check your configuration.';
+        } else if (e.toString().contains('network') || e.toString().contains('connection')) {
+          errorMessage = 'Network error. Please check your connection and try again.';
+        } else if (e.toString().contains('google-services.json') || 
+                   e.toString().contains('GoogleServicesJson')) {
+          errorMessage = 'Google Services configuration error. Please check your setup.';
+        } else if (e.toString().contains('permission') || e.toString().contains('denied')) {
+          errorMessage = 'Permission denied. Please check your app permissions.';
         } else {
           errorMessage = 'Sign in failed: $e';
         }
@@ -296,6 +320,12 @@ class AuthNotifier extends StateNotifier<AuthState> {
       
       await _performGoogleSignIn();
     } catch (e) {
+      // Don't show error for user cancellation - this is normal behavior
+      if (e.toString().contains('cancelled') || e.toString().contains('Google sign in was cancelled')) {
+        // User cancelled the sign-in process - this is not an error
+        _clearError();
+        return;
+      }
       _handleAuthError('Google sign in failed: $e');
     } finally {
       _setLoadingState(false);
@@ -306,7 +336,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn!.signIn();
       if (googleUser == null) {
-        throw Exception('Google sign in was cancelled');
+        // User cancelled the sign-in process - this is normal, not an error
+        return;
       }
 
       final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
@@ -348,7 +379,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
       } else if (e.toString().contains('network_error')) {
         errorMessage = 'Network error. Please check your connection';
       } else if (e.toString().contains('cancelled')) {
-        errorMessage = 'Google sign in was cancelled';
+        // User cancellation is not an error - just return
+        return;
       } else {
         errorMessage = 'Google sign in failed: $e';
       }
@@ -449,19 +481,14 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = state.copyWith(error: errorMessage);
   }
 
-  /// Clear all errors and reset to clean state
-  void clearAllErrors() {
-    state = state.copyWith(
-      error: null,
-      isLoading: false,
-    );
-  }
-
   /// Clear authentication error
   void clearAuthError() {
-    if (state.error != null) {
-      state = state.copyWith(error: null);
-    }
+    state = state.copyWith(error: null);
+  }
+
+  /// Clear all errors and reset state
+  void clearAllErrors() {
+    state = state.copyWith(error: null, isLoading: false);
   }
 
   /// Clear error (alias for clearAuthError)
