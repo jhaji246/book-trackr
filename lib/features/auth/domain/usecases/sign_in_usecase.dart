@@ -29,6 +29,15 @@ class SignInUseCase {
     }
   }
 
+  /// Execute Google sign in
+  Future<Either<Failure, UserEntity>> callGoogleSignIn() async {
+    try {
+      return await repository.signInWithGoogle();
+    } catch (e) {
+      return Left(Failure.serverFailure(message: 'Google sign in failed: $e'));
+    }
+  }
+
   /// Validate email and password credentials
   Either<Failure, void> _validateCredentials(String email, String password) {
     // Check if email is provided

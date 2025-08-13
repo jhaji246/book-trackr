@@ -82,7 +82,7 @@ class LoginScreen extends HookConsumerWidget {
           return;
         }
 
-        await ref.read(authProvider.notifier).signInWithEmail(email, password);
+        await ref.read(authProvider.notifier).signInWithEmail(email, password, context);
       }
     }
 

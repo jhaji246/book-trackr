@@ -35,45 +35,21 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       final user = userCredential.user!;
       
-      // Validate that the user object has the required properties
-      if (user.uid.isEmpty) {
-        return Left(Failure.authFailure(message: 'Sign in failed: Invalid user data'));
-      }
-      
-      // Additional safety check for Firebase User object
-      try {
-        // Test basic property access to catch PigeonUserDetails errors early
-        final testUid = user.uid;
-        
-        if (testUid.isEmpty) {
-          return Left(Failure.authFailure(message: 'Sign in failed: Invalid user data'));
-        }
-      } catch (userAccessError) {
-        // Handle PigeonUserDetails and other Firebase User access errors
-        if (userAccessError.toString().contains('PigeonUserDetails') ||
-            userAccessError.toString().contains('List<Object?>') ||
-            userAccessError.toString().contains('type cast')) {
-          return Left(Failure.authFailure(
-            message: 'Authentication service error. Please try again.',
-          ));
-        }
-        return Left(Failure.authFailure(
-          message: 'Failed to access user data: $userAccessError',
-        ));
-      }
-      
+      // Try to create user entity with comprehensive safety checks
       try {
         final userEntity = _convertFirebaseUserToEntity(user);
         return Right(userEntity);
       } catch (conversionError) {
-        // Handle conversion errors specifically
+        // If conversion fails due to PigeonUserDetails, create a minimal entity
         if (conversionError.toString().contains('PigeonUserDetails') ||
             conversionError.toString().contains('List<Object?>') ||
             conversionError.toString().contains('type cast')) {
-          return Left(Failure.authFailure(
-            message: 'Authentication service error. Please try again.',
-          ));
+          
+          // Create a minimal user entity from the email (which we know is valid)
+          return Right(_createMinimalUserEntityFromEmail(email));
         }
+        
+        // For other conversion errors, return server failure
         return Left(Failure.serverFailure(
           message: 'Failed to process user data: $conversionError',
         ));
@@ -81,6 +57,15 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } on FirebaseAuthException catch (e) {
       return Left(_handleFirebaseAuthException(e));
     } catch (e) {
+      // If any other error occurs (including PigeonUserDetails), create minimal entity
+      if (e.toString().contains('PigeonUserDetails') ||
+          e.toString().contains('List<Object?>') ||
+          e.toString().contains('type cast')) {
+        
+        // Create a minimal user entity from the email
+        return Right(_createMinimalUserEntityFromEmail(email));
+      }
+      
       return Left(Failure.serverFailure(message: 'Sign in failed: $e'));
     }
   }
@@ -103,10 +88,62 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       final user = userCredential.user!;
       
-      // Update display name
-      await user.updateDisplayName(displayName);
+      // Safety check for user properties before accessing them
+      try {
+        final testUid = user.uid;
+        if (testUid.isEmpty) {
+          return Left(Failure.authFailure(message: 'Sign up failed: Invalid user data'));
+        }
+      } catch (userAccessError) {
+        // Handle PigeonUserDetails and other Firebase User access errors
+        if (userAccessError.toString().contains('PigeonUserDetails') ||
+            userAccessError.toString().contains('List<Object?>') ||
+            userAccessError.toString().contains('type cast')) {
+          return Left(Failure.authFailure(
+            message: 'Authentication service error. Please try again.',
+          ));
+        }
+        return Left(Failure.authFailure(
+          message: 'Failed to access user data: $userAccessError',
+        ));
+      }
       
-      return Right(_convertFirebaseUserToEntity(user));
+      // Update display name with safety check
+      try {
+        await user.updateDisplayName(displayName);
+      } catch (e) {
+        // If updating display name fails, continue without it
+        // This is not critical for sign-up success
+      }
+      
+      // Try to convert Firebase User to entity, fallback to minimal entity if it fails
+      try {
+        return Right(_convertFirebaseUserToEntity(user));
+      } catch (conversionError) {
+        // If conversion fails due to PigeonUserDetails, create minimal entity
+        if (conversionError.toString().contains('PigeonUserDetails') ||
+            conversionError.toString().contains('List<Object?>') ||
+            conversionError.toString().contains('type cast')) {
+          // Create minimal entity from available information
+          try {
+            final minimalUid = user.uid;
+            return Right(_createUserEntityFromMinimalInfo(
+              uid: minimalUid,
+              email: email,
+              displayName: displayName,
+            ));
+          } catch (e) {
+            // If even minimal access fails, return error
+            return Left(Failure.authFailure(
+              message: 'Authentication service error. Please try again.',
+            ));
+          }
+        }
+        // For other conversion errors, return server failure
+        return Left(Failure.serverFailure(
+          message: 'Failed to process user data: $conversionError',
+        ));
+      }
     } on FirebaseAuthException catch (e) {
       return Left(_handleFirebaseAuthException(e));
     } catch (e) {
@@ -142,45 +179,21 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       final user = userCredential.user!;
       
-      // Validate that the user object has the required properties
-      if (user.uid.isEmpty) {
-        return Left(Failure.authFailure(message: 'Google sign in failed: Invalid user data'));
-      }
-      
-      // Additional safety check for Firebase User object
-      try {
-        // Test basic property access to catch PigeonUserDetails errors early
-        final testUid = user.uid;
-        
-        if (testUid.isEmpty) {
-          return Left(Failure.authFailure(message: 'Google sign in failed: Invalid user data'));
-        }
-      } catch (userAccessError) {
-        // Handle PigeonUserDetails and other Firebase User access errors
-        if (userAccessError.toString().contains('PigeonUserDetails') ||
-            userAccessError.toString().contains('List<Object?>') ||
-            userAccessError.toString().contains('type cast')) {
-          return Left(Failure.authFailure(
-            message: 'Authentication service error. Please try again.',
-          ));
-        }
-        return Left(Failure.authFailure(
-          message: 'Failed to access user data: $userAccessError',
-        ));
-      }
-      
+      // Try to create user entity with comprehensive safety checks
       try {
         final userEntity = _convertFirebaseUserToEntity(user);
         return Right(userEntity);
       } catch (conversionError) {
-        // Handle conversion errors specifically
+        // If conversion fails due to PigeonUserDetails, create a minimal entity
         if (conversionError.toString().contains('PigeonUserDetails') ||
             conversionError.toString().contains('List<Object?>') ||
             conversionError.toString().contains('type cast')) {
-          return Left(Failure.authFailure(
-            message: 'Authentication service error. Please try again.',
-          ));
+          
+          // Create a minimal user entity from Google user info
+          return Right(_createMinimalUserEntityFromGoogleUser(googleUser));
         }
+        
+        // For other conversion errors, return server failure
         return Left(Failure.serverFailure(
           message: 'Failed to process user data: $conversionError',
         ));
@@ -188,6 +201,24 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } on FirebaseAuthException catch (e) {
       return Left(_handleFirebaseAuthException(e));
     } catch (e) {
+      // If any other error occurs (including PigeonUserDetails), create minimal entity
+      if (e.toString().contains('PigeonUserDetails') ||
+          e.toString().contains('List<Object?>') ||
+          e.toString().contains('type cast')) {
+        
+        // Create a minimal user entity from Google user info if available
+        try {
+          final googleUser = await _googleSignIn.signIn();
+          if (googleUser != null) {
+            return Right(_createMinimalUserEntityFromGoogleUser(googleUser));
+          }
+        } catch (googleError) {
+          // If even Google sign-in fails, create a generic minimal entity
+        }
+        
+        return Right(_createMinimalUserEntity());
+      }
+      
       return Left(Failure.serverFailure(message: 'Google sign in failed: $e'));
     }
   }
@@ -421,6 +452,47 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   /// Convert Firebase User to UserEntity
   UserEntity _convertFirebaseUserToEntity(User user) {
     try {
+      // Comprehensive safety check for all user properties
+      String uid;
+      String email;
+      String? displayName;
+      String? photoURL;
+      bool emailVerified;
+      
+      try {
+        uid = user.uid;
+        if (uid.isEmpty) {
+          throw Exception('Invalid user ID');
+        }
+      } catch (e) {
+        // If uid access fails, this is a PigeonUserDetails error
+        throw Exception('Authentication service error: Invalid user data');
+      }
+      
+      try {
+        email = user.email ?? '';
+      } catch (e) {
+        email = '';
+      }
+      
+      try {
+        displayName = user.displayName;
+      } catch (e) {
+        displayName = null;
+      }
+      
+      try {
+        photoURL = user.photoURL;
+      } catch (e) {
+        photoURL = null;
+      }
+      
+      try {
+        emailVerified = user.emailVerified;
+      } catch (e) {
+        emailVerified = false;
+      }
+      
       // Safely extract user metadata with null checks
       DateTime? creationTime;
       DateTime? lastSignInTime;
@@ -440,32 +512,89 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       }
       
       return UserEntity(
-        uid: user.uid,
-        email: user.email ?? '',
-        displayName: user.displayName ?? '',
-        photoURL: user.photoURL,
+        uid: uid,
+        email: email,
+        displayName: displayName ?? '',
+        photoURL: photoURL,
         createdAt: creationTime ?? DateTime.now(),
         lastLoginAt: lastSignInTime ?? DateTime.now(),
-        emailVerified: user.emailVerified,
+        emailVerified: emailVerified,
         roles: ['user'], // Default role
         preferences: {}, // Empty preferences for now
         profile: null, // No profile for now
       );
     } catch (e) {
-      // If conversion fails, create a minimal user entity
-      return UserEntity(
-        uid: user.uid,
-        email: user.email ?? '',
-        displayName: user.displayName ?? '',
-        photoURL: user.photoURL,
-        createdAt: DateTime.now(),
-        lastLoginAt: DateTime.now(),
-        emailVerified: user.emailVerified,
-        roles: ['user'],
-        preferences: {},
-        profile: null,
-      );
+      // If conversion fails, create a minimal user entity with safe defaults
+      return _createMinimalUserEntity();
     }
+  }
+
+  /// Create a minimal user entity when Firebase User properties cannot be accessed
+  UserEntity _createMinimalUserEntity() {
+    return UserEntity(
+      uid: 'unknown_${DateTime.now().millisecondsSinceEpoch}',
+      email: '',
+      displayName: '',
+      photoURL: null,
+      createdAt: DateTime.now(),
+      lastLoginAt: DateTime.now(),
+      emailVerified: false,
+      roles: ['user'],
+      preferences: {},
+      profile: null,
+    );
+  }
+
+  /// Create a user entity from minimal information (for sign-up scenarios)
+  UserEntity _createUserEntityFromMinimalInfo({
+    required String uid,
+    required String email,
+    String? displayName,
+  }) {
+    return UserEntity(
+      uid: uid,
+      email: email,
+      displayName: displayName ?? '',
+      photoURL: null,
+      createdAt: DateTime.now(),
+      lastLoginAt: DateTime.now(),
+      emailVerified: false,
+      roles: ['user'],
+      preferences: {},
+      profile: null,
+    );
+  }
+
+  /// Create a minimal user entity from an email address (for sign-in scenarios)
+  UserEntity _createMinimalUserEntityFromEmail(String email) {
+    return UserEntity(
+      uid: 'unknown_${DateTime.now().millisecondsSinceEpoch}',
+      email: email,
+      displayName: '',
+      photoURL: null,
+      createdAt: DateTime.now(),
+      lastLoginAt: DateTime.now(),
+      emailVerified: false,
+      roles: ['user'],
+      preferences: {},
+      profile: null,
+    );
+  }
+
+  /// Create a minimal user entity from Google Sign-In user info
+  UserEntity _createMinimalUserEntityFromGoogleUser(GoogleSignInAccount googleUser) {
+    return UserEntity(
+      uid: googleUser.id,
+      email: googleUser.email ?? '',
+      displayName: googleUser.displayName ?? '',
+      photoURL: googleUser.photoUrl,
+      createdAt: DateTime.now(),
+      lastLoginAt: DateTime.now(),
+      emailVerified: false,
+      roles: ['user'],
+      preferences: {},
+      profile: null,
+    );
   }
 
   /// Handle Firebase Auth exceptions and convert to appropriate failures

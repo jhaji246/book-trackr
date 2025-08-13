@@ -381,7 +381,19 @@ class ProfileScreen extends ConsumerWidget {
                 ),
                 onTap: () async {
                   try {
+                    // Show loading indicator
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Signing out...'),
+                        duration: Duration(seconds: 1),
+                      ),
+                    );
+                    
                     await ref.read(authProvider.notifier).signOut();
+                    
+                    // Add a small delay to ensure state is cleared
+                    await Future.delayed(const Duration(milliseconds: 500));
+                    
                     if (context.mounted) {
                       // Navigate to login screen and clear the navigation stack
                       Navigator.of(context).pushAndRemoveUntil(
@@ -417,7 +429,19 @@ class ProfileScreen extends ConsumerWidget {
         text: 'Sign Out',
         onPressed: () async {
           try {
+            // Show loading indicator
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Signing out...'),
+                duration: Duration(seconds: 1),
+              ),
+            );
+            
             await ref.read(authProvider.notifier).signOut();
+            
+            // Add a small delay to ensure state is cleared
+            await Future.delayed(const Duration(milliseconds: 500));
+            
             if (context.mounted) {
               Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(
