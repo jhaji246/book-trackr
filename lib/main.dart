@@ -14,17 +14,13 @@ void main() async {
     
     // Initialize all app services (even if Firebase fails)
     try {
-      print('Starting app initialization...');
       await AppInitializer.initialize();
-      print('App initialization completed successfully');
     } catch (e) {
-      print('App initialization failed: $e');
       // Continue without Firebase - show login page with error handling
     }
     
     runApp(const ProviderScope(child: BookTrackrApp()));
   } catch (e) {
-    print('Critical initialization failed: $e');
     // Critical initialization failed
     runApp(FirebaseInitErrorApp(error: e.toString()));
   }

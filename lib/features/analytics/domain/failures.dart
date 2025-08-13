@@ -33,7 +33,7 @@ class Failure with _$Failure {
 
   const factory Failure.insufficientDataFailure({
     required String message,
-    required int minimumDataPoints,
+    int? minimumDataPoints,
   }) = InsufficientDataFailure;
 
   const factory Failure.insightGenerationFailure({
@@ -71,105 +71,4 @@ class Failure with _$Failure {
     DateTime? startDate,
     DateTime? endDate,
   }) = PeriodValidationFailure;
-}
-
-/// Server-related failures
-class ServerFailure extends Failure {
-  const ServerFailure({
-    required super.message,
-    this.statusCode,
-  });
-}
-
-/// Network-related failures
-class NetworkFailure extends Failure {
-  const NetworkFailure({required super.message});
-}
-
-/// Cache-related failures
-class CacheFailure extends Failure {
-  const CacheFailure({required super.message});
-}
-
-/// Input validation failures
-class InvalidInputFailure extends Failure {
-  const InvalidInputFailure({
-    required super.message,
-    this.field,
-  });
-}
-
-/// Authentication failures
-class AuthFailure extends Failure {
-  const AuthFailure({required super.message});
-}
-
-/// Analytics not found failures
-class AnalyticsNotFoundFailure extends Failure {
-  const AnalyticsNotFoundFailure({required super.userId});
-}
-
-/// Insufficient data failures
-class InsufficientDataFailure extends Failure {
-  const InsufficientDataFailure({
-    required super.message,
-    this.minimumDataPoints,
-  });
-}
-
-/// Insight generation failures
-class InsightGenerationFailure extends Failure {
-  const InsightGenerationFailure({
-    required super.message,
-    this.insightType,
-  });
-}
-
-/// Recommendation generation failures
-class RecommendationGenerationFailure extends Failure {
-  const RecommendationGenerationFailure({
-    required super.message,
-    this.recommendationType,
-  });
-}
-
-/// Data processing failures
-class DataProcessingFailure extends Failure {
-  const DataProcessingFailure({
-    required super.message,
-    this.processingStep,
-  });
-}
-
-/// Export failures
-class ExportFailure extends Failure {
-  const ExportFailure({
-    required super.message,
-    this.format,
-  });
-}
-
-/// Prediction failures
-class PredictionFailure extends Failure {
-  const PredictionFailure({
-    required super.message,
-    this.predictionType,
-  });
-}
-
-/// Comparison failures
-class ComparisonFailure extends Failure {
-  const ComparisonFailure({
-    required super.message,
-    this.comparisonType,
-  });
-}
-
-/// Period validation failures
-class PeriodValidationFailure extends Failure {
-  const PeriodValidationFailure({
-    required super.message,
-    this.startDate,
-    this.endDate,
-  });
 }

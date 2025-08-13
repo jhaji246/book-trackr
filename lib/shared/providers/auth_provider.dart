@@ -5,6 +5,10 @@ import 'package:google_sign_in/google_sign_in.dart';
 import '../models/user_model.dart';
 import 'package:firebase_core/firebase_core.dart'; // Added for Firebase.app()
 import '../../core/app_initializer.dart'; // Added for AppInitializer
+import '../../features/auth/di/auth_di.dart';
+import '../../features/auth/domain/usecases/sign_in_usecase.dart';
+import '../../features/auth/domain/usecases/sign_up_usecase.dart';
+import '../../features/auth/domain/failures.dart';
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   return AuthNotifier();
@@ -164,9 +168,25 @@ class AuthNotifier extends StateNotifier<AuthState> {
       Firebase.app();
       return true;
     } catch (e) {
-      print('Firebase not available: $e');
       return false;
     }
+  }
+
+  /// Check if the authentication service is ready
+  bool _isAuthServiceReady() {
+    return AuthDI.isRegistered<SignInUseCase>() && 
+           AuthDI.isRegistered<SignUpUseCase>();
+  }
+
+  /// Wait for the authentication service to be ready
+  Future<bool> _waitForAuthServiceReady({int maxRetries = 3, int delayMs = 500}) async {
+    for (int i = 0; i < maxRetries; i++) {
+      if (_isAuthServiceReady()) {
+        return true;
+      }
+      await Future.delayed(Duration(milliseconds: delayMs));
+    }
+    return false;
   }
 
   /// Get a helpful error message for Firebase configuration issues
@@ -191,6 +211,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
     if (_auth == null) {
       _handleAuthError('Authentication not initialized');
       return;
+    }
+
+    // Wait for auth service to be ready
+    if (!_isAuthServiceReady()) {
+      final isReady = await _waitForAuthServiceReady();
+      if (!isReady) {
+        _handleAuthError('Authentication service not ready. Please try again.');
+        return;
+      }
     }
 
     try {
@@ -241,14 +270,42 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   Future<void> _performEmailSignIn(String email, String password) async {
     try {
-      final userCredential = await _auth!.signInWithEmailAndPassword(
+      // Check if DI is initialized
+      if (!AuthDI.isRegistered<SignInUseCase>()) {
+        _handleAuthError('Authentication service not ready. Please try again.');
+        return;
+      }
+      
+      // Use the DI-based sign in use case
+      final signInUseCase = AuthDI.get<SignInUseCase>();
+      final result = await signInUseCase.call(
         email: email.trim(),
         password: password,
       );
       
-      // If we get here, sign in was successful
-      // The auth state listener will handle updating the state
-      
+      result.fold(
+        (failure) {
+          // Handle failure
+          String errorMessage = 'Sign in failed';
+          if (failure is InvalidCredentialsFailure) {
+            errorMessage = 'Invalid email or password';
+          } else if (failure is UserNotFoundFailure) {
+            errorMessage = 'No user found with this email address';
+          } else if (failure is AccountDisabledFailure) {
+            errorMessage = 'This account has been disabled';
+          } else if (failure is TooManyRequestsFailure) {
+            errorMessage = 'Too many failed attempts. Please try again later';
+          } else if (failure is InvalidEmailFailure) {
+            errorMessage = 'Invalid email address';
+          } else {
+            errorMessage = failure.message;
+          }
+          _handleAuthError(errorMessage);
+        },
+        (user) {
+          // Sign in successful - the auth state listener will handle updating the state
+        },
+      );
       
     } catch (e) {
       // Handle specific Firebase Auth errors
@@ -312,6 +369,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
     if (_auth == null || _googleSignIn == null) {
       _handleAuthError('Authentication not initialized');
       return;
+    }
+
+    // Wait for auth service to be ready
+    if (!_isAuthServiceReady()) {
+      final isReady = await _waitForAuthServiceReady();
+      if (!isReady) {
+        _handleAuthError('Authentication service not ready. Please try again.');
+        return;
+      }
     }
 
     try {

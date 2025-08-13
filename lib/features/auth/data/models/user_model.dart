@@ -37,7 +37,10 @@ class UserModel with _$UserModel {
       profile: entity.profile,
     );
   }
+}
 
+/// Extension to add conversion methods to UserModel
+extension UserModelExtension on UserModel {
   /// Convert to domain entity
   UserEntity toEntity() {
     return UserEntity(

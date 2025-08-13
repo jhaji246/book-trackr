@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import '../../domain/entities/collaborative_list_entity.dart';
 import '../../domain/failures.dart';
 

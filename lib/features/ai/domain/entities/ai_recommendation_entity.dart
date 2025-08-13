@@ -207,7 +207,7 @@ enum PlotPointType {
   plotTwist,
   revelation,
   conflict,
-  resolution,
+  denouement,
 }
 
 /// Writing style entity

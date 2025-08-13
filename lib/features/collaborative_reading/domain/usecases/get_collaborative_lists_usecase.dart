@@ -30,40 +30,43 @@ class GetCollaborativeListsUseCase {
         trendingOnly: trendingOnly,
       );
       
-      if (validationResult.isLeft()) {
-        return validationResult;
-      }
+      return validationResult.fold(
+        (failure) => Left(failure),
+        (_) async {
+          // Get lists based on filters
+          if (trendingOnly) {
+            return await repository.getTrendingCollaborativeLists();
+          }
 
-      // Get lists based on filters
-      if (trendingOnly) {
-        return await repository.getTrendingCollaborativeLists();
-      }
+          if (publicOnly) {
+            return await repository.getPublicCollaborativeLists();
+          }
 
-      if (publicOnly) {
-        return await repository.getPublicCollaborativeLists();
-      }
+          if (type != null) {
+            return await repository.getCollaborativeListsByType(type);
+          }
 
-      if (type != null) {
-        return await repository.getCollaborativeListsByType(type);
-      }
+          if (tags != null && tags.isNotEmpty) {
+            return await repository.getCollaborativeListsByTags(tags);
+          }
 
-      if (tags != null && tags.isNotEmpty) {
-        return await repository.getCollaborativeListsByTags(tags);
-      }
+          if (userId != null) {
+            return await repository.getCollaborativeListsForUser(userId);
+          }
 
-      if (userId != null) {
-        return await repository.getCollaborativeListsForUser(userId);
-      }
-
-      // Use search with filters
-      return await repository.searchCollaborativeLists(
-        searchQuery: searchQuery,
-        type: type,
-        visibility: visibility,
-        tags: tags,
-        creatorId: creatorId,
-        isMember: isMember,
+          // Use search with filters
+          return await repository.searchCollaborativeLists(
+            searchQuery: searchQuery,
+            type: type,
+            visibility: visibility,
+            tags: tags,
+            creatorId: creatorId,
+            isMember: isMember,
+          );
+        },
       );
+
+
     } catch (e) {
       return Left(Failure.serverFailure(message: 'Failed to get collaborative lists: $e'));
     }
@@ -96,7 +99,7 @@ class GetCollaborativeListsUseCase {
     }
 
     // Validate that at least one identifier is provided
-    if (userId == null && !publicOnly && !trendingOnly) {
+    if (userId == null && publicOnly != true && trendingOnly != true) {
       return const Left(Failure.invalidInputFailure(
         message: 'Either userId, publicOnly, or trendingOnly must be provided',
         field: 'identifiers',

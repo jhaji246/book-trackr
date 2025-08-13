@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../constants/app_constants.dart';
 import '../../shared/models/book.dart';
+import '../../shared/models/reading_status.dart';
 import '../../shared/providers/bookshelf_provider.dart';
 import 'cached_network_image_widget.dart';
 
@@ -170,36 +171,32 @@ class AnimatedBookCard extends HookConsumerWidget {
     );
   }
 
-  Widget _buildStatusBadge(BookStatus status) {
+  Widget _buildStatusBadge(ReadingStatus status) {
     Color badgeColor;
     IconData icon;
     String text;
 
-    switch (status.runtimeType.toString()) {
-      case '_WantToRead':
+    switch (status) {
+      case ReadingStatus.toRead:
         badgeColor = Colors.orange;
         icon = Icons.bookmark_border;
         text = 'Want';
         break;
-      case '_Reading':
+      case ReadingStatus.reading:
         badgeColor = Colors.blue;
         icon = Icons.book;
         text = 'Reading';
         break;
-      case '_Completed':
+      case ReadingStatus.completed:
         badgeColor = Colors.green;
         icon = Icons.check_circle;
         text = 'Done';
         break;
-      case '_Dnf':
+      case ReadingStatus.abandoned:
         badgeColor = Colors.red;
         icon = Icons.close;
         text = 'DNF';
         break;
-      default:
-        badgeColor = Colors.grey;
-        icon = Icons.bookmark_border;
-        text = 'Want';
     }
 
     return Container(

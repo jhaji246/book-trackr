@@ -225,7 +225,7 @@ class ReadingStatisticsScreen extends ConsumerWidget {
     final genreMap = <String, int>{};
     
     for (final book in bookshelfState.completed) {
-      for (final genre in book.book.genres) {
+      for (final genre in book.genres) {
         genreMap[genre] = (genreMap[genre] ?? 0) + 1;
       }
     }
@@ -476,8 +476,8 @@ class ReadingStatisticsScreen extends ConsumerWidget {
     
     // Get all completed books from this year
     final completedBooks = bookshelfState.completed.where((book) {
-      if (book.completedAt == null) return false;
-      return book.completedAt!.year == currentYear;
+      if (book.dateCompleted == null) return false;
+      return book.dateCompleted!.year == currentYear;
     }).toList();
     
     // Group books by month
@@ -487,7 +487,7 @@ class ReadingStatisticsScreen extends ConsumerWidget {
     }
     
     for (final book in completedBooks) {
-      final month = book.completedAt!.month;
+      final month = book.dateCompleted!.month;
       monthlyCounts[month] = (monthlyCounts[month] ?? 0) + 1;
     }
     

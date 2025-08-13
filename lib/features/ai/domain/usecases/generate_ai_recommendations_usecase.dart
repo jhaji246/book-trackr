@@ -25,18 +25,17 @@ class GenerateAIRecommendationsUseCase {
         excludeBookIds,
         preferences,
       );
-      if (validationResult.isLeft()) {
-        return validationResult;
-      }
-
-      // Generate recommendations using the repository
-      return await repository.generateRecommendations(
-        userId,
-        limit: limit,
-        excludeBookIds: excludeBookIds,
-        type: type,
-        preferences: preferences,
+      return validationResult.fold(
+        (failure) => Left(failure),
+        (_) async => await repository.generateRecommendations(
+          userId,
+          limit: limit,
+          excludeBookIds: excludeBookIds,
+          type: type,
+          preferences: preferences,
+        ),
       );
+
     } catch (e) {
       return Left(Failure.recommendationGenerationFailure(
         message: 'Failed to generate recommendations: $e',
@@ -59,15 +58,13 @@ class GenerateAIRecommendationsUseCase {
         currentBookId,
         currentPage,
       );
-      if (validationResult.isLeft()) {
-        return validationResult;
-      }
-
-      // Generate contextual recommendations using the repository
-      return await repository.generateContextualRecommendations(
-        userId,
-        currentBookId,
-        currentPage,
+      return validationResult.fold(
+        (failure) => Left(failure),
+        (_) async => await repository.generateContextualRecommendations(
+          userId,
+          currentBookId,
+          currentPage,
+        ),
       );
     } catch (e) {
       return Left(Failure.recommendationGenerationFailure(
@@ -91,15 +88,13 @@ class GenerateAIRecommendationsUseCase {
         mood,
         preferences,
       );
-      if (validationResult.isLeft()) {
-        return validationResult;
-      }
-
-      // Generate mood-based recommendations using the repository
-      return await repository.generateMoodBasedRecommendations(
-        userId,
-        mood,
-        preferences,
+      return validationResult.fold(
+        (failure) => Left(failure),
+        (_) async => await repository.generateMoodBasedRecommendations(
+          userId,
+          mood,
+          preferences,
+        ),
       );
     } catch (e) {
       return Left(Failure.recommendationGenerationFailure(
@@ -123,15 +118,13 @@ class GenerateAIRecommendationsUseCase {
         season,
         year,
       );
-      if (validationResult.isLeft()) {
-        return validationResult;
-      }
-
-      // Generate seasonal recommendations using the repository
-      return await repository.generateSeasonalRecommendations(
-        userId,
-        season,
-        year,
+      return validationResult.fold(
+        (failure) => Left(failure),
+        (_) async => await repository.generateSeasonalRecommendations(
+          userId,
+          season,
+          year,
+        ),
       );
     } catch (e) {
       return Left(Failure.recommendationGenerationFailure(
@@ -155,15 +148,13 @@ class GenerateAIRecommendationsUseCase {
         diversityFactors,
         limit,
       );
-      if (validationResult.isLeft()) {
-        return validationResult;
-      }
-
-      // Generate diversity recommendations using the repository
-      return await repository.generateDiversityRecommendations(
-        userId,
-        diversityFactors,
-        limit,
+      return validationResult.fold(
+        (failure) => Left(failure),
+        (_) async => await repository.generateDiversityRecommendations(
+          userId,
+          diversityFactors,
+          limit,
+        ),
       );
     } catch (e) {
       return Left(Failure.recommendationGenerationFailure(
@@ -187,15 +178,13 @@ class GenerateAIRecommendationsUseCase {
         explorationLevel,
         limit,
       );
-      if (validationResult.isLeft()) {
-        return validationResult;
-      }
-
-      // Generate exploration recommendations using the repository
-      return await repository.generateExplorationRecommendations(
-        userId,
-        explorationLevel,
-        limit,
+      return validationResult.fold(
+        (failure) => Left(failure),
+        (_) async => await repository.generateExplorationRecommendations(
+          userId,
+          explorationLevel,
+          limit,
+        ),
       );
     } catch (e) {
       return Left(Failure.recommendationGenerationFailure(
@@ -402,7 +391,7 @@ class GenerateAIRecommendationsUseCase {
     if (year != null) {
       final currentYear = DateTime.now().year;
       if (year < 1900 || year > currentYear + 1) {
-        return const Left(Failure.invalidInputFailure(
+        return Left(Failure.invalidInputFailure(
           message: 'Year must be between 1900 and ${currentYear + 1}',
           field: 'year',
         ));

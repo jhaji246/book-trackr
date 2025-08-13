@@ -10,6 +10,7 @@ import 'services/cache_service.dart';
 import 'services/analytics_service.dart';
 import 'services/localization_service.dart';
 import '../../shared/providers/auth_provider.dart';
+import '../../features/auth/di/auth_di.dart';
 
 /// Handles all app initialization logic
 class AppInitializer {
@@ -69,9 +70,6 @@ class AppInitializer {
       _isFirebaseInitialized = true;
       
     } catch (e) {
-      // Log the specific error for debugging
-      print('Firebase initialization error: $e');
-      
       // If it's a duplicate app error, try to get the existing app
       if (e.toString().contains('duplicate-app')) {
         try {
@@ -79,21 +77,18 @@ class AppInitializer {
           _isFirebaseInitialized = true;
           return;
         } catch (getAppError) {
-          print('Failed to get existing Firebase app: $getAppError');
           // Continue without Firebase
         }
       }
       
       // Check if it's a configuration error
       if (e.toString().contains('Firebase configuration is incomplete')) {
-        print('Firebase configuration is incomplete');
         _isFirebaseInitialized = false;
         return; // Don't rethrow, just continue without Firebase
       }
       
       // Check for specific Firebase errors
       if (e.toString().contains('network') || e.toString().contains('connection')) {
-        print('Firebase network/connection error');
         _isFirebaseInitialized = false;
         return; // Network issues - continue without Firebase
       }
@@ -101,13 +96,11 @@ class AppInitializer {
       // Check for Google Services configuration issues
       if (e.toString().contains('google-services.json') || 
           e.toString().contains('GoogleServicesJson')) {
-        print('Google Services configuration error: $e');
         _isFirebaseInitialized = false;
         return;
       }
       
       // For other errors, continue without Firebase (app can still function)
-      print('Unknown Firebase error, continuing without Firebase: $e');
       _isFirebaseInitialized = false;
       return; // Don't rethrow, just continue without Firebase
     }
@@ -140,6 +133,9 @@ class AppInitializer {
       
       // Initialize localization
       await LocalizationService.initialize();
+      
+      // Initialize auth dependencies
+      await AuthDI.initialize();
       
     } catch (e) {
       // Continue with partial initialization

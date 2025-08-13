@@ -63,6 +63,15 @@ class HomeScreen extends HookConsumerWidget {
     final booksState = ref.watch(booksProvider);
     final searchController = useTextEditingController();
 
+    // Auto-load recommendations when screen first loads
+    useEffect(() {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(recommendationProvider.notifier).refreshRecommendations();
+        ref.read(booksProvider.notifier).loadFeaturedBooks();
+      });
+      return null;
+    }, []);
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(

@@ -327,8 +327,8 @@ class MeetingLocalDataSourceImpl implements MeetingLocalDataSource {
       'recordingUrl': meeting.recordingUrl,
       'notes': meeting.notes,
       'materials': meeting.materials,
-      'agenda': meeting.agenda.map((item) => _agendaItemToMap(item)).toList(),
-      'reminders': meeting.reminders.map((reminder) => _reminderToMap(reminder)).toList(),
+      // 'agenda': meeting.agenda.map((item) => _agendaItemToMap(item)).toList(),
+      // 'reminders': meeting.reminders.map((reminder) => _reminderToMap(reminder)).toList(),
       'dateCreated': meeting.dateCreated.toIso8601String(),
       'dateUpdated': meeting.dateUpdated.toIso8601String(),
     };

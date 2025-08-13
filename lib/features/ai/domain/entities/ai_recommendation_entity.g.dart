@@ -333,6 +333,7 @@ const _$PlotPointTypeEnumMap = {
   PlotPointType.plotTwist: 'plotTwist',
   PlotPointType.revelation: 'revelation',
   PlotPointType.conflict: 'conflict',
+  PlotPointType.denouement: 'denouement',
 };
 
 _$WritingStyleEntityImpl _$$WritingStyleEntityImplFromJson(

@@ -47,14 +47,19 @@ class BooksNotifier extends StateNotifier<BooksState> {
     try {
       state = state.copyWith(isLoading: true, error: null);
       
-      // Try to load featured books from API
+      // Load featured books from API
       List<Book> featuredBooks = [];
       try {
         final apiResponse = await BooksApiService.searchBooks(query: 'bestseller fiction');
         featuredBooks = _convertApiResponseToBooks(apiResponse);
       } catch (e) {
-        // If API fails, use sample books
-        featuredBooks = _getSampleFeaturedBooks();
+        // If API fails, set error
+        state = state.copyWith(
+          featuredBooks: [],
+          isLoading: false,
+          error: 'Failed to load featured books: $e',
+        );
+        return;
       }
       
       state = state.copyWith(
@@ -62,12 +67,9 @@ class BooksNotifier extends StateNotifier<BooksState> {
         isLoading: false,
       );
     } catch (e) {
-      // Fallback to sample books
-      final featuredBooks = _getSampleFeaturedBooks();
       state = state.copyWith(
-        featuredBooks: featuredBooks,
         isLoading: false,
-        error: null,
+        error: 'Failed to load featured books: $e',
       );
     }
   }
@@ -219,54 +221,5 @@ class BooksNotifier extends StateNotifier<BooksState> {
     return 'Hard';
   }
 
-  /// Returns sample featured books as fallback
-  List<Book> _getSampleFeaturedBooks() {
-    return [
-      Book(
-        id: 'featured1',
-        title: 'The Alchemist',
-        author: 'Paulo Coelho',
-        description: 'A shepherd boy embarks on a journey to find a treasure.',
-        isbn: '9780062315007',
-        pageCount: 208,
-        publishedDate: '1988-01-01',
-        publisher: 'HarperOne',
-        coverUrl: 'https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?w=150&h=200&fit=crop&crop=center',
-        genres: ['Fiction', 'Adventure', 'Philosophy'],
-        averageRating: 4.3,
-        ratingCount: 2500,
-        language: 'en',
-      ),
-      Book(
-        id: 'featured2',
-        title: '1984',
-        author: 'George Orwell',
-        description: 'A dystopian novel about totalitarian surveillance.',
-        isbn: '9780451524935',
-        pageCount: 328,
-        publishedDate: '1949-06-08',
-        publisher: 'Signet Classic',
-        coverUrl: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=150&h=200&fit=crop&crop=center',
-        genres: ['Fiction', 'Dystopian', 'Classic'],
-        averageRating: 4.2,
-        ratingCount: 3200,
-        language: 'en',
-      ),
-      Book(
-        id: 'featured3',
-        title: 'The Great Gatsby',
-        author: 'F. Scott Fitzgerald',
-        description: 'A story of the fabulously wealthy Jay Gatsby.',
-        isbn: '9780743273565',
-        pageCount: 180,
-        publishedDate: '1925-04-10',
-        publisher: 'Scribner',
-        coverUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=200&fit=crop&crop=center',
-        genres: ['Fiction', 'Classic', 'Romance'],
-        averageRating: 4.1,
-        ratingCount: 2800,
-        language: 'en',
-      ),
-    ];
-  }
+
 }

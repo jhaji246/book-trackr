@@ -17,14 +17,12 @@ class SignInUseCase {
     try {
       // Validate input parameters
       final validationResult = _validateCredentials(email, password);
-      if (validationResult.isLeft()) {
-        return validationResult;
-      }
-
-      // Attempt to sign in
-      return await repository.signInWithEmailAndPassword(
-        email: email.trim(),
-        password: password,
+      return validationResult.fold(
+        (failure) => Left(failure),
+        (_) async => await repository.signInWithEmailAndPassword(
+          email: email.trim(),
+          password: password,
+        ),
       );
     } catch (e) {
       return Left(Failure.serverFailure(message: 'Sign in failed: $e'));

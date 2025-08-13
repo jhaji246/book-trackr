@@ -18,15 +18,13 @@ class SignUpUseCase {
     try {
       // Validate input parameters
       final validationResult = _validateSignUpData(email, password, displayName);
-      if (validationResult.isLeft()) {
-        return validationResult;
-      }
-
-      // Attempt to sign up
-      return await repository.signUpWithEmailAndPassword(
-        email: email.trim(),
-        password: password,
-        displayName: displayName.trim(),
+      return validationResult.fold(
+        (failure) => Left(failure),
+        (_) async => await repository.signUpWithEmailAndPassword(
+          email: email.trim(),
+          password: password,
+          displayName: displayName.trim(),
+        ),
       );
     } catch (e) {
       return Left(Failure.serverFailure(message: 'Sign up failed: $e'));

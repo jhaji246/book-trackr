@@ -38,20 +38,21 @@ class GenerateInsightsUseCase {
     try {
       // Validate input parameters
       final validationResult = _validatePeriod(startDate, endDate);
-      if (validationResult.isLeft()) {
-        return validationResult;
-      }
-
-      // Get analytics for the period and generate insights
-      final analyticsResult = await repository.getUserAnalyticsForPeriod(
-        userId,
-        startDate,
-        endDate,
-      );
-
-      return analyticsResult.fold(
+      return validationResult.fold(
         (failure) => Left(failure),
-        (analytics) => _generateInsightsFromAnalytics(analytics),
+        (_) async {
+          // Get analytics for the period and generate insights
+          final analyticsResult = await repository.getUserAnalyticsForPeriod(
+            userId,
+            startDate,
+            endDate,
+          );
+
+          return analyticsResult.fold(
+            (failure) => Left(failure),
+            (analytics) async => Right(_generateInsightsFromAnalytics(analytics)),
+          );
+        },
       );
     } catch (e) {
       return Left(Failure.insightGenerationFailure(
@@ -79,7 +80,7 @@ class GenerateInsightsUseCase {
       
       return analyticsResult.fold(
         (failure) => Left(failure),
-        (analytics) => _generateInsightsByTypeFromAnalytics(analytics, types),
+        (analytics) async => Right(_generateInsightsByTypeFromAnalytics(analytics, types)),
       );
     } catch (e) {
       return Left(Failure.insightGenerationFailure(
@@ -126,22 +127,23 @@ class GenerateInsightsUseCase {
         period2Start,
         period2End,
       );
-      if (validationResult.isLeft()) {
-        return validationResult;
-      }
-
-      // Get comparative analytics
-      final comparativeResult = await repository.getComparativeAnalytics(
-        userId,
-        period1Start,
-        period1End,
-        period2Start,
-        period2End,
-      );
-
-      return comparativeResult.fold(
+      return validationResult.fold(
         (failure) => Left(failure),
-        (comparativeData) => _generateComparativeInsights(comparativeData),
+        (_) async {
+          // Get comparative analytics
+          final comparativeResult = await repository.getComparativeAnalytics(
+            userId,
+            period1Start,
+            period1End,
+            period2Start,
+            period2End,
+          );
+
+          return comparativeResult.fold(
+            (failure) => Left(failure),
+            (comparativeData) async => Right(_generateComparativeInsights(comparativeData)),
+          );
+        },
       );
     } catch (e) {
       return Left(Failure.insightGenerationFailure(

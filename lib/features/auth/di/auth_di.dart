@@ -1,6 +1,8 @@
 import 'package:get_it/get_it.dart';
 import '../data/datasources/auth_local_data_source.dart';
+import '../data/datasources/auth_local_data_source_impl.dart';
 import '../data/datasources/auth_remote_data_source.dart';
+import '../data/datasources/auth_remote_data_source_impl.dart';
 import '../data/repositories/auth_repository_impl.dart';
 import '../domain/repositories/auth_repository.dart';
 import '../domain/usecases/sign_in_usecase.dart';
@@ -17,12 +19,12 @@ class AuthDI {
       () => AuthRemoteDataSourceImpl(),
     );
 
-    _getIt.registerLazySingletonAsync<AuthLocalDataSource>(
-      () async {
-        final localDataSource = AuthLocalDataSourceImpl();
-        await localDataSource.initialize();
-        return localDataSource;
-      },
+    // Initialize local data source first
+    final localDataSource = AuthLocalDataSourceImpl();
+    await localDataSource.initialize();
+    
+    _getIt.registerLazySingleton<AuthLocalDataSource>(
+      () => localDataSource,
     );
 
     // Register repository

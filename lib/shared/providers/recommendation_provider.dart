@@ -1,11 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/services/recommendation_service.dart';
 import '../models/book.dart';
-import '../models/user_book.dart';
-import 'bookshelf_provider.dart';
 
 final recommendationProvider = StateNotifierProvider<RecommendationNotifier, RecommendationState>((ref) {
-  return RecommendationNotifier(ref);
+  return RecommendationNotifier();
 });
 
 class RecommendationState {
@@ -37,24 +35,7 @@ class RecommendationState {
 }
 
 class RecommendationNotifier extends StateNotifier<RecommendationState> {
-  final Ref _ref;
-
-  RecommendationNotifier(this._ref) : super(const RecommendationState()) {
-    // Initialize with sample data immediately to avoid loading state
-    _initializeWithSampleData();
-  }
-
-  void _initializeWithSampleData() {
-    // Set sample data immediately to show content
-    final sampleRecommendations = RecommendationService.getRecommendations();
-    final sampleTrendingBooks = RecommendationService.getTrendingBooks();
-    
-    state = state.copyWith(
-      personalizedRecommendations: sampleRecommendations,
-      trendingBooks: sampleTrendingBooks,
-      isLoading: false,
-    );
-  }
+  RecommendationNotifier() : super(const RecommendationState());
 
   Future<void> generatePersonalizedRecommendations() async {
     try {
@@ -81,8 +62,10 @@ class RecommendationNotifier extends StateNotifier<RecommendationState> {
       await generatePersonalizedRecommendations();
       await generateTrendingBooks();
     } catch (e) {
-      // If refresh fails, fall back to sample data
-      _initializeWithSampleData();
+      state = state.copyWith(
+        error: 'Failed to refresh recommendations: $e',
+        isLoading: false,
+      );
     }
   }
 

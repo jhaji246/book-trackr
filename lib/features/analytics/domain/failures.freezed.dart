@@ -25,7 +25,7 @@ mixin _$Failure {
         invalidInputFailure,
     required TResult Function(String message) authFailure,
     required TResult Function(String userId) analyticsNotFoundFailure,
-    required TResult Function(String message, int minimumDataPoints)
+    required TResult Function(String message, int? minimumDataPoints)
         insufficientDataFailure,
     required TResult Function(String message, String? insightType)
         insightGenerationFailure,
@@ -51,7 +51,7 @@ mixin _$Failure {
     TResult? Function(String message, String? field)? invalidInputFailure,
     TResult? Function(String message)? authFailure,
     TResult? Function(String userId)? analyticsNotFoundFailure,
-    TResult? Function(String message, int minimumDataPoints)?
+    TResult? Function(String message, int? minimumDataPoints)?
         insufficientDataFailure,
     TResult? Function(String message, String? insightType)?
         insightGenerationFailure,
@@ -76,7 +76,7 @@ mixin _$Failure {
     TResult Function(String message, String? field)? invalidInputFailure,
     TResult Function(String message)? authFailure,
     TResult Function(String userId)? analyticsNotFoundFailure,
-    TResult Function(String message, int minimumDataPoints)?
+    TResult Function(String message, int? minimumDataPoints)?
         insufficientDataFailure,
     TResult Function(String message, String? insightType)?
         insightGenerationFailure,
@@ -261,7 +261,7 @@ class _$ServerFailureImpl implements ServerFailure {
         invalidInputFailure,
     required TResult Function(String message) authFailure,
     required TResult Function(String userId) analyticsNotFoundFailure,
-    required TResult Function(String message, int minimumDataPoints)
+    required TResult Function(String message, int? minimumDataPoints)
         insufficientDataFailure,
     required TResult Function(String message, String? insightType)
         insightGenerationFailure,
@@ -290,7 +290,7 @@ class _$ServerFailureImpl implements ServerFailure {
     TResult? Function(String message, String? field)? invalidInputFailure,
     TResult? Function(String message)? authFailure,
     TResult? Function(String userId)? analyticsNotFoundFailure,
-    TResult? Function(String message, int minimumDataPoints)?
+    TResult? Function(String message, int? minimumDataPoints)?
         insufficientDataFailure,
     TResult? Function(String message, String? insightType)?
         insightGenerationFailure,
@@ -318,7 +318,7 @@ class _$ServerFailureImpl implements ServerFailure {
     TResult Function(String message, String? field)? invalidInputFailure,
     TResult Function(String message)? authFailure,
     TResult Function(String userId)? analyticsNotFoundFailure,
-    TResult Function(String message, int minimumDataPoints)?
+    TResult Function(String message, int? minimumDataPoints)?
         insufficientDataFailure,
     TResult Function(String message, String? insightType)?
         insightGenerationFailure,
@@ -506,7 +506,7 @@ class _$NetworkFailureImpl implements NetworkFailure {
         invalidInputFailure,
     required TResult Function(String message) authFailure,
     required TResult Function(String userId) analyticsNotFoundFailure,
-    required TResult Function(String message, int minimumDataPoints)
+    required TResult Function(String message, int? minimumDataPoints)
         insufficientDataFailure,
     required TResult Function(String message, String? insightType)
         insightGenerationFailure,
@@ -535,7 +535,7 @@ class _$NetworkFailureImpl implements NetworkFailure {
     TResult? Function(String message, String? field)? invalidInputFailure,
     TResult? Function(String message)? authFailure,
     TResult? Function(String userId)? analyticsNotFoundFailure,
-    TResult? Function(String message, int minimumDataPoints)?
+    TResult? Function(String message, int? minimumDataPoints)?
         insufficientDataFailure,
     TResult? Function(String message, String? insightType)?
         insightGenerationFailure,
@@ -563,7 +563,7 @@ class _$NetworkFailureImpl implements NetworkFailure {
     TResult Function(String message, String? field)? invalidInputFailure,
     TResult Function(String message)? authFailure,
     TResult Function(String userId)? analyticsNotFoundFailure,
-    TResult Function(String message, int minimumDataPoints)?
+    TResult Function(String message, int? minimumDataPoints)?
         insufficientDataFailure,
     TResult Function(String message, String? insightType)?
         insightGenerationFailure,
@@ -748,7 +748,7 @@ class _$CacheFailureImpl implements CacheFailure {
         invalidInputFailure,
     required TResult Function(String message) authFailure,
     required TResult Function(String userId) analyticsNotFoundFailure,
-    required TResult Function(String message, int minimumDataPoints)
+    required TResult Function(String message, int? minimumDataPoints)
         insufficientDataFailure,
     required TResult Function(String message, String? insightType)
         insightGenerationFailure,
@@ -777,7 +777,7 @@ class _$CacheFailureImpl implements CacheFailure {
     TResult? Function(String message, String? field)? invalidInputFailure,
     TResult? Function(String message)? authFailure,
     TResult? Function(String userId)? analyticsNotFoundFailure,
-    TResult? Function(String message, int minimumDataPoints)?
+    TResult? Function(String message, int? minimumDataPoints)?
         insufficientDataFailure,
     TResult? Function(String message, String? insightType)?
         insightGenerationFailure,
@@ -805,7 +805,7 @@ class _$CacheFailureImpl implements CacheFailure {
     TResult Function(String message, String? field)? invalidInputFailure,
     TResult Function(String message)? authFailure,
     TResult Function(String userId)? analyticsNotFoundFailure,
-    TResult Function(String message, int minimumDataPoints)?
+    TResult Function(String message, int? minimumDataPoints)?
         insufficientDataFailure,
     TResult Function(String message, String? insightType)?
         insightGenerationFailure,
@@ -999,7 +999,7 @@ class _$InvalidInputFailureImpl implements InvalidInputFailure {
         invalidInputFailure,
     required TResult Function(String message) authFailure,
     required TResult Function(String userId) analyticsNotFoundFailure,
-    required TResult Function(String message, int minimumDataPoints)
+    required TResult Function(String message, int? minimumDataPoints)
         insufficientDataFailure,
     required TResult Function(String message, String? insightType)
         insightGenerationFailure,
@@ -1028,7 +1028,7 @@ class _$InvalidInputFailureImpl implements InvalidInputFailure {
     TResult? Function(String message, String? field)? invalidInputFailure,
     TResult? Function(String message)? authFailure,
     TResult? Function(String userId)? analyticsNotFoundFailure,
-    TResult? Function(String message, int minimumDataPoints)?
+    TResult? Function(String message, int? minimumDataPoints)?
         insufficientDataFailure,
     TResult? Function(String message, String? insightType)?
         insightGenerationFailure,
@@ -1056,7 +1056,7 @@ class _$InvalidInputFailureImpl implements InvalidInputFailure {
     TResult Function(String message, String? field)? invalidInputFailure,
     TResult Function(String message)? authFailure,
     TResult Function(String userId)? analyticsNotFoundFailure,
-    TResult Function(String message, int minimumDataPoints)?
+    TResult Function(String message, int? minimumDataPoints)?
         insufficientDataFailure,
     TResult Function(String message, String? insightType)?
         insightGenerationFailure,
@@ -1243,7 +1243,7 @@ class _$AuthFailureImpl implements AuthFailure {
         invalidInputFailure,
     required TResult Function(String message) authFailure,
     required TResult Function(String userId) analyticsNotFoundFailure,
-    required TResult Function(String message, int minimumDataPoints)
+    required TResult Function(String message, int? minimumDataPoints)
         insufficientDataFailure,
     required TResult Function(String message, String? insightType)
         insightGenerationFailure,
@@ -1272,7 +1272,7 @@ class _$AuthFailureImpl implements AuthFailure {
     TResult? Function(String message, String? field)? invalidInputFailure,
     TResult? Function(String message)? authFailure,
     TResult? Function(String userId)? analyticsNotFoundFailure,
-    TResult? Function(String message, int minimumDataPoints)?
+    TResult? Function(String message, int? minimumDataPoints)?
         insufficientDataFailure,
     TResult? Function(String message, String? insightType)?
         insightGenerationFailure,
@@ -1300,7 +1300,7 @@ class _$AuthFailureImpl implements AuthFailure {
     TResult Function(String message, String? field)? invalidInputFailure,
     TResult Function(String message)? authFailure,
     TResult Function(String userId)? analyticsNotFoundFailure,
-    TResult Function(String message, int minimumDataPoints)?
+    TResult Function(String message, int? minimumDataPoints)?
         insufficientDataFailure,
     TResult Function(String message, String? insightType)?
         insightGenerationFailure,
@@ -1488,7 +1488,7 @@ class _$AnalyticsNotFoundFailureImpl implements AnalyticsNotFoundFailure {
         invalidInputFailure,
     required TResult Function(String message) authFailure,
     required TResult Function(String userId) analyticsNotFoundFailure,
-    required TResult Function(String message, int minimumDataPoints)
+    required TResult Function(String message, int? minimumDataPoints)
         insufficientDataFailure,
     required TResult Function(String message, String? insightType)
         insightGenerationFailure,
@@ -1517,7 +1517,7 @@ class _$AnalyticsNotFoundFailureImpl implements AnalyticsNotFoundFailure {
     TResult? Function(String message, String? field)? invalidInputFailure,
     TResult? Function(String message)? authFailure,
     TResult? Function(String userId)? analyticsNotFoundFailure,
-    TResult? Function(String message, int minimumDataPoints)?
+    TResult? Function(String message, int? minimumDataPoints)?
         insufficientDataFailure,
     TResult? Function(String message, String? insightType)?
         insightGenerationFailure,
@@ -1545,7 +1545,7 @@ class _$AnalyticsNotFoundFailureImpl implements AnalyticsNotFoundFailure {
     TResult Function(String message, String? field)? invalidInputFailure,
     TResult Function(String message)? authFailure,
     TResult Function(String userId)? analyticsNotFoundFailure,
-    TResult Function(String message, int minimumDataPoints)?
+    TResult Function(String message, int? minimumDataPoints)?
         insufficientDataFailure,
     TResult Function(String message, String? insightType)?
         insightGenerationFailure,
@@ -1662,7 +1662,7 @@ abstract class _$$InsufficientDataFailureImplCopyWith<$Res> {
           $Res Function(_$InsufficientDataFailureImpl) then) =
       __$$InsufficientDataFailureImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String message, int minimumDataPoints});
+  $Res call({String message, int? minimumDataPoints});
 }
 
 /// @nodoc
@@ -1680,17 +1680,17 @@ class __$$InsufficientDataFailureImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? message = null,
-    Object? minimumDataPoints = null,
+    Object? minimumDataPoints = freezed,
   }) {
     return _then(_$InsufficientDataFailureImpl(
       message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      minimumDataPoints: null == minimumDataPoints
+      minimumDataPoints: freezed == minimumDataPoints
           ? _value.minimumDataPoints
           : minimumDataPoints // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
     ));
   }
 }
@@ -1699,12 +1699,12 @@ class __$$InsufficientDataFailureImplCopyWithImpl<$Res>
 
 class _$InsufficientDataFailureImpl implements InsufficientDataFailure {
   const _$InsufficientDataFailureImpl(
-      {required this.message, required this.minimumDataPoints});
+      {required this.message, this.minimumDataPoints});
 
   @override
   final String message;
   @override
-  final int minimumDataPoints;
+  final int? minimumDataPoints;
 
   @override
   String toString() {
@@ -1743,7 +1743,7 @@ class _$InsufficientDataFailureImpl implements InsufficientDataFailure {
         invalidInputFailure,
     required TResult Function(String message) authFailure,
     required TResult Function(String userId) analyticsNotFoundFailure,
-    required TResult Function(String message, int minimumDataPoints)
+    required TResult Function(String message, int? minimumDataPoints)
         insufficientDataFailure,
     required TResult Function(String message, String? insightType)
         insightGenerationFailure,
@@ -1772,7 +1772,7 @@ class _$InsufficientDataFailureImpl implements InsufficientDataFailure {
     TResult? Function(String message, String? field)? invalidInputFailure,
     TResult? Function(String message)? authFailure,
     TResult? Function(String userId)? analyticsNotFoundFailure,
-    TResult? Function(String message, int minimumDataPoints)?
+    TResult? Function(String message, int? minimumDataPoints)?
         insufficientDataFailure,
     TResult? Function(String message, String? insightType)?
         insightGenerationFailure,
@@ -1800,7 +1800,7 @@ class _$InsufficientDataFailureImpl implements InsufficientDataFailure {
     TResult Function(String message, String? field)? invalidInputFailure,
     TResult Function(String message)? authFailure,
     TResult Function(String userId)? analyticsNotFoundFailure,
-    TResult Function(String message, int minimumDataPoints)?
+    TResult Function(String message, int? minimumDataPoints)?
         insufficientDataFailure,
     TResult Function(String message, String? insightType)?
         insightGenerationFailure,
@@ -1900,10 +1900,10 @@ class _$InsufficientDataFailureImpl implements InsufficientDataFailure {
 abstract class InsufficientDataFailure implements Failure {
   const factory InsufficientDataFailure(
       {required final String message,
-      required final int minimumDataPoints}) = _$InsufficientDataFailureImpl;
+      final int? minimumDataPoints}) = _$InsufficientDataFailureImpl;
 
   String get message;
-  int get minimumDataPoints;
+  int? get minimumDataPoints;
 
   /// Create a copy of Failure
   /// with the given fields replaced by the non-null parameter values.
@@ -2000,7 +2000,7 @@ class _$InsightGenerationFailureImpl implements InsightGenerationFailure {
         invalidInputFailure,
     required TResult Function(String message) authFailure,
     required TResult Function(String userId) analyticsNotFoundFailure,
-    required TResult Function(String message, int minimumDataPoints)
+    required TResult Function(String message, int? minimumDataPoints)
         insufficientDataFailure,
     required TResult Function(String message, String? insightType)
         insightGenerationFailure,
@@ -2029,7 +2029,7 @@ class _$InsightGenerationFailureImpl implements InsightGenerationFailure {
     TResult? Function(String message, String? field)? invalidInputFailure,
     TResult? Function(String message)? authFailure,
     TResult? Function(String userId)? analyticsNotFoundFailure,
-    TResult? Function(String message, int minimumDataPoints)?
+    TResult? Function(String message, int? minimumDataPoints)?
         insufficientDataFailure,
     TResult? Function(String message, String? insightType)?
         insightGenerationFailure,
@@ -2057,7 +2057,7 @@ class _$InsightGenerationFailureImpl implements InsightGenerationFailure {
     TResult Function(String message, String? field)? invalidInputFailure,
     TResult Function(String message)? authFailure,
     TResult Function(String userId)? analyticsNotFoundFailure,
-    TResult Function(String message, int minimumDataPoints)?
+    TResult Function(String message, int? minimumDataPoints)?
         insufficientDataFailure,
     TResult Function(String message, String? insightType)?
         insightGenerationFailure,
@@ -2259,7 +2259,7 @@ class _$RecommendationGenerationFailureImpl
         invalidInputFailure,
     required TResult Function(String message) authFailure,
     required TResult Function(String userId) analyticsNotFoundFailure,
-    required TResult Function(String message, int minimumDataPoints)
+    required TResult Function(String message, int? minimumDataPoints)
         insufficientDataFailure,
     required TResult Function(String message, String? insightType)
         insightGenerationFailure,
@@ -2288,7 +2288,7 @@ class _$RecommendationGenerationFailureImpl
     TResult? Function(String message, String? field)? invalidInputFailure,
     TResult? Function(String message)? authFailure,
     TResult? Function(String userId)? analyticsNotFoundFailure,
-    TResult? Function(String message, int minimumDataPoints)?
+    TResult? Function(String message, int? minimumDataPoints)?
         insufficientDataFailure,
     TResult? Function(String message, String? insightType)?
         insightGenerationFailure,
@@ -2316,7 +2316,7 @@ class _$RecommendationGenerationFailureImpl
     TResult Function(String message, String? field)? invalidInputFailure,
     TResult Function(String message)? authFailure,
     TResult Function(String userId)? analyticsNotFoundFailure,
-    TResult Function(String message, int minimumDataPoints)?
+    TResult Function(String message, int? minimumDataPoints)?
         insufficientDataFailure,
     TResult Function(String message, String? insightType)?
         insightGenerationFailure,
@@ -2516,7 +2516,7 @@ class _$DataProcessingFailureImpl implements DataProcessingFailure {
         invalidInputFailure,
     required TResult Function(String message) authFailure,
     required TResult Function(String userId) analyticsNotFoundFailure,
-    required TResult Function(String message, int minimumDataPoints)
+    required TResult Function(String message, int? minimumDataPoints)
         insufficientDataFailure,
     required TResult Function(String message, String? insightType)
         insightGenerationFailure,
@@ -2545,7 +2545,7 @@ class _$DataProcessingFailureImpl implements DataProcessingFailure {
     TResult? Function(String message, String? field)? invalidInputFailure,
     TResult? Function(String message)? authFailure,
     TResult? Function(String userId)? analyticsNotFoundFailure,
-    TResult? Function(String message, int minimumDataPoints)?
+    TResult? Function(String message, int? minimumDataPoints)?
         insufficientDataFailure,
     TResult? Function(String message, String? insightType)?
         insightGenerationFailure,
@@ -2573,7 +2573,7 @@ class _$DataProcessingFailureImpl implements DataProcessingFailure {
     TResult Function(String message, String? field)? invalidInputFailure,
     TResult Function(String message)? authFailure,
     TResult Function(String userId)? analyticsNotFoundFailure,
-    TResult Function(String message, int minimumDataPoints)?
+    TResult Function(String message, int? minimumDataPoints)?
         insufficientDataFailure,
     TResult Function(String message, String? insightType)?
         insightGenerationFailure,
@@ -2768,7 +2768,7 @@ class _$ExportFailureImpl implements ExportFailure {
         invalidInputFailure,
     required TResult Function(String message) authFailure,
     required TResult Function(String userId) analyticsNotFoundFailure,
-    required TResult Function(String message, int minimumDataPoints)
+    required TResult Function(String message, int? minimumDataPoints)
         insufficientDataFailure,
     required TResult Function(String message, String? insightType)
         insightGenerationFailure,
@@ -2797,7 +2797,7 @@ class _$ExportFailureImpl implements ExportFailure {
     TResult? Function(String message, String? field)? invalidInputFailure,
     TResult? Function(String message)? authFailure,
     TResult? Function(String userId)? analyticsNotFoundFailure,
-    TResult? Function(String message, int minimumDataPoints)?
+    TResult? Function(String message, int? minimumDataPoints)?
         insufficientDataFailure,
     TResult? Function(String message, String? insightType)?
         insightGenerationFailure,
@@ -2825,7 +2825,7 @@ class _$ExportFailureImpl implements ExportFailure {
     TResult Function(String message, String? field)? invalidInputFailure,
     TResult Function(String message)? authFailure,
     TResult Function(String userId)? analyticsNotFoundFailure,
-    TResult Function(String message, int minimumDataPoints)?
+    TResult Function(String message, int? minimumDataPoints)?
         insufficientDataFailure,
     TResult Function(String message, String? insightType)?
         insightGenerationFailure,
@@ -3022,7 +3022,7 @@ class _$PredictionFailureImpl implements PredictionFailure {
         invalidInputFailure,
     required TResult Function(String message) authFailure,
     required TResult Function(String userId) analyticsNotFoundFailure,
-    required TResult Function(String message, int minimumDataPoints)
+    required TResult Function(String message, int? minimumDataPoints)
         insufficientDataFailure,
     required TResult Function(String message, String? insightType)
         insightGenerationFailure,
@@ -3051,7 +3051,7 @@ class _$PredictionFailureImpl implements PredictionFailure {
     TResult? Function(String message, String? field)? invalidInputFailure,
     TResult? Function(String message)? authFailure,
     TResult? Function(String userId)? analyticsNotFoundFailure,
-    TResult? Function(String message, int minimumDataPoints)?
+    TResult? Function(String message, int? minimumDataPoints)?
         insufficientDataFailure,
     TResult? Function(String message, String? insightType)?
         insightGenerationFailure,
@@ -3079,7 +3079,7 @@ class _$PredictionFailureImpl implements PredictionFailure {
     TResult Function(String message, String? field)? invalidInputFailure,
     TResult Function(String message)? authFailure,
     TResult Function(String userId)? analyticsNotFoundFailure,
-    TResult Function(String message, int minimumDataPoints)?
+    TResult Function(String message, int? minimumDataPoints)?
         insufficientDataFailure,
     TResult Function(String message, String? insightType)?
         insightGenerationFailure,
@@ -3276,7 +3276,7 @@ class _$ComparisonFailureImpl implements ComparisonFailure {
         invalidInputFailure,
     required TResult Function(String message) authFailure,
     required TResult Function(String userId) analyticsNotFoundFailure,
-    required TResult Function(String message, int minimumDataPoints)
+    required TResult Function(String message, int? minimumDataPoints)
         insufficientDataFailure,
     required TResult Function(String message, String? insightType)
         insightGenerationFailure,
@@ -3305,7 +3305,7 @@ class _$ComparisonFailureImpl implements ComparisonFailure {
     TResult? Function(String message, String? field)? invalidInputFailure,
     TResult? Function(String message)? authFailure,
     TResult? Function(String userId)? analyticsNotFoundFailure,
-    TResult? Function(String message, int minimumDataPoints)?
+    TResult? Function(String message, int? minimumDataPoints)?
         insufficientDataFailure,
     TResult? Function(String message, String? insightType)?
         insightGenerationFailure,
@@ -3333,7 +3333,7 @@ class _$ComparisonFailureImpl implements ComparisonFailure {
     TResult Function(String message, String? field)? invalidInputFailure,
     TResult Function(String message)? authFailure,
     TResult Function(String userId)? analyticsNotFoundFailure,
-    TResult Function(String message, int minimumDataPoints)?
+    TResult Function(String message, int? minimumDataPoints)?
         insufficientDataFailure,
     TResult Function(String message, String? insightType)?
         insightGenerationFailure,
@@ -3541,7 +3541,7 @@ class _$PeriodValidationFailureImpl implements PeriodValidationFailure {
         invalidInputFailure,
     required TResult Function(String message) authFailure,
     required TResult Function(String userId) analyticsNotFoundFailure,
-    required TResult Function(String message, int minimumDataPoints)
+    required TResult Function(String message, int? minimumDataPoints)
         insufficientDataFailure,
     required TResult Function(String message, String? insightType)
         insightGenerationFailure,
@@ -3570,7 +3570,7 @@ class _$PeriodValidationFailureImpl implements PeriodValidationFailure {
     TResult? Function(String message, String? field)? invalidInputFailure,
     TResult? Function(String message)? authFailure,
     TResult? Function(String userId)? analyticsNotFoundFailure,
-    TResult? Function(String message, int minimumDataPoints)?
+    TResult? Function(String message, int? minimumDataPoints)?
         insufficientDataFailure,
     TResult? Function(String message, String? insightType)?
         insightGenerationFailure,
@@ -3598,7 +3598,7 @@ class _$PeriodValidationFailureImpl implements PeriodValidationFailure {
     TResult Function(String message, String? field)? invalidInputFailure,
     TResult Function(String message)? authFailure,
     TResult Function(String userId)? analyticsNotFoundFailure,
-    TResult Function(String message, int minimumDataPoints)?
+    TResult Function(String message, int? minimumDataPoints)?
         insufficientDataFailure,
     TResult Function(String message, String? insightType)?
         insightGenerationFailure,

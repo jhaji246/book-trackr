@@ -221,7 +221,7 @@ class AuthRepositoryImpl implements AuthRepository {
       // First check local cache
       final cachedState = await _localDataSource.getCachedAuthState();
       if (cachedState.isRight() && cachedState.getOrElse(() => null) != null) {
-        return cachedState;
+        return cachedState.map((isAuth) => isAuth ?? false);
       }
 
       // If no cached state, check remote
@@ -235,7 +235,7 @@ class AuthRepositoryImpl implements AuthRepository {
         },
       );
 
-      return remoteState;
+      return remoteState.map((isAuth) => isAuth ?? false);
     } catch (e) {
       return Left(Failure.serverFailure(message: 'Failed to check authentication: $e'));
     }

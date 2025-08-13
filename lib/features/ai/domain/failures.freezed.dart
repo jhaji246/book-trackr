@@ -29,7 +29,7 @@ mixin _$Failure {
             String message, String? modelName, String? operation)
         aiModelFailure,
     required TResult Function(
-            String message, int minimumDataPoints, String? dataType)
+            String message, int? minimumDataPoints, String? dataType)
         insufficientDataFailure,
     required TResult Function(
             String message, String? recommendationType, String? reason)
@@ -45,38 +45,21 @@ mixin _$Failure {
     required TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)
         comprehensionAssessmentFailure,
-    required TResult Function(
-            String message, String? bookId, String? nlpOperation)
+    required TResult Function(String message, String? operation, String? text)
         nlpProcessingFailure,
     required TResult Function(
-            String message, String? modelName, String? trainingData)
-        modelTrainingFailure,
+            String message, String? bookId, String? analysisType)
+        sentimentAnalysisFailure,
+    required TResult Function(String message, String? bookId, String? modelType)
+        topicModelingFailure,
     required TResult Function(
-            String message, String? userId, String? preferenceType)
-        preferenceUpdateFailure,
+            String message, String? bookId, String? assessmentMethod)
+        readingLevelAssessmentFailure,
     required TResult Function(
-            String message, String? insightType, String? context)
-        insightGenerationFailure,
-    required TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)
-        scheduleGenerationFailure,
+            String message, String? userId, String? personalizationType)
+        personalizationFailure,
     required TResult Function(
-            String message, String? userId, String? goalType, String? timeframe)
-        goalGenerationFailure,
-    required TResult Function(String message, String? userId,
-            String? challengeType, String? difficulty)
-        challengeGenerationFailure,
-    required TResult Function(
-            String message, String? reason, String? contentType)
-        contentModerationFailure,
-    required TResult Function(
-            String message, Duration cooldown, String? operation)
-        rateLimitFailure,
-    required TResult Function(
-            String message, String? modelName, String? alternative)
-        modelUnavailableFailure,
-    required TResult Function(
-            String message, String? dataType, String? qualityIssue)
+            String message, String? dataSource, String? qualityIssue)
         dataQualityFailure,
   }) =>
       throw _privateConstructorUsedError;
@@ -89,7 +72,7 @@ mixin _$Failure {
     TResult? Function(String message)? authFailure,
     TResult? Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult? Function(String message, int minimumDataPoints, String? dataType)?
+    TResult? Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult? Function(
             String message, String? recommendationType, String? reason)?
@@ -103,30 +86,18 @@ mixin _$Failure {
     TResult? Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult? Function(String message, String? bookId, String? nlpOperation)?
+    TResult? Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult? Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult? Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult? Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult? Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult? Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult? Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult? Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult? Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult? Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult? Function(String message, String? dataType, String? qualityIssue)?
+    TResult? Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult? Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult? Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult? Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult? Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
   }) =>
       throw _privateConstructorUsedError;
@@ -139,7 +110,7 @@ mixin _$Failure {
     TResult Function(String message)? authFailure,
     TResult Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult Function(String message, int minimumDataPoints, String? dataType)?
+    TResult Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult Function(
             String message, String? recommendationType, String? reason)?
@@ -153,30 +124,18 @@ mixin _$Failure {
     TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult Function(String message, String? bookId, String? nlpOperation)?
+    TResult Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult Function(String message, String? dataType, String? qualityIssue)?
+    TResult Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
     required TResult orElse(),
   }) =>
@@ -201,22 +160,13 @@ mixin _$Failure {
     required TResult Function(ComprehensionAssessmentFailure value)
         comprehensionAssessmentFailure,
     required TResult Function(NLPProcessingFailure value) nlpProcessingFailure,
-    required TResult Function(ModelTrainingFailure value) modelTrainingFailure,
-    required TResult Function(PreferenceUpdateFailure value)
-        preferenceUpdateFailure,
-    required TResult Function(InsightGenerationFailure value)
-        insightGenerationFailure,
-    required TResult Function(ScheduleGenerationFailure value)
-        scheduleGenerationFailure,
-    required TResult Function(GoalGenerationFailure value)
-        goalGenerationFailure,
-    required TResult Function(ChallengeGenerationFailure value)
-        challengeGenerationFailure,
-    required TResult Function(ContentModerationFailure value)
-        contentModerationFailure,
-    required TResult Function(RateLimitFailure value) rateLimitFailure,
-    required TResult Function(ModelUnavailableFailure value)
-        modelUnavailableFailure,
+    required TResult Function(SentimentAnalysisFailure value)
+        sentimentAnalysisFailure,
+    required TResult Function(TopicModelingFailure value) topicModelingFailure,
+    required TResult Function(ReadingLevelAssessmentFailure value)
+        readingLevelAssessmentFailure,
+    required TResult Function(PersonalizationFailure value)
+        personalizationFailure,
     required TResult Function(DataQualityFailure value) dataQualityFailure,
   }) =>
       throw _privateConstructorUsedError;
@@ -238,17 +188,11 @@ mixin _$Failure {
     TResult? Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult? Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult? Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult? Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult? Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult? Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult? Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult? Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult? Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult? Function(RateLimitFailure value)? rateLimitFailure,
-    TResult? Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult? Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult? Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult? Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult? Function(PersonalizationFailure value)? personalizationFailure,
     TResult? Function(DataQualityFailure value)? dataQualityFailure,
   }) =>
       throw _privateConstructorUsedError;
@@ -270,17 +214,11 @@ mixin _$Failure {
     TResult Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult Function(RateLimitFailure value)? rateLimitFailure,
-    TResult Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult Function(PersonalizationFailure value)? personalizationFailure,
     TResult Function(DataQualityFailure value)? dataQualityFailure,
     required TResult orElse(),
   }) =>
@@ -415,7 +353,7 @@ class _$ServerFailureImpl implements ServerFailure {
             String message, String? modelName, String? operation)
         aiModelFailure,
     required TResult Function(
-            String message, int minimumDataPoints, String? dataType)
+            String message, int? minimumDataPoints, String? dataType)
         insufficientDataFailure,
     required TResult Function(
             String message, String? recommendationType, String? reason)
@@ -431,38 +369,21 @@ class _$ServerFailureImpl implements ServerFailure {
     required TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)
         comprehensionAssessmentFailure,
-    required TResult Function(
-            String message, String? bookId, String? nlpOperation)
+    required TResult Function(String message, String? operation, String? text)
         nlpProcessingFailure,
     required TResult Function(
-            String message, String? modelName, String? trainingData)
-        modelTrainingFailure,
+            String message, String? bookId, String? analysisType)
+        sentimentAnalysisFailure,
+    required TResult Function(String message, String? bookId, String? modelType)
+        topicModelingFailure,
     required TResult Function(
-            String message, String? userId, String? preferenceType)
-        preferenceUpdateFailure,
+            String message, String? bookId, String? assessmentMethod)
+        readingLevelAssessmentFailure,
     required TResult Function(
-            String message, String? insightType, String? context)
-        insightGenerationFailure,
-    required TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)
-        scheduleGenerationFailure,
+            String message, String? userId, String? personalizationType)
+        personalizationFailure,
     required TResult Function(
-            String message, String? userId, String? goalType, String? timeframe)
-        goalGenerationFailure,
-    required TResult Function(String message, String? userId,
-            String? challengeType, String? difficulty)
-        challengeGenerationFailure,
-    required TResult Function(
-            String message, String? reason, String? contentType)
-        contentModerationFailure,
-    required TResult Function(
-            String message, Duration cooldown, String? operation)
-        rateLimitFailure,
-    required TResult Function(
-            String message, String? modelName, String? alternative)
-        modelUnavailableFailure,
-    required TResult Function(
-            String message, String? dataType, String? qualityIssue)
+            String message, String? dataSource, String? qualityIssue)
         dataQualityFailure,
   }) {
     return serverFailure(message, statusCode);
@@ -478,7 +399,7 @@ class _$ServerFailureImpl implements ServerFailure {
     TResult? Function(String message)? authFailure,
     TResult? Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult? Function(String message, int minimumDataPoints, String? dataType)?
+    TResult? Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult? Function(
             String message, String? recommendationType, String? reason)?
@@ -492,30 +413,18 @@ class _$ServerFailureImpl implements ServerFailure {
     TResult? Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult? Function(String message, String? bookId, String? nlpOperation)?
+    TResult? Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult? Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult? Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult? Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult? Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult? Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult? Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult? Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult? Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult? Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult? Function(String message, String? dataType, String? qualityIssue)?
+    TResult? Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult? Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult? Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult? Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult? Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
   }) {
     return serverFailure?.call(message, statusCode);
@@ -531,7 +440,7 @@ class _$ServerFailureImpl implements ServerFailure {
     TResult Function(String message)? authFailure,
     TResult Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult Function(String message, int minimumDataPoints, String? dataType)?
+    TResult Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult Function(
             String message, String? recommendationType, String? reason)?
@@ -545,30 +454,18 @@ class _$ServerFailureImpl implements ServerFailure {
     TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult Function(String message, String? bookId, String? nlpOperation)?
+    TResult Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult Function(String message, String? dataType, String? qualityIssue)?
+    TResult Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
     required TResult orElse(),
   }) {
@@ -599,22 +496,13 @@ class _$ServerFailureImpl implements ServerFailure {
     required TResult Function(ComprehensionAssessmentFailure value)
         comprehensionAssessmentFailure,
     required TResult Function(NLPProcessingFailure value) nlpProcessingFailure,
-    required TResult Function(ModelTrainingFailure value) modelTrainingFailure,
-    required TResult Function(PreferenceUpdateFailure value)
-        preferenceUpdateFailure,
-    required TResult Function(InsightGenerationFailure value)
-        insightGenerationFailure,
-    required TResult Function(ScheduleGenerationFailure value)
-        scheduleGenerationFailure,
-    required TResult Function(GoalGenerationFailure value)
-        goalGenerationFailure,
-    required TResult Function(ChallengeGenerationFailure value)
-        challengeGenerationFailure,
-    required TResult Function(ContentModerationFailure value)
-        contentModerationFailure,
-    required TResult Function(RateLimitFailure value) rateLimitFailure,
-    required TResult Function(ModelUnavailableFailure value)
-        modelUnavailableFailure,
+    required TResult Function(SentimentAnalysisFailure value)
+        sentimentAnalysisFailure,
+    required TResult Function(TopicModelingFailure value) topicModelingFailure,
+    required TResult Function(ReadingLevelAssessmentFailure value)
+        readingLevelAssessmentFailure,
+    required TResult Function(PersonalizationFailure value)
+        personalizationFailure,
     required TResult Function(DataQualityFailure value) dataQualityFailure,
   }) {
     return serverFailure(this);
@@ -639,17 +527,11 @@ class _$ServerFailureImpl implements ServerFailure {
     TResult? Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult? Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult? Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult? Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult? Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult? Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult? Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult? Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult? Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult? Function(RateLimitFailure value)? rateLimitFailure,
-    TResult? Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult? Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult? Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult? Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult? Function(PersonalizationFailure value)? personalizationFailure,
     TResult? Function(DataQualityFailure value)? dataQualityFailure,
   }) {
     return serverFailure?.call(this);
@@ -674,17 +556,11 @@ class _$ServerFailureImpl implements ServerFailure {
     TResult Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult Function(RateLimitFailure value)? rateLimitFailure,
-    TResult Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult Function(PersonalizationFailure value)? personalizationFailure,
     TResult Function(DataQualityFailure value)? dataQualityFailure,
     required TResult orElse(),
   }) {
@@ -793,7 +669,7 @@ class _$NetworkFailureImpl implements NetworkFailure {
             String message, String? modelName, String? operation)
         aiModelFailure,
     required TResult Function(
-            String message, int minimumDataPoints, String? dataType)
+            String message, int? minimumDataPoints, String? dataType)
         insufficientDataFailure,
     required TResult Function(
             String message, String? recommendationType, String? reason)
@@ -809,38 +685,21 @@ class _$NetworkFailureImpl implements NetworkFailure {
     required TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)
         comprehensionAssessmentFailure,
-    required TResult Function(
-            String message, String? bookId, String? nlpOperation)
+    required TResult Function(String message, String? operation, String? text)
         nlpProcessingFailure,
     required TResult Function(
-            String message, String? modelName, String? trainingData)
-        modelTrainingFailure,
+            String message, String? bookId, String? analysisType)
+        sentimentAnalysisFailure,
+    required TResult Function(String message, String? bookId, String? modelType)
+        topicModelingFailure,
     required TResult Function(
-            String message, String? userId, String? preferenceType)
-        preferenceUpdateFailure,
+            String message, String? bookId, String? assessmentMethod)
+        readingLevelAssessmentFailure,
     required TResult Function(
-            String message, String? insightType, String? context)
-        insightGenerationFailure,
-    required TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)
-        scheduleGenerationFailure,
+            String message, String? userId, String? personalizationType)
+        personalizationFailure,
     required TResult Function(
-            String message, String? userId, String? goalType, String? timeframe)
-        goalGenerationFailure,
-    required TResult Function(String message, String? userId,
-            String? challengeType, String? difficulty)
-        challengeGenerationFailure,
-    required TResult Function(
-            String message, String? reason, String? contentType)
-        contentModerationFailure,
-    required TResult Function(
-            String message, Duration cooldown, String? operation)
-        rateLimitFailure,
-    required TResult Function(
-            String message, String? modelName, String? alternative)
-        modelUnavailableFailure,
-    required TResult Function(
-            String message, String? dataType, String? qualityIssue)
+            String message, String? dataSource, String? qualityIssue)
         dataQualityFailure,
   }) {
     return networkFailure(message);
@@ -856,7 +715,7 @@ class _$NetworkFailureImpl implements NetworkFailure {
     TResult? Function(String message)? authFailure,
     TResult? Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult? Function(String message, int minimumDataPoints, String? dataType)?
+    TResult? Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult? Function(
             String message, String? recommendationType, String? reason)?
@@ -870,30 +729,18 @@ class _$NetworkFailureImpl implements NetworkFailure {
     TResult? Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult? Function(String message, String? bookId, String? nlpOperation)?
+    TResult? Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult? Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult? Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult? Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult? Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult? Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult? Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult? Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult? Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult? Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult? Function(String message, String? dataType, String? qualityIssue)?
+    TResult? Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult? Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult? Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult? Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult? Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
   }) {
     return networkFailure?.call(message);
@@ -909,7 +756,7 @@ class _$NetworkFailureImpl implements NetworkFailure {
     TResult Function(String message)? authFailure,
     TResult Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult Function(String message, int minimumDataPoints, String? dataType)?
+    TResult Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult Function(
             String message, String? recommendationType, String? reason)?
@@ -923,30 +770,18 @@ class _$NetworkFailureImpl implements NetworkFailure {
     TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult Function(String message, String? bookId, String? nlpOperation)?
+    TResult Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult Function(String message, String? dataType, String? qualityIssue)?
+    TResult Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
     required TResult orElse(),
   }) {
@@ -977,22 +812,13 @@ class _$NetworkFailureImpl implements NetworkFailure {
     required TResult Function(ComprehensionAssessmentFailure value)
         comprehensionAssessmentFailure,
     required TResult Function(NLPProcessingFailure value) nlpProcessingFailure,
-    required TResult Function(ModelTrainingFailure value) modelTrainingFailure,
-    required TResult Function(PreferenceUpdateFailure value)
-        preferenceUpdateFailure,
-    required TResult Function(InsightGenerationFailure value)
-        insightGenerationFailure,
-    required TResult Function(ScheduleGenerationFailure value)
-        scheduleGenerationFailure,
-    required TResult Function(GoalGenerationFailure value)
-        goalGenerationFailure,
-    required TResult Function(ChallengeGenerationFailure value)
-        challengeGenerationFailure,
-    required TResult Function(ContentModerationFailure value)
-        contentModerationFailure,
-    required TResult Function(RateLimitFailure value) rateLimitFailure,
-    required TResult Function(ModelUnavailableFailure value)
-        modelUnavailableFailure,
+    required TResult Function(SentimentAnalysisFailure value)
+        sentimentAnalysisFailure,
+    required TResult Function(TopicModelingFailure value) topicModelingFailure,
+    required TResult Function(ReadingLevelAssessmentFailure value)
+        readingLevelAssessmentFailure,
+    required TResult Function(PersonalizationFailure value)
+        personalizationFailure,
     required TResult Function(DataQualityFailure value) dataQualityFailure,
   }) {
     return networkFailure(this);
@@ -1017,17 +843,11 @@ class _$NetworkFailureImpl implements NetworkFailure {
     TResult? Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult? Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult? Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult? Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult? Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult? Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult? Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult? Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult? Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult? Function(RateLimitFailure value)? rateLimitFailure,
-    TResult? Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult? Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult? Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult? Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult? Function(PersonalizationFailure value)? personalizationFailure,
     TResult? Function(DataQualityFailure value)? dataQualityFailure,
   }) {
     return networkFailure?.call(this);
@@ -1052,17 +872,11 @@ class _$NetworkFailureImpl implements NetworkFailure {
     TResult Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult Function(RateLimitFailure value)? rateLimitFailure,
-    TResult Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult Function(PersonalizationFailure value)? personalizationFailure,
     TResult Function(DataQualityFailure value)? dataQualityFailure,
     required TResult orElse(),
   }) {
@@ -1168,7 +982,7 @@ class _$CacheFailureImpl implements CacheFailure {
             String message, String? modelName, String? operation)
         aiModelFailure,
     required TResult Function(
-            String message, int minimumDataPoints, String? dataType)
+            String message, int? minimumDataPoints, String? dataType)
         insufficientDataFailure,
     required TResult Function(
             String message, String? recommendationType, String? reason)
@@ -1184,38 +998,21 @@ class _$CacheFailureImpl implements CacheFailure {
     required TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)
         comprehensionAssessmentFailure,
-    required TResult Function(
-            String message, String? bookId, String? nlpOperation)
+    required TResult Function(String message, String? operation, String? text)
         nlpProcessingFailure,
     required TResult Function(
-            String message, String? modelName, String? trainingData)
-        modelTrainingFailure,
+            String message, String? bookId, String? analysisType)
+        sentimentAnalysisFailure,
+    required TResult Function(String message, String? bookId, String? modelType)
+        topicModelingFailure,
     required TResult Function(
-            String message, String? userId, String? preferenceType)
-        preferenceUpdateFailure,
+            String message, String? bookId, String? assessmentMethod)
+        readingLevelAssessmentFailure,
     required TResult Function(
-            String message, String? insightType, String? context)
-        insightGenerationFailure,
-    required TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)
-        scheduleGenerationFailure,
+            String message, String? userId, String? personalizationType)
+        personalizationFailure,
     required TResult Function(
-            String message, String? userId, String? goalType, String? timeframe)
-        goalGenerationFailure,
-    required TResult Function(String message, String? userId,
-            String? challengeType, String? difficulty)
-        challengeGenerationFailure,
-    required TResult Function(
-            String message, String? reason, String? contentType)
-        contentModerationFailure,
-    required TResult Function(
-            String message, Duration cooldown, String? operation)
-        rateLimitFailure,
-    required TResult Function(
-            String message, String? modelName, String? alternative)
-        modelUnavailableFailure,
-    required TResult Function(
-            String message, String? dataType, String? qualityIssue)
+            String message, String? dataSource, String? qualityIssue)
         dataQualityFailure,
   }) {
     return cacheFailure(message);
@@ -1231,7 +1028,7 @@ class _$CacheFailureImpl implements CacheFailure {
     TResult? Function(String message)? authFailure,
     TResult? Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult? Function(String message, int minimumDataPoints, String? dataType)?
+    TResult? Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult? Function(
             String message, String? recommendationType, String? reason)?
@@ -1245,30 +1042,18 @@ class _$CacheFailureImpl implements CacheFailure {
     TResult? Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult? Function(String message, String? bookId, String? nlpOperation)?
+    TResult? Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult? Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult? Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult? Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult? Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult? Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult? Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult? Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult? Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult? Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult? Function(String message, String? dataType, String? qualityIssue)?
+    TResult? Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult? Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult? Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult? Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult? Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
   }) {
     return cacheFailure?.call(message);
@@ -1284,7 +1069,7 @@ class _$CacheFailureImpl implements CacheFailure {
     TResult Function(String message)? authFailure,
     TResult Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult Function(String message, int minimumDataPoints, String? dataType)?
+    TResult Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult Function(
             String message, String? recommendationType, String? reason)?
@@ -1298,30 +1083,18 @@ class _$CacheFailureImpl implements CacheFailure {
     TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult Function(String message, String? bookId, String? nlpOperation)?
+    TResult Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult Function(String message, String? dataType, String? qualityIssue)?
+    TResult Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
     required TResult orElse(),
   }) {
@@ -1352,22 +1125,13 @@ class _$CacheFailureImpl implements CacheFailure {
     required TResult Function(ComprehensionAssessmentFailure value)
         comprehensionAssessmentFailure,
     required TResult Function(NLPProcessingFailure value) nlpProcessingFailure,
-    required TResult Function(ModelTrainingFailure value) modelTrainingFailure,
-    required TResult Function(PreferenceUpdateFailure value)
-        preferenceUpdateFailure,
-    required TResult Function(InsightGenerationFailure value)
-        insightGenerationFailure,
-    required TResult Function(ScheduleGenerationFailure value)
-        scheduleGenerationFailure,
-    required TResult Function(GoalGenerationFailure value)
-        goalGenerationFailure,
-    required TResult Function(ChallengeGenerationFailure value)
-        challengeGenerationFailure,
-    required TResult Function(ContentModerationFailure value)
-        contentModerationFailure,
-    required TResult Function(RateLimitFailure value) rateLimitFailure,
-    required TResult Function(ModelUnavailableFailure value)
-        modelUnavailableFailure,
+    required TResult Function(SentimentAnalysisFailure value)
+        sentimentAnalysisFailure,
+    required TResult Function(TopicModelingFailure value) topicModelingFailure,
+    required TResult Function(ReadingLevelAssessmentFailure value)
+        readingLevelAssessmentFailure,
+    required TResult Function(PersonalizationFailure value)
+        personalizationFailure,
     required TResult Function(DataQualityFailure value) dataQualityFailure,
   }) {
     return cacheFailure(this);
@@ -1392,17 +1156,11 @@ class _$CacheFailureImpl implements CacheFailure {
     TResult? Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult? Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult? Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult? Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult? Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult? Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult? Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult? Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult? Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult? Function(RateLimitFailure value)? rateLimitFailure,
-    TResult? Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult? Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult? Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult? Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult? Function(PersonalizationFailure value)? personalizationFailure,
     TResult? Function(DataQualityFailure value)? dataQualityFailure,
   }) {
     return cacheFailure?.call(this);
@@ -1427,17 +1185,11 @@ class _$CacheFailureImpl implements CacheFailure {
     TResult Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult Function(RateLimitFailure value)? rateLimitFailure,
-    TResult Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult Function(PersonalizationFailure value)? personalizationFailure,
     TResult Function(DataQualityFailure value)? dataQualityFailure,
     required TResult orElse(),
   }) {
@@ -1552,7 +1304,7 @@ class _$InvalidInputFailureImpl implements InvalidInputFailure {
             String message, String? modelName, String? operation)
         aiModelFailure,
     required TResult Function(
-            String message, int minimumDataPoints, String? dataType)
+            String message, int? minimumDataPoints, String? dataType)
         insufficientDataFailure,
     required TResult Function(
             String message, String? recommendationType, String? reason)
@@ -1568,38 +1320,21 @@ class _$InvalidInputFailureImpl implements InvalidInputFailure {
     required TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)
         comprehensionAssessmentFailure,
-    required TResult Function(
-            String message, String? bookId, String? nlpOperation)
+    required TResult Function(String message, String? operation, String? text)
         nlpProcessingFailure,
     required TResult Function(
-            String message, String? modelName, String? trainingData)
-        modelTrainingFailure,
+            String message, String? bookId, String? analysisType)
+        sentimentAnalysisFailure,
+    required TResult Function(String message, String? bookId, String? modelType)
+        topicModelingFailure,
     required TResult Function(
-            String message, String? userId, String? preferenceType)
-        preferenceUpdateFailure,
+            String message, String? bookId, String? assessmentMethod)
+        readingLevelAssessmentFailure,
     required TResult Function(
-            String message, String? insightType, String? context)
-        insightGenerationFailure,
-    required TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)
-        scheduleGenerationFailure,
+            String message, String? userId, String? personalizationType)
+        personalizationFailure,
     required TResult Function(
-            String message, String? userId, String? goalType, String? timeframe)
-        goalGenerationFailure,
-    required TResult Function(String message, String? userId,
-            String? challengeType, String? difficulty)
-        challengeGenerationFailure,
-    required TResult Function(
-            String message, String? reason, String? contentType)
-        contentModerationFailure,
-    required TResult Function(
-            String message, Duration cooldown, String? operation)
-        rateLimitFailure,
-    required TResult Function(
-            String message, String? modelName, String? alternative)
-        modelUnavailableFailure,
-    required TResult Function(
-            String message, String? dataType, String? qualityIssue)
+            String message, String? dataSource, String? qualityIssue)
         dataQualityFailure,
   }) {
     return invalidInputFailure(message, field);
@@ -1615,7 +1350,7 @@ class _$InvalidInputFailureImpl implements InvalidInputFailure {
     TResult? Function(String message)? authFailure,
     TResult? Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult? Function(String message, int minimumDataPoints, String? dataType)?
+    TResult? Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult? Function(
             String message, String? recommendationType, String? reason)?
@@ -1629,30 +1364,18 @@ class _$InvalidInputFailureImpl implements InvalidInputFailure {
     TResult? Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult? Function(String message, String? bookId, String? nlpOperation)?
+    TResult? Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult? Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult? Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult? Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult? Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult? Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult? Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult? Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult? Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult? Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult? Function(String message, String? dataType, String? qualityIssue)?
+    TResult? Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult? Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult? Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult? Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult? Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
   }) {
     return invalidInputFailure?.call(message, field);
@@ -1668,7 +1391,7 @@ class _$InvalidInputFailureImpl implements InvalidInputFailure {
     TResult Function(String message)? authFailure,
     TResult Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult Function(String message, int minimumDataPoints, String? dataType)?
+    TResult Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult Function(
             String message, String? recommendationType, String? reason)?
@@ -1682,30 +1405,18 @@ class _$InvalidInputFailureImpl implements InvalidInputFailure {
     TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult Function(String message, String? bookId, String? nlpOperation)?
+    TResult Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult Function(String message, String? dataType, String? qualityIssue)?
+    TResult Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
     required TResult orElse(),
   }) {
@@ -1736,22 +1447,13 @@ class _$InvalidInputFailureImpl implements InvalidInputFailure {
     required TResult Function(ComprehensionAssessmentFailure value)
         comprehensionAssessmentFailure,
     required TResult Function(NLPProcessingFailure value) nlpProcessingFailure,
-    required TResult Function(ModelTrainingFailure value) modelTrainingFailure,
-    required TResult Function(PreferenceUpdateFailure value)
-        preferenceUpdateFailure,
-    required TResult Function(InsightGenerationFailure value)
-        insightGenerationFailure,
-    required TResult Function(ScheduleGenerationFailure value)
-        scheduleGenerationFailure,
-    required TResult Function(GoalGenerationFailure value)
-        goalGenerationFailure,
-    required TResult Function(ChallengeGenerationFailure value)
-        challengeGenerationFailure,
-    required TResult Function(ContentModerationFailure value)
-        contentModerationFailure,
-    required TResult Function(RateLimitFailure value) rateLimitFailure,
-    required TResult Function(ModelUnavailableFailure value)
-        modelUnavailableFailure,
+    required TResult Function(SentimentAnalysisFailure value)
+        sentimentAnalysisFailure,
+    required TResult Function(TopicModelingFailure value) topicModelingFailure,
+    required TResult Function(ReadingLevelAssessmentFailure value)
+        readingLevelAssessmentFailure,
+    required TResult Function(PersonalizationFailure value)
+        personalizationFailure,
     required TResult Function(DataQualityFailure value) dataQualityFailure,
   }) {
     return invalidInputFailure(this);
@@ -1776,17 +1478,11 @@ class _$InvalidInputFailureImpl implements InvalidInputFailure {
     TResult? Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult? Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult? Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult? Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult? Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult? Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult? Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult? Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult? Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult? Function(RateLimitFailure value)? rateLimitFailure,
-    TResult? Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult? Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult? Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult? Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult? Function(PersonalizationFailure value)? personalizationFailure,
     TResult? Function(DataQualityFailure value)? dataQualityFailure,
   }) {
     return invalidInputFailure?.call(this);
@@ -1811,17 +1507,11 @@ class _$InvalidInputFailureImpl implements InvalidInputFailure {
     TResult Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult Function(RateLimitFailure value)? rateLimitFailure,
-    TResult Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult Function(PersonalizationFailure value)? personalizationFailure,
     TResult Function(DataQualityFailure value)? dataQualityFailure,
     required TResult orElse(),
   }) {
@@ -1929,7 +1619,7 @@ class _$AuthFailureImpl implements AuthFailure {
             String message, String? modelName, String? operation)
         aiModelFailure,
     required TResult Function(
-            String message, int minimumDataPoints, String? dataType)
+            String message, int? minimumDataPoints, String? dataType)
         insufficientDataFailure,
     required TResult Function(
             String message, String? recommendationType, String? reason)
@@ -1945,38 +1635,21 @@ class _$AuthFailureImpl implements AuthFailure {
     required TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)
         comprehensionAssessmentFailure,
-    required TResult Function(
-            String message, String? bookId, String? nlpOperation)
+    required TResult Function(String message, String? operation, String? text)
         nlpProcessingFailure,
     required TResult Function(
-            String message, String? modelName, String? trainingData)
-        modelTrainingFailure,
+            String message, String? bookId, String? analysisType)
+        sentimentAnalysisFailure,
+    required TResult Function(String message, String? bookId, String? modelType)
+        topicModelingFailure,
     required TResult Function(
-            String message, String? userId, String? preferenceType)
-        preferenceUpdateFailure,
+            String message, String? bookId, String? assessmentMethod)
+        readingLevelAssessmentFailure,
     required TResult Function(
-            String message, String? insightType, String? context)
-        insightGenerationFailure,
-    required TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)
-        scheduleGenerationFailure,
+            String message, String? userId, String? personalizationType)
+        personalizationFailure,
     required TResult Function(
-            String message, String? userId, String? goalType, String? timeframe)
-        goalGenerationFailure,
-    required TResult Function(String message, String? userId,
-            String? challengeType, String? difficulty)
-        challengeGenerationFailure,
-    required TResult Function(
-            String message, String? reason, String? contentType)
-        contentModerationFailure,
-    required TResult Function(
-            String message, Duration cooldown, String? operation)
-        rateLimitFailure,
-    required TResult Function(
-            String message, String? modelName, String? alternative)
-        modelUnavailableFailure,
-    required TResult Function(
-            String message, String? dataType, String? qualityIssue)
+            String message, String? dataSource, String? qualityIssue)
         dataQualityFailure,
   }) {
     return authFailure(message);
@@ -1992,7 +1665,7 @@ class _$AuthFailureImpl implements AuthFailure {
     TResult? Function(String message)? authFailure,
     TResult? Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult? Function(String message, int minimumDataPoints, String? dataType)?
+    TResult? Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult? Function(
             String message, String? recommendationType, String? reason)?
@@ -2006,30 +1679,18 @@ class _$AuthFailureImpl implements AuthFailure {
     TResult? Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult? Function(String message, String? bookId, String? nlpOperation)?
+    TResult? Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult? Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult? Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult? Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult? Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult? Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult? Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult? Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult? Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult? Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult? Function(String message, String? dataType, String? qualityIssue)?
+    TResult? Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult? Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult? Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult? Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult? Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
   }) {
     return authFailure?.call(message);
@@ -2045,7 +1706,7 @@ class _$AuthFailureImpl implements AuthFailure {
     TResult Function(String message)? authFailure,
     TResult Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult Function(String message, int minimumDataPoints, String? dataType)?
+    TResult Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult Function(
             String message, String? recommendationType, String? reason)?
@@ -2059,30 +1720,18 @@ class _$AuthFailureImpl implements AuthFailure {
     TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult Function(String message, String? bookId, String? nlpOperation)?
+    TResult Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult Function(String message, String? dataType, String? qualityIssue)?
+    TResult Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
     required TResult orElse(),
   }) {
@@ -2113,22 +1762,13 @@ class _$AuthFailureImpl implements AuthFailure {
     required TResult Function(ComprehensionAssessmentFailure value)
         comprehensionAssessmentFailure,
     required TResult Function(NLPProcessingFailure value) nlpProcessingFailure,
-    required TResult Function(ModelTrainingFailure value) modelTrainingFailure,
-    required TResult Function(PreferenceUpdateFailure value)
-        preferenceUpdateFailure,
-    required TResult Function(InsightGenerationFailure value)
-        insightGenerationFailure,
-    required TResult Function(ScheduleGenerationFailure value)
-        scheduleGenerationFailure,
-    required TResult Function(GoalGenerationFailure value)
-        goalGenerationFailure,
-    required TResult Function(ChallengeGenerationFailure value)
-        challengeGenerationFailure,
-    required TResult Function(ContentModerationFailure value)
-        contentModerationFailure,
-    required TResult Function(RateLimitFailure value) rateLimitFailure,
-    required TResult Function(ModelUnavailableFailure value)
-        modelUnavailableFailure,
+    required TResult Function(SentimentAnalysisFailure value)
+        sentimentAnalysisFailure,
+    required TResult Function(TopicModelingFailure value) topicModelingFailure,
+    required TResult Function(ReadingLevelAssessmentFailure value)
+        readingLevelAssessmentFailure,
+    required TResult Function(PersonalizationFailure value)
+        personalizationFailure,
     required TResult Function(DataQualityFailure value) dataQualityFailure,
   }) {
     return authFailure(this);
@@ -2153,17 +1793,11 @@ class _$AuthFailureImpl implements AuthFailure {
     TResult? Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult? Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult? Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult? Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult? Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult? Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult? Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult? Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult? Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult? Function(RateLimitFailure value)? rateLimitFailure,
-    TResult? Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult? Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult? Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult? Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult? Function(PersonalizationFailure value)? personalizationFailure,
     TResult? Function(DataQualityFailure value)? dataQualityFailure,
   }) {
     return authFailure?.call(this);
@@ -2188,17 +1822,11 @@ class _$AuthFailureImpl implements AuthFailure {
     TResult Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult Function(RateLimitFailure value)? rateLimitFailure,
-    TResult Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult Function(PersonalizationFailure value)? personalizationFailure,
     TResult Function(DataQualityFailure value)? dataQualityFailure,
     required TResult orElse(),
   }) {
@@ -2324,7 +1952,7 @@ class _$AIModelFailureImpl implements AIModelFailure {
             String message, String? modelName, String? operation)
         aiModelFailure,
     required TResult Function(
-            String message, int minimumDataPoints, String? dataType)
+            String message, int? minimumDataPoints, String? dataType)
         insufficientDataFailure,
     required TResult Function(
             String message, String? recommendationType, String? reason)
@@ -2340,38 +1968,21 @@ class _$AIModelFailureImpl implements AIModelFailure {
     required TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)
         comprehensionAssessmentFailure,
-    required TResult Function(
-            String message, String? bookId, String? nlpOperation)
+    required TResult Function(String message, String? operation, String? text)
         nlpProcessingFailure,
     required TResult Function(
-            String message, String? modelName, String? trainingData)
-        modelTrainingFailure,
+            String message, String? bookId, String? analysisType)
+        sentimentAnalysisFailure,
+    required TResult Function(String message, String? bookId, String? modelType)
+        topicModelingFailure,
     required TResult Function(
-            String message, String? userId, String? preferenceType)
-        preferenceUpdateFailure,
+            String message, String? bookId, String? assessmentMethod)
+        readingLevelAssessmentFailure,
     required TResult Function(
-            String message, String? insightType, String? context)
-        insightGenerationFailure,
-    required TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)
-        scheduleGenerationFailure,
+            String message, String? userId, String? personalizationType)
+        personalizationFailure,
     required TResult Function(
-            String message, String? userId, String? goalType, String? timeframe)
-        goalGenerationFailure,
-    required TResult Function(String message, String? userId,
-            String? challengeType, String? difficulty)
-        challengeGenerationFailure,
-    required TResult Function(
-            String message, String? reason, String? contentType)
-        contentModerationFailure,
-    required TResult Function(
-            String message, Duration cooldown, String? operation)
-        rateLimitFailure,
-    required TResult Function(
-            String message, String? modelName, String? alternative)
-        modelUnavailableFailure,
-    required TResult Function(
-            String message, String? dataType, String? qualityIssue)
+            String message, String? dataSource, String? qualityIssue)
         dataQualityFailure,
   }) {
     return aiModelFailure(message, modelName, operation);
@@ -2387,7 +1998,7 @@ class _$AIModelFailureImpl implements AIModelFailure {
     TResult? Function(String message)? authFailure,
     TResult? Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult? Function(String message, int minimumDataPoints, String? dataType)?
+    TResult? Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult? Function(
             String message, String? recommendationType, String? reason)?
@@ -2401,30 +2012,18 @@ class _$AIModelFailureImpl implements AIModelFailure {
     TResult? Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult? Function(String message, String? bookId, String? nlpOperation)?
+    TResult? Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult? Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult? Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult? Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult? Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult? Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult? Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult? Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult? Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult? Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult? Function(String message, String? dataType, String? qualityIssue)?
+    TResult? Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult? Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult? Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult? Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult? Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
   }) {
     return aiModelFailure?.call(message, modelName, operation);
@@ -2440,7 +2039,7 @@ class _$AIModelFailureImpl implements AIModelFailure {
     TResult Function(String message)? authFailure,
     TResult Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult Function(String message, int minimumDataPoints, String? dataType)?
+    TResult Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult Function(
             String message, String? recommendationType, String? reason)?
@@ -2454,30 +2053,18 @@ class _$AIModelFailureImpl implements AIModelFailure {
     TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult Function(String message, String? bookId, String? nlpOperation)?
+    TResult Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult Function(String message, String? dataType, String? qualityIssue)?
+    TResult Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
     required TResult orElse(),
   }) {
@@ -2508,22 +2095,13 @@ class _$AIModelFailureImpl implements AIModelFailure {
     required TResult Function(ComprehensionAssessmentFailure value)
         comprehensionAssessmentFailure,
     required TResult Function(NLPProcessingFailure value) nlpProcessingFailure,
-    required TResult Function(ModelTrainingFailure value) modelTrainingFailure,
-    required TResult Function(PreferenceUpdateFailure value)
-        preferenceUpdateFailure,
-    required TResult Function(InsightGenerationFailure value)
-        insightGenerationFailure,
-    required TResult Function(ScheduleGenerationFailure value)
-        scheduleGenerationFailure,
-    required TResult Function(GoalGenerationFailure value)
-        goalGenerationFailure,
-    required TResult Function(ChallengeGenerationFailure value)
-        challengeGenerationFailure,
-    required TResult Function(ContentModerationFailure value)
-        contentModerationFailure,
-    required TResult Function(RateLimitFailure value) rateLimitFailure,
-    required TResult Function(ModelUnavailableFailure value)
-        modelUnavailableFailure,
+    required TResult Function(SentimentAnalysisFailure value)
+        sentimentAnalysisFailure,
+    required TResult Function(TopicModelingFailure value) topicModelingFailure,
+    required TResult Function(ReadingLevelAssessmentFailure value)
+        readingLevelAssessmentFailure,
+    required TResult Function(PersonalizationFailure value)
+        personalizationFailure,
     required TResult Function(DataQualityFailure value) dataQualityFailure,
   }) {
     return aiModelFailure(this);
@@ -2548,17 +2126,11 @@ class _$AIModelFailureImpl implements AIModelFailure {
     TResult? Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult? Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult? Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult? Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult? Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult? Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult? Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult? Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult? Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult? Function(RateLimitFailure value)? rateLimitFailure,
-    TResult? Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult? Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult? Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult? Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult? Function(PersonalizationFailure value)? personalizationFailure,
     TResult? Function(DataQualityFailure value)? dataQualityFailure,
   }) {
     return aiModelFailure?.call(this);
@@ -2583,17 +2155,11 @@ class _$AIModelFailureImpl implements AIModelFailure {
     TResult Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult Function(RateLimitFailure value)? rateLimitFailure,
-    TResult Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult Function(PersonalizationFailure value)? personalizationFailure,
     TResult Function(DataQualityFailure value)? dataQualityFailure,
     required TResult orElse(),
   }) {
@@ -2632,7 +2198,7 @@ abstract class _$$InsufficientDataFailureImplCopyWith<$Res>
       __$$InsufficientDataFailureImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String message, int minimumDataPoints, String? dataType});
+  $Res call({String message, int? minimumDataPoints, String? dataType});
 }
 
 /// @nodoc
@@ -2650,7 +2216,7 @@ class __$$InsufficientDataFailureImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? message = null,
-    Object? minimumDataPoints = null,
+    Object? minimumDataPoints = freezed,
     Object? dataType = freezed,
   }) {
     return _then(_$InsufficientDataFailureImpl(
@@ -2658,10 +2224,10 @@ class __$$InsufficientDataFailureImplCopyWithImpl<$Res>
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      minimumDataPoints: null == minimumDataPoints
+      minimumDataPoints: freezed == minimumDataPoints
           ? _value.minimumDataPoints
           : minimumDataPoints // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       dataType: freezed == dataType
           ? _value.dataType
           : dataType // ignore: cast_nullable_to_non_nullable
@@ -2674,12 +2240,12 @@ class __$$InsufficientDataFailureImplCopyWithImpl<$Res>
 
 class _$InsufficientDataFailureImpl implements InsufficientDataFailure {
   const _$InsufficientDataFailureImpl(
-      {required this.message, required this.minimumDataPoints, this.dataType});
+      {required this.message, this.minimumDataPoints, this.dataType});
 
   @override
   final String message;
   @override
-  final int minimumDataPoints;
+  final int? minimumDataPoints;
   @override
   final String? dataType;
 
@@ -2726,7 +2292,7 @@ class _$InsufficientDataFailureImpl implements InsufficientDataFailure {
             String message, String? modelName, String? operation)
         aiModelFailure,
     required TResult Function(
-            String message, int minimumDataPoints, String? dataType)
+            String message, int? minimumDataPoints, String? dataType)
         insufficientDataFailure,
     required TResult Function(
             String message, String? recommendationType, String? reason)
@@ -2742,38 +2308,21 @@ class _$InsufficientDataFailureImpl implements InsufficientDataFailure {
     required TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)
         comprehensionAssessmentFailure,
-    required TResult Function(
-            String message, String? bookId, String? nlpOperation)
+    required TResult Function(String message, String? operation, String? text)
         nlpProcessingFailure,
     required TResult Function(
-            String message, String? modelName, String? trainingData)
-        modelTrainingFailure,
+            String message, String? bookId, String? analysisType)
+        sentimentAnalysisFailure,
+    required TResult Function(String message, String? bookId, String? modelType)
+        topicModelingFailure,
     required TResult Function(
-            String message, String? userId, String? preferenceType)
-        preferenceUpdateFailure,
+            String message, String? bookId, String? assessmentMethod)
+        readingLevelAssessmentFailure,
     required TResult Function(
-            String message, String? insightType, String? context)
-        insightGenerationFailure,
-    required TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)
-        scheduleGenerationFailure,
+            String message, String? userId, String? personalizationType)
+        personalizationFailure,
     required TResult Function(
-            String message, String? userId, String? goalType, String? timeframe)
-        goalGenerationFailure,
-    required TResult Function(String message, String? userId,
-            String? challengeType, String? difficulty)
-        challengeGenerationFailure,
-    required TResult Function(
-            String message, String? reason, String? contentType)
-        contentModerationFailure,
-    required TResult Function(
-            String message, Duration cooldown, String? operation)
-        rateLimitFailure,
-    required TResult Function(
-            String message, String? modelName, String? alternative)
-        modelUnavailableFailure,
-    required TResult Function(
-            String message, String? dataType, String? qualityIssue)
+            String message, String? dataSource, String? qualityIssue)
         dataQualityFailure,
   }) {
     return insufficientDataFailure(message, minimumDataPoints, dataType);
@@ -2789,7 +2338,7 @@ class _$InsufficientDataFailureImpl implements InsufficientDataFailure {
     TResult? Function(String message)? authFailure,
     TResult? Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult? Function(String message, int minimumDataPoints, String? dataType)?
+    TResult? Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult? Function(
             String message, String? recommendationType, String? reason)?
@@ -2803,30 +2352,18 @@ class _$InsufficientDataFailureImpl implements InsufficientDataFailure {
     TResult? Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult? Function(String message, String? bookId, String? nlpOperation)?
+    TResult? Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult? Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult? Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult? Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult? Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult? Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult? Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult? Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult? Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult? Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult? Function(String message, String? dataType, String? qualityIssue)?
+    TResult? Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult? Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult? Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult? Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult? Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
   }) {
     return insufficientDataFailure?.call(message, minimumDataPoints, dataType);
@@ -2842,7 +2379,7 @@ class _$InsufficientDataFailureImpl implements InsufficientDataFailure {
     TResult Function(String message)? authFailure,
     TResult Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult Function(String message, int minimumDataPoints, String? dataType)?
+    TResult Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult Function(
             String message, String? recommendationType, String? reason)?
@@ -2856,30 +2393,18 @@ class _$InsufficientDataFailureImpl implements InsufficientDataFailure {
     TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult Function(String message, String? bookId, String? nlpOperation)?
+    TResult Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult Function(String message, String? dataType, String? qualityIssue)?
+    TResult Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
     required TResult orElse(),
   }) {
@@ -2910,22 +2435,13 @@ class _$InsufficientDataFailureImpl implements InsufficientDataFailure {
     required TResult Function(ComprehensionAssessmentFailure value)
         comprehensionAssessmentFailure,
     required TResult Function(NLPProcessingFailure value) nlpProcessingFailure,
-    required TResult Function(ModelTrainingFailure value) modelTrainingFailure,
-    required TResult Function(PreferenceUpdateFailure value)
-        preferenceUpdateFailure,
-    required TResult Function(InsightGenerationFailure value)
-        insightGenerationFailure,
-    required TResult Function(ScheduleGenerationFailure value)
-        scheduleGenerationFailure,
-    required TResult Function(GoalGenerationFailure value)
-        goalGenerationFailure,
-    required TResult Function(ChallengeGenerationFailure value)
-        challengeGenerationFailure,
-    required TResult Function(ContentModerationFailure value)
-        contentModerationFailure,
-    required TResult Function(RateLimitFailure value) rateLimitFailure,
-    required TResult Function(ModelUnavailableFailure value)
-        modelUnavailableFailure,
+    required TResult Function(SentimentAnalysisFailure value)
+        sentimentAnalysisFailure,
+    required TResult Function(TopicModelingFailure value) topicModelingFailure,
+    required TResult Function(ReadingLevelAssessmentFailure value)
+        readingLevelAssessmentFailure,
+    required TResult Function(PersonalizationFailure value)
+        personalizationFailure,
     required TResult Function(DataQualityFailure value) dataQualityFailure,
   }) {
     return insufficientDataFailure(this);
@@ -2950,17 +2466,11 @@ class _$InsufficientDataFailureImpl implements InsufficientDataFailure {
     TResult? Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult? Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult? Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult? Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult? Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult? Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult? Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult? Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult? Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult? Function(RateLimitFailure value)? rateLimitFailure,
-    TResult? Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult? Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult? Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult? Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult? Function(PersonalizationFailure value)? personalizationFailure,
     TResult? Function(DataQualityFailure value)? dataQualityFailure,
   }) {
     return insufficientDataFailure?.call(this);
@@ -2985,17 +2495,11 @@ class _$InsufficientDataFailureImpl implements InsufficientDataFailure {
     TResult Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult Function(RateLimitFailure value)? rateLimitFailure,
-    TResult Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult Function(PersonalizationFailure value)? personalizationFailure,
     TResult Function(DataQualityFailure value)? dataQualityFailure,
     required TResult orElse(),
   }) {
@@ -3009,12 +2513,12 @@ class _$InsufficientDataFailureImpl implements InsufficientDataFailure {
 abstract class InsufficientDataFailure implements Failure {
   const factory InsufficientDataFailure(
       {required final String message,
-      required final int minimumDataPoints,
+      final int? minimumDataPoints,
       final String? dataType}) = _$InsufficientDataFailureImpl;
 
   @override
   String get message;
-  int get minimumDataPoints;
+  int? get minimumDataPoints;
   String? get dataType;
 
   /// Create a copy of Failure
@@ -3129,7 +2633,7 @@ class _$RecommendationGenerationFailureImpl
             String message, String? modelName, String? operation)
         aiModelFailure,
     required TResult Function(
-            String message, int minimumDataPoints, String? dataType)
+            String message, int? minimumDataPoints, String? dataType)
         insufficientDataFailure,
     required TResult Function(
             String message, String? recommendationType, String? reason)
@@ -3145,38 +2649,21 @@ class _$RecommendationGenerationFailureImpl
     required TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)
         comprehensionAssessmentFailure,
-    required TResult Function(
-            String message, String? bookId, String? nlpOperation)
+    required TResult Function(String message, String? operation, String? text)
         nlpProcessingFailure,
     required TResult Function(
-            String message, String? modelName, String? trainingData)
-        modelTrainingFailure,
+            String message, String? bookId, String? analysisType)
+        sentimentAnalysisFailure,
+    required TResult Function(String message, String? bookId, String? modelType)
+        topicModelingFailure,
     required TResult Function(
-            String message, String? userId, String? preferenceType)
-        preferenceUpdateFailure,
+            String message, String? bookId, String? assessmentMethod)
+        readingLevelAssessmentFailure,
     required TResult Function(
-            String message, String? insightType, String? context)
-        insightGenerationFailure,
-    required TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)
-        scheduleGenerationFailure,
+            String message, String? userId, String? personalizationType)
+        personalizationFailure,
     required TResult Function(
-            String message, String? userId, String? goalType, String? timeframe)
-        goalGenerationFailure,
-    required TResult Function(String message, String? userId,
-            String? challengeType, String? difficulty)
-        challengeGenerationFailure,
-    required TResult Function(
-            String message, String? reason, String? contentType)
-        contentModerationFailure,
-    required TResult Function(
-            String message, Duration cooldown, String? operation)
-        rateLimitFailure,
-    required TResult Function(
-            String message, String? modelName, String? alternative)
-        modelUnavailableFailure,
-    required TResult Function(
-            String message, String? dataType, String? qualityIssue)
+            String message, String? dataSource, String? qualityIssue)
         dataQualityFailure,
   }) {
     return recommendationGenerationFailure(message, recommendationType, reason);
@@ -3192,7 +2679,7 @@ class _$RecommendationGenerationFailureImpl
     TResult? Function(String message)? authFailure,
     TResult? Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult? Function(String message, int minimumDataPoints, String? dataType)?
+    TResult? Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult? Function(
             String message, String? recommendationType, String? reason)?
@@ -3206,30 +2693,18 @@ class _$RecommendationGenerationFailureImpl
     TResult? Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult? Function(String message, String? bookId, String? nlpOperation)?
+    TResult? Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult? Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult? Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult? Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult? Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult? Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult? Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult? Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult? Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult? Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult? Function(String message, String? dataType, String? qualityIssue)?
+    TResult? Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult? Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult? Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult? Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult? Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
   }) {
     return recommendationGenerationFailure?.call(
@@ -3246,7 +2721,7 @@ class _$RecommendationGenerationFailureImpl
     TResult Function(String message)? authFailure,
     TResult Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult Function(String message, int minimumDataPoints, String? dataType)?
+    TResult Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult Function(
             String message, String? recommendationType, String? reason)?
@@ -3260,30 +2735,18 @@ class _$RecommendationGenerationFailureImpl
     TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult Function(String message, String? bookId, String? nlpOperation)?
+    TResult Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult Function(String message, String? dataType, String? qualityIssue)?
+    TResult Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
     required TResult orElse(),
   }) {
@@ -3315,22 +2778,13 @@ class _$RecommendationGenerationFailureImpl
     required TResult Function(ComprehensionAssessmentFailure value)
         comprehensionAssessmentFailure,
     required TResult Function(NLPProcessingFailure value) nlpProcessingFailure,
-    required TResult Function(ModelTrainingFailure value) modelTrainingFailure,
-    required TResult Function(PreferenceUpdateFailure value)
-        preferenceUpdateFailure,
-    required TResult Function(InsightGenerationFailure value)
-        insightGenerationFailure,
-    required TResult Function(ScheduleGenerationFailure value)
-        scheduleGenerationFailure,
-    required TResult Function(GoalGenerationFailure value)
-        goalGenerationFailure,
-    required TResult Function(ChallengeGenerationFailure value)
-        challengeGenerationFailure,
-    required TResult Function(ContentModerationFailure value)
-        contentModerationFailure,
-    required TResult Function(RateLimitFailure value) rateLimitFailure,
-    required TResult Function(ModelUnavailableFailure value)
-        modelUnavailableFailure,
+    required TResult Function(SentimentAnalysisFailure value)
+        sentimentAnalysisFailure,
+    required TResult Function(TopicModelingFailure value) topicModelingFailure,
+    required TResult Function(ReadingLevelAssessmentFailure value)
+        readingLevelAssessmentFailure,
+    required TResult Function(PersonalizationFailure value)
+        personalizationFailure,
     required TResult Function(DataQualityFailure value) dataQualityFailure,
   }) {
     return recommendationGenerationFailure(this);
@@ -3355,17 +2809,11 @@ class _$RecommendationGenerationFailureImpl
     TResult? Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult? Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult? Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult? Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult? Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult? Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult? Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult? Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult? Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult? Function(RateLimitFailure value)? rateLimitFailure,
-    TResult? Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult? Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult? Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult? Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult? Function(PersonalizationFailure value)? personalizationFailure,
     TResult? Function(DataQualityFailure value)? dataQualityFailure,
   }) {
     return recommendationGenerationFailure?.call(this);
@@ -3390,17 +2838,11 @@ class _$RecommendationGenerationFailureImpl
     TResult Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult Function(RateLimitFailure value)? rateLimitFailure,
-    TResult Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult Function(PersonalizationFailure value)? personalizationFailure,
     TResult Function(DataQualityFailure value)? dataQualityFailure,
     required TResult orElse(),
   }) {
@@ -3532,7 +2974,7 @@ class _$ContentAnalysisFailureImpl implements ContentAnalysisFailure {
             String message, String? modelName, String? operation)
         aiModelFailure,
     required TResult Function(
-            String message, int minimumDataPoints, String? dataType)
+            String message, int? minimumDataPoints, String? dataType)
         insufficientDataFailure,
     required TResult Function(
             String message, String? recommendationType, String? reason)
@@ -3548,38 +2990,21 @@ class _$ContentAnalysisFailureImpl implements ContentAnalysisFailure {
     required TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)
         comprehensionAssessmentFailure,
-    required TResult Function(
-            String message, String? bookId, String? nlpOperation)
+    required TResult Function(String message, String? operation, String? text)
         nlpProcessingFailure,
     required TResult Function(
-            String message, String? modelName, String? trainingData)
-        modelTrainingFailure,
+            String message, String? bookId, String? analysisType)
+        sentimentAnalysisFailure,
+    required TResult Function(String message, String? bookId, String? modelType)
+        topicModelingFailure,
     required TResult Function(
-            String message, String? userId, String? preferenceType)
-        preferenceUpdateFailure,
+            String message, String? bookId, String? assessmentMethod)
+        readingLevelAssessmentFailure,
     required TResult Function(
-            String message, String? insightType, String? context)
-        insightGenerationFailure,
-    required TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)
-        scheduleGenerationFailure,
+            String message, String? userId, String? personalizationType)
+        personalizationFailure,
     required TResult Function(
-            String message, String? userId, String? goalType, String? timeframe)
-        goalGenerationFailure,
-    required TResult Function(String message, String? userId,
-            String? challengeType, String? difficulty)
-        challengeGenerationFailure,
-    required TResult Function(
-            String message, String? reason, String? contentType)
-        contentModerationFailure,
-    required TResult Function(
-            String message, Duration cooldown, String? operation)
-        rateLimitFailure,
-    required TResult Function(
-            String message, String? modelName, String? alternative)
-        modelUnavailableFailure,
-    required TResult Function(
-            String message, String? dataType, String? qualityIssue)
+            String message, String? dataSource, String? qualityIssue)
         dataQualityFailure,
   }) {
     return contentAnalysisFailure(message, analysisType, bookId);
@@ -3595,7 +3020,7 @@ class _$ContentAnalysisFailureImpl implements ContentAnalysisFailure {
     TResult? Function(String message)? authFailure,
     TResult? Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult? Function(String message, int minimumDataPoints, String? dataType)?
+    TResult? Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult? Function(
             String message, String? recommendationType, String? reason)?
@@ -3609,30 +3034,18 @@ class _$ContentAnalysisFailureImpl implements ContentAnalysisFailure {
     TResult? Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult? Function(String message, String? bookId, String? nlpOperation)?
+    TResult? Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult? Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult? Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult? Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult? Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult? Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult? Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult? Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult? Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult? Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult? Function(String message, String? dataType, String? qualityIssue)?
+    TResult? Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult? Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult? Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult? Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult? Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
   }) {
     return contentAnalysisFailure?.call(message, analysisType, bookId);
@@ -3648,7 +3061,7 @@ class _$ContentAnalysisFailureImpl implements ContentAnalysisFailure {
     TResult Function(String message)? authFailure,
     TResult Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult Function(String message, int minimumDataPoints, String? dataType)?
+    TResult Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult Function(
             String message, String? recommendationType, String? reason)?
@@ -3662,30 +3075,18 @@ class _$ContentAnalysisFailureImpl implements ContentAnalysisFailure {
     TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult Function(String message, String? bookId, String? nlpOperation)?
+    TResult Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult Function(String message, String? dataType, String? qualityIssue)?
+    TResult Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
     required TResult orElse(),
   }) {
@@ -3716,22 +3117,13 @@ class _$ContentAnalysisFailureImpl implements ContentAnalysisFailure {
     required TResult Function(ComprehensionAssessmentFailure value)
         comprehensionAssessmentFailure,
     required TResult Function(NLPProcessingFailure value) nlpProcessingFailure,
-    required TResult Function(ModelTrainingFailure value) modelTrainingFailure,
-    required TResult Function(PreferenceUpdateFailure value)
-        preferenceUpdateFailure,
-    required TResult Function(InsightGenerationFailure value)
-        insightGenerationFailure,
-    required TResult Function(ScheduleGenerationFailure value)
-        scheduleGenerationFailure,
-    required TResult Function(GoalGenerationFailure value)
-        goalGenerationFailure,
-    required TResult Function(ChallengeGenerationFailure value)
-        challengeGenerationFailure,
-    required TResult Function(ContentModerationFailure value)
-        contentModerationFailure,
-    required TResult Function(RateLimitFailure value) rateLimitFailure,
-    required TResult Function(ModelUnavailableFailure value)
-        modelUnavailableFailure,
+    required TResult Function(SentimentAnalysisFailure value)
+        sentimentAnalysisFailure,
+    required TResult Function(TopicModelingFailure value) topicModelingFailure,
+    required TResult Function(ReadingLevelAssessmentFailure value)
+        readingLevelAssessmentFailure,
+    required TResult Function(PersonalizationFailure value)
+        personalizationFailure,
     required TResult Function(DataQualityFailure value) dataQualityFailure,
   }) {
     return contentAnalysisFailure(this);
@@ -3756,17 +3148,11 @@ class _$ContentAnalysisFailureImpl implements ContentAnalysisFailure {
     TResult? Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult? Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult? Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult? Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult? Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult? Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult? Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult? Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult? Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult? Function(RateLimitFailure value)? rateLimitFailure,
-    TResult? Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult? Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult? Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult? Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult? Function(PersonalizationFailure value)? personalizationFailure,
     TResult? Function(DataQualityFailure value)? dataQualityFailure,
   }) {
     return contentAnalysisFailure?.call(this);
@@ -3791,17 +3177,11 @@ class _$ContentAnalysisFailureImpl implements ContentAnalysisFailure {
     TResult Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult Function(RateLimitFailure value)? rateLimitFailure,
-    TResult Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult Function(PersonalizationFailure value)? personalizationFailure,
     TResult Function(DataQualityFailure value)? dataQualityFailure,
     required TResult orElse(),
   }) {
@@ -3932,7 +3312,7 @@ class _$DifficultyAssessmentFailureImpl implements DifficultyAssessmentFailure {
             String message, String? modelName, String? operation)
         aiModelFailure,
     required TResult Function(
-            String message, int minimumDataPoints, String? dataType)
+            String message, int? minimumDataPoints, String? dataType)
         insufficientDataFailure,
     required TResult Function(
             String message, String? recommendationType, String? reason)
@@ -3948,38 +3328,21 @@ class _$DifficultyAssessmentFailureImpl implements DifficultyAssessmentFailure {
     required TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)
         comprehensionAssessmentFailure,
-    required TResult Function(
-            String message, String? bookId, String? nlpOperation)
+    required TResult Function(String message, String? operation, String? text)
         nlpProcessingFailure,
     required TResult Function(
-            String message, String? modelName, String? trainingData)
-        modelTrainingFailure,
+            String message, String? bookId, String? analysisType)
+        sentimentAnalysisFailure,
+    required TResult Function(String message, String? bookId, String? modelType)
+        topicModelingFailure,
     required TResult Function(
-            String message, String? userId, String? preferenceType)
-        preferenceUpdateFailure,
+            String message, String? bookId, String? assessmentMethod)
+        readingLevelAssessmentFailure,
     required TResult Function(
-            String message, String? insightType, String? context)
-        insightGenerationFailure,
-    required TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)
-        scheduleGenerationFailure,
+            String message, String? userId, String? personalizationType)
+        personalizationFailure,
     required TResult Function(
-            String message, String? userId, String? goalType, String? timeframe)
-        goalGenerationFailure,
-    required TResult Function(String message, String? userId,
-            String? challengeType, String? difficulty)
-        challengeGenerationFailure,
-    required TResult Function(
-            String message, String? reason, String? contentType)
-        contentModerationFailure,
-    required TResult Function(
-            String message, Duration cooldown, String? operation)
-        rateLimitFailure,
-    required TResult Function(
-            String message, String? modelName, String? alternative)
-        modelUnavailableFailure,
-    required TResult Function(
-            String message, String? dataType, String? qualityIssue)
+            String message, String? dataSource, String? qualityIssue)
         dataQualityFailure,
   }) {
     return difficultyAssessmentFailure(message, bookId, assessmentType);
@@ -3995,7 +3358,7 @@ class _$DifficultyAssessmentFailureImpl implements DifficultyAssessmentFailure {
     TResult? Function(String message)? authFailure,
     TResult? Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult? Function(String message, int minimumDataPoints, String? dataType)?
+    TResult? Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult? Function(
             String message, String? recommendationType, String? reason)?
@@ -4009,30 +3372,18 @@ class _$DifficultyAssessmentFailureImpl implements DifficultyAssessmentFailure {
     TResult? Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult? Function(String message, String? bookId, String? nlpOperation)?
+    TResult? Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult? Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult? Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult? Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult? Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult? Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult? Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult? Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult? Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult? Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult? Function(String message, String? dataType, String? qualityIssue)?
+    TResult? Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult? Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult? Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult? Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult? Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
   }) {
     return difficultyAssessmentFailure?.call(message, bookId, assessmentType);
@@ -4048,7 +3399,7 @@ class _$DifficultyAssessmentFailureImpl implements DifficultyAssessmentFailure {
     TResult Function(String message)? authFailure,
     TResult Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult Function(String message, int minimumDataPoints, String? dataType)?
+    TResult Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult Function(
             String message, String? recommendationType, String? reason)?
@@ -4062,30 +3413,18 @@ class _$DifficultyAssessmentFailureImpl implements DifficultyAssessmentFailure {
     TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult Function(String message, String? bookId, String? nlpOperation)?
+    TResult Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult Function(String message, String? dataType, String? qualityIssue)?
+    TResult Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
     required TResult orElse(),
   }) {
@@ -4116,22 +3455,13 @@ class _$DifficultyAssessmentFailureImpl implements DifficultyAssessmentFailure {
     required TResult Function(ComprehensionAssessmentFailure value)
         comprehensionAssessmentFailure,
     required TResult Function(NLPProcessingFailure value) nlpProcessingFailure,
-    required TResult Function(ModelTrainingFailure value) modelTrainingFailure,
-    required TResult Function(PreferenceUpdateFailure value)
-        preferenceUpdateFailure,
-    required TResult Function(InsightGenerationFailure value)
-        insightGenerationFailure,
-    required TResult Function(ScheduleGenerationFailure value)
-        scheduleGenerationFailure,
-    required TResult Function(GoalGenerationFailure value)
-        goalGenerationFailure,
-    required TResult Function(ChallengeGenerationFailure value)
-        challengeGenerationFailure,
-    required TResult Function(ContentModerationFailure value)
-        contentModerationFailure,
-    required TResult Function(RateLimitFailure value) rateLimitFailure,
-    required TResult Function(ModelUnavailableFailure value)
-        modelUnavailableFailure,
+    required TResult Function(SentimentAnalysisFailure value)
+        sentimentAnalysisFailure,
+    required TResult Function(TopicModelingFailure value) topicModelingFailure,
+    required TResult Function(ReadingLevelAssessmentFailure value)
+        readingLevelAssessmentFailure,
+    required TResult Function(PersonalizationFailure value)
+        personalizationFailure,
     required TResult Function(DataQualityFailure value) dataQualityFailure,
   }) {
     return difficultyAssessmentFailure(this);
@@ -4156,17 +3486,11 @@ class _$DifficultyAssessmentFailureImpl implements DifficultyAssessmentFailure {
     TResult? Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult? Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult? Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult? Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult? Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult? Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult? Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult? Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult? Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult? Function(RateLimitFailure value)? rateLimitFailure,
-    TResult? Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult? Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult? Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult? Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult? Function(PersonalizationFailure value)? personalizationFailure,
     TResult? Function(DataQualityFailure value)? dataQualityFailure,
   }) {
     return difficultyAssessmentFailure?.call(this);
@@ -4191,17 +3515,11 @@ class _$DifficultyAssessmentFailureImpl implements DifficultyAssessmentFailure {
     TResult Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult Function(RateLimitFailure value)? rateLimitFailure,
-    TResult Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult Function(PersonalizationFailure value)? personalizationFailure,
     TResult Function(DataQualityFailure value)? dataQualityFailure,
     required TResult orElse(),
   }) {
@@ -4330,7 +3648,7 @@ class _$LearningPathFailureImpl implements LearningPathFailure {
             String message, String? modelName, String? operation)
         aiModelFailure,
     required TResult Function(
-            String message, int minimumDataPoints, String? dataType)
+            String message, int? minimumDataPoints, String? dataType)
         insufficientDataFailure,
     required TResult Function(
             String message, String? recommendationType, String? reason)
@@ -4346,38 +3664,21 @@ class _$LearningPathFailureImpl implements LearningPathFailure {
     required TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)
         comprehensionAssessmentFailure,
-    required TResult Function(
-            String message, String? bookId, String? nlpOperation)
+    required TResult Function(String message, String? operation, String? text)
         nlpProcessingFailure,
     required TResult Function(
-            String message, String? modelName, String? trainingData)
-        modelTrainingFailure,
+            String message, String? bookId, String? analysisType)
+        sentimentAnalysisFailure,
+    required TResult Function(String message, String? bookId, String? modelType)
+        topicModelingFailure,
     required TResult Function(
-            String message, String? userId, String? preferenceType)
-        preferenceUpdateFailure,
+            String message, String? bookId, String? assessmentMethod)
+        readingLevelAssessmentFailure,
     required TResult Function(
-            String message, String? insightType, String? context)
-        insightGenerationFailure,
-    required TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)
-        scheduleGenerationFailure,
+            String message, String? userId, String? personalizationType)
+        personalizationFailure,
     required TResult Function(
-            String message, String? userId, String? goalType, String? timeframe)
-        goalGenerationFailure,
-    required TResult Function(String message, String? userId,
-            String? challengeType, String? difficulty)
-        challengeGenerationFailure,
-    required TResult Function(
-            String message, String? reason, String? contentType)
-        contentModerationFailure,
-    required TResult Function(
-            String message, Duration cooldown, String? operation)
-        rateLimitFailure,
-    required TResult Function(
-            String message, String? modelName, String? alternative)
-        modelUnavailableFailure,
-    required TResult Function(
-            String message, String? dataType, String? qualityIssue)
+            String message, String? dataSource, String? qualityIssue)
         dataQualityFailure,
   }) {
     return learningPathFailure(message, pathId, operation);
@@ -4393,7 +3694,7 @@ class _$LearningPathFailureImpl implements LearningPathFailure {
     TResult? Function(String message)? authFailure,
     TResult? Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult? Function(String message, int minimumDataPoints, String? dataType)?
+    TResult? Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult? Function(
             String message, String? recommendationType, String? reason)?
@@ -4407,30 +3708,18 @@ class _$LearningPathFailureImpl implements LearningPathFailure {
     TResult? Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult? Function(String message, String? bookId, String? nlpOperation)?
+    TResult? Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult? Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult? Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult? Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult? Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult? Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult? Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult? Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult? Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult? Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult? Function(String message, String? dataType, String? qualityIssue)?
+    TResult? Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult? Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult? Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult? Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult? Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
   }) {
     return learningPathFailure?.call(message, pathId, operation);
@@ -4446,7 +3735,7 @@ class _$LearningPathFailureImpl implements LearningPathFailure {
     TResult Function(String message)? authFailure,
     TResult Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult Function(String message, int minimumDataPoints, String? dataType)?
+    TResult Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult Function(
             String message, String? recommendationType, String? reason)?
@@ -4460,30 +3749,18 @@ class _$LearningPathFailureImpl implements LearningPathFailure {
     TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult Function(String message, String? bookId, String? nlpOperation)?
+    TResult Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult Function(String message, String? dataType, String? qualityIssue)?
+    TResult Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
     required TResult orElse(),
   }) {
@@ -4514,22 +3791,13 @@ class _$LearningPathFailureImpl implements LearningPathFailure {
     required TResult Function(ComprehensionAssessmentFailure value)
         comprehensionAssessmentFailure,
     required TResult Function(NLPProcessingFailure value) nlpProcessingFailure,
-    required TResult Function(ModelTrainingFailure value) modelTrainingFailure,
-    required TResult Function(PreferenceUpdateFailure value)
-        preferenceUpdateFailure,
-    required TResult Function(InsightGenerationFailure value)
-        insightGenerationFailure,
-    required TResult Function(ScheduleGenerationFailure value)
-        scheduleGenerationFailure,
-    required TResult Function(GoalGenerationFailure value)
-        goalGenerationFailure,
-    required TResult Function(ChallengeGenerationFailure value)
-        challengeGenerationFailure,
-    required TResult Function(ContentModerationFailure value)
-        contentModerationFailure,
-    required TResult Function(RateLimitFailure value) rateLimitFailure,
-    required TResult Function(ModelUnavailableFailure value)
-        modelUnavailableFailure,
+    required TResult Function(SentimentAnalysisFailure value)
+        sentimentAnalysisFailure,
+    required TResult Function(TopicModelingFailure value) topicModelingFailure,
+    required TResult Function(ReadingLevelAssessmentFailure value)
+        readingLevelAssessmentFailure,
+    required TResult Function(PersonalizationFailure value)
+        personalizationFailure,
     required TResult Function(DataQualityFailure value) dataQualityFailure,
   }) {
     return learningPathFailure(this);
@@ -4554,17 +3822,11 @@ class _$LearningPathFailureImpl implements LearningPathFailure {
     TResult? Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult? Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult? Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult? Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult? Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult? Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult? Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult? Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult? Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult? Function(RateLimitFailure value)? rateLimitFailure,
-    TResult? Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult? Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult? Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult? Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult? Function(PersonalizationFailure value)? personalizationFailure,
     TResult? Function(DataQualityFailure value)? dataQualityFailure,
   }) {
     return learningPathFailure?.call(this);
@@ -4589,17 +3851,11 @@ class _$LearningPathFailureImpl implements LearningPathFailure {
     TResult Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult Function(RateLimitFailure value)? rateLimitFailure,
-    TResult Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult Function(PersonalizationFailure value)? personalizationFailure,
     TResult Function(DataQualityFailure value)? dataQualityFailure,
     required TResult orElse(),
   }) {
@@ -4742,7 +3998,7 @@ class _$ComprehensionAssessmentFailureImpl
             String message, String? modelName, String? operation)
         aiModelFailure,
     required TResult Function(
-            String message, int minimumDataPoints, String? dataType)
+            String message, int? minimumDataPoints, String? dataType)
         insufficientDataFailure,
     required TResult Function(
             String message, String? recommendationType, String? reason)
@@ -4758,38 +4014,21 @@ class _$ComprehensionAssessmentFailureImpl
     required TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)
         comprehensionAssessmentFailure,
-    required TResult Function(
-            String message, String? bookId, String? nlpOperation)
+    required TResult Function(String message, String? operation, String? text)
         nlpProcessingFailure,
     required TResult Function(
-            String message, String? modelName, String? trainingData)
-        modelTrainingFailure,
+            String message, String? bookId, String? analysisType)
+        sentimentAnalysisFailure,
+    required TResult Function(String message, String? bookId, String? modelType)
+        topicModelingFailure,
     required TResult Function(
-            String message, String? userId, String? preferenceType)
-        preferenceUpdateFailure,
+            String message, String? bookId, String? assessmentMethod)
+        readingLevelAssessmentFailure,
     required TResult Function(
-            String message, String? insightType, String? context)
-        insightGenerationFailure,
-    required TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)
-        scheduleGenerationFailure,
+            String message, String? userId, String? personalizationType)
+        personalizationFailure,
     required TResult Function(
-            String message, String? userId, String? goalType, String? timeframe)
-        goalGenerationFailure,
-    required TResult Function(String message, String? userId,
-            String? challengeType, String? difficulty)
-        challengeGenerationFailure,
-    required TResult Function(
-            String message, String? reason, String? contentType)
-        contentModerationFailure,
-    required TResult Function(
-            String message, Duration cooldown, String? operation)
-        rateLimitFailure,
-    required TResult Function(
-            String message, String? modelName, String? alternative)
-        modelUnavailableFailure,
-    required TResult Function(
-            String message, String? dataType, String? qualityIssue)
+            String message, String? dataSource, String? qualityIssue)
         dataQualityFailure,
   }) {
     return comprehensionAssessmentFailure(
@@ -4806,7 +4045,7 @@ class _$ComprehensionAssessmentFailureImpl
     TResult? Function(String message)? authFailure,
     TResult? Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult? Function(String message, int minimumDataPoints, String? dataType)?
+    TResult? Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult? Function(
             String message, String? recommendationType, String? reason)?
@@ -4820,30 +4059,18 @@ class _$ComprehensionAssessmentFailureImpl
     TResult? Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult? Function(String message, String? bookId, String? nlpOperation)?
+    TResult? Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult? Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult? Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult? Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult? Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult? Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult? Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult? Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult? Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult? Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult? Function(String message, String? dataType, String? qualityIssue)?
+    TResult? Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult? Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult? Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult? Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult? Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
   }) {
     return comprehensionAssessmentFailure?.call(
@@ -4860,7 +4087,7 @@ class _$ComprehensionAssessmentFailureImpl
     TResult Function(String message)? authFailure,
     TResult Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult Function(String message, int minimumDataPoints, String? dataType)?
+    TResult Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult Function(
             String message, String? recommendationType, String? reason)?
@@ -4874,30 +4101,18 @@ class _$ComprehensionAssessmentFailureImpl
     TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult Function(String message, String? bookId, String? nlpOperation)?
+    TResult Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult Function(String message, String? dataType, String? qualityIssue)?
+    TResult Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
     required TResult orElse(),
   }) {
@@ -4929,22 +4144,13 @@ class _$ComprehensionAssessmentFailureImpl
     required TResult Function(ComprehensionAssessmentFailure value)
         comprehensionAssessmentFailure,
     required TResult Function(NLPProcessingFailure value) nlpProcessingFailure,
-    required TResult Function(ModelTrainingFailure value) modelTrainingFailure,
-    required TResult Function(PreferenceUpdateFailure value)
-        preferenceUpdateFailure,
-    required TResult Function(InsightGenerationFailure value)
-        insightGenerationFailure,
-    required TResult Function(ScheduleGenerationFailure value)
-        scheduleGenerationFailure,
-    required TResult Function(GoalGenerationFailure value)
-        goalGenerationFailure,
-    required TResult Function(ChallengeGenerationFailure value)
-        challengeGenerationFailure,
-    required TResult Function(ContentModerationFailure value)
-        contentModerationFailure,
-    required TResult Function(RateLimitFailure value) rateLimitFailure,
-    required TResult Function(ModelUnavailableFailure value)
-        modelUnavailableFailure,
+    required TResult Function(SentimentAnalysisFailure value)
+        sentimentAnalysisFailure,
+    required TResult Function(TopicModelingFailure value) topicModelingFailure,
+    required TResult Function(ReadingLevelAssessmentFailure value)
+        readingLevelAssessmentFailure,
+    required TResult Function(PersonalizationFailure value)
+        personalizationFailure,
     required TResult Function(DataQualityFailure value) dataQualityFailure,
   }) {
     return comprehensionAssessmentFailure(this);
@@ -4969,17 +4175,11 @@ class _$ComprehensionAssessmentFailureImpl
     TResult? Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult? Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult? Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult? Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult? Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult? Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult? Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult? Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult? Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult? Function(RateLimitFailure value)? rateLimitFailure,
-    TResult? Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult? Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult? Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult? Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult? Function(PersonalizationFailure value)? personalizationFailure,
     TResult? Function(DataQualityFailure value)? dataQualityFailure,
   }) {
     return comprehensionAssessmentFailure?.call(this);
@@ -5004,17 +4204,11 @@ class _$ComprehensionAssessmentFailureImpl
     TResult Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult Function(RateLimitFailure value)? rateLimitFailure,
-    TResult Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult Function(PersonalizationFailure value)? personalizationFailure,
     TResult Function(DataQualityFailure value)? dataQualityFailure,
     required TResult orElse(),
   }) {
@@ -5055,7 +4249,7 @@ abstract class _$$NLPProcessingFailureImplCopyWith<$Res>
       __$$NLPProcessingFailureImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String message, String? bookId, String? nlpOperation});
+  $Res call({String message, String? operation, String? text});
 }
 
 /// @nodoc
@@ -5072,21 +4266,21 @@ class __$$NLPProcessingFailureImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? message = null,
-    Object? bookId = freezed,
-    Object? nlpOperation = freezed,
+    Object? operation = freezed,
+    Object? text = freezed,
   }) {
     return _then(_$NLPProcessingFailureImpl(
       message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      bookId: freezed == bookId
-          ? _value.bookId
-          : bookId // ignore: cast_nullable_to_non_nullable
+      operation: freezed == operation
+          ? _value.operation
+          : operation // ignore: cast_nullable_to_non_nullable
               as String?,
-      nlpOperation: freezed == nlpOperation
-          ? _value.nlpOperation
-          : nlpOperation // ignore: cast_nullable_to_non_nullable
+      text: freezed == text
+          ? _value.text
+          : text // ignore: cast_nullable_to_non_nullable
               as String?,
     ));
   }
@@ -5096,18 +4290,18 @@ class __$$NLPProcessingFailureImplCopyWithImpl<$Res>
 
 class _$NLPProcessingFailureImpl implements NLPProcessingFailure {
   const _$NLPProcessingFailureImpl(
-      {required this.message, this.bookId, this.nlpOperation});
+      {required this.message, this.operation, this.text});
 
   @override
   final String message;
   @override
-  final String? bookId;
+  final String? operation;
   @override
-  final String? nlpOperation;
+  final String? text;
 
   @override
   String toString() {
-    return 'Failure.nlpProcessingFailure(message: $message, bookId: $bookId, nlpOperation: $nlpOperation)';
+    return 'Failure.nlpProcessingFailure(message: $message, operation: $operation, text: $text)';
   }
 
   @override
@@ -5116,13 +4310,13 @@ class _$NLPProcessingFailureImpl implements NLPProcessingFailure {
         (other.runtimeType == runtimeType &&
             other is _$NLPProcessingFailureImpl &&
             (identical(other.message, message) || other.message == message) &&
-            (identical(other.bookId, bookId) || other.bookId == bookId) &&
-            (identical(other.nlpOperation, nlpOperation) ||
-                other.nlpOperation == nlpOperation));
+            (identical(other.operation, operation) ||
+                other.operation == operation) &&
+            (identical(other.text, text) || other.text == text));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, message, bookId, nlpOperation);
+  int get hashCode => Object.hash(runtimeType, message, operation, text);
 
   /// Create a copy of Failure
   /// with the given fields replaced by the non-null parameter values.
@@ -5147,7 +4341,7 @@ class _$NLPProcessingFailureImpl implements NLPProcessingFailure {
             String message, String? modelName, String? operation)
         aiModelFailure,
     required TResult Function(
-            String message, int minimumDataPoints, String? dataType)
+            String message, int? minimumDataPoints, String? dataType)
         insufficientDataFailure,
     required TResult Function(
             String message, String? recommendationType, String? reason)
@@ -5163,41 +4357,24 @@ class _$NLPProcessingFailureImpl implements NLPProcessingFailure {
     required TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)
         comprehensionAssessmentFailure,
-    required TResult Function(
-            String message, String? bookId, String? nlpOperation)
+    required TResult Function(String message, String? operation, String? text)
         nlpProcessingFailure,
     required TResult Function(
-            String message, String? modelName, String? trainingData)
-        modelTrainingFailure,
+            String message, String? bookId, String? analysisType)
+        sentimentAnalysisFailure,
+    required TResult Function(String message, String? bookId, String? modelType)
+        topicModelingFailure,
     required TResult Function(
-            String message, String? userId, String? preferenceType)
-        preferenceUpdateFailure,
+            String message, String? bookId, String? assessmentMethod)
+        readingLevelAssessmentFailure,
     required TResult Function(
-            String message, String? insightType, String? context)
-        insightGenerationFailure,
-    required TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)
-        scheduleGenerationFailure,
+            String message, String? userId, String? personalizationType)
+        personalizationFailure,
     required TResult Function(
-            String message, String? userId, String? goalType, String? timeframe)
-        goalGenerationFailure,
-    required TResult Function(String message, String? userId,
-            String? challengeType, String? difficulty)
-        challengeGenerationFailure,
-    required TResult Function(
-            String message, String? reason, String? contentType)
-        contentModerationFailure,
-    required TResult Function(
-            String message, Duration cooldown, String? operation)
-        rateLimitFailure,
-    required TResult Function(
-            String message, String? modelName, String? alternative)
-        modelUnavailableFailure,
-    required TResult Function(
-            String message, String? dataType, String? qualityIssue)
+            String message, String? dataSource, String? qualityIssue)
         dataQualityFailure,
   }) {
-    return nlpProcessingFailure(message, bookId, nlpOperation);
+    return nlpProcessingFailure(message, operation, text);
   }
 
   @override
@@ -5210,7 +4387,7 @@ class _$NLPProcessingFailureImpl implements NLPProcessingFailure {
     TResult? Function(String message)? authFailure,
     TResult? Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult? Function(String message, int minimumDataPoints, String? dataType)?
+    TResult? Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult? Function(
             String message, String? recommendationType, String? reason)?
@@ -5224,33 +4401,21 @@ class _$NLPProcessingFailureImpl implements NLPProcessingFailure {
     TResult? Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult? Function(String message, String? bookId, String? nlpOperation)?
+    TResult? Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult? Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult? Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult? Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult? Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult? Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult? Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult? Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult? Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult? Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult? Function(String message, String? dataType, String? qualityIssue)?
+    TResult? Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult? Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult? Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult? Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult? Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
   }) {
-    return nlpProcessingFailure?.call(message, bookId, nlpOperation);
+    return nlpProcessingFailure?.call(message, operation, text);
   }
 
   @override
@@ -5263,7 +4428,7 @@ class _$NLPProcessingFailureImpl implements NLPProcessingFailure {
     TResult Function(String message)? authFailure,
     TResult Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult Function(String message, int minimumDataPoints, String? dataType)?
+    TResult Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult Function(
             String message, String? recommendationType, String? reason)?
@@ -5277,35 +4442,23 @@ class _$NLPProcessingFailureImpl implements NLPProcessingFailure {
     TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult Function(String message, String? bookId, String? nlpOperation)?
+    TResult Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult Function(String message, String? dataType, String? qualityIssue)?
+    TResult Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
     required TResult orElse(),
   }) {
     if (nlpProcessingFailure != null) {
-      return nlpProcessingFailure(message, bookId, nlpOperation);
+      return nlpProcessingFailure(message, operation, text);
     }
     return orElse();
   }
@@ -5331,22 +4484,13 @@ class _$NLPProcessingFailureImpl implements NLPProcessingFailure {
     required TResult Function(ComprehensionAssessmentFailure value)
         comprehensionAssessmentFailure,
     required TResult Function(NLPProcessingFailure value) nlpProcessingFailure,
-    required TResult Function(ModelTrainingFailure value) modelTrainingFailure,
-    required TResult Function(PreferenceUpdateFailure value)
-        preferenceUpdateFailure,
-    required TResult Function(InsightGenerationFailure value)
-        insightGenerationFailure,
-    required TResult Function(ScheduleGenerationFailure value)
-        scheduleGenerationFailure,
-    required TResult Function(GoalGenerationFailure value)
-        goalGenerationFailure,
-    required TResult Function(ChallengeGenerationFailure value)
-        challengeGenerationFailure,
-    required TResult Function(ContentModerationFailure value)
-        contentModerationFailure,
-    required TResult Function(RateLimitFailure value) rateLimitFailure,
-    required TResult Function(ModelUnavailableFailure value)
-        modelUnavailableFailure,
+    required TResult Function(SentimentAnalysisFailure value)
+        sentimentAnalysisFailure,
+    required TResult Function(TopicModelingFailure value) topicModelingFailure,
+    required TResult Function(ReadingLevelAssessmentFailure value)
+        readingLevelAssessmentFailure,
+    required TResult Function(PersonalizationFailure value)
+        personalizationFailure,
     required TResult Function(DataQualityFailure value) dataQualityFailure,
   }) {
     return nlpProcessingFailure(this);
@@ -5371,17 +4515,11 @@ class _$NLPProcessingFailureImpl implements NLPProcessingFailure {
     TResult? Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult? Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult? Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult? Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult? Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult? Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult? Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult? Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult? Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult? Function(RateLimitFailure value)? rateLimitFailure,
-    TResult? Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult? Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult? Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult? Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult? Function(PersonalizationFailure value)? personalizationFailure,
     TResult? Function(DataQualityFailure value)? dataQualityFailure,
   }) {
     return nlpProcessingFailure?.call(this);
@@ -5406,17 +4544,11 @@ class _$NLPProcessingFailureImpl implements NLPProcessingFailure {
     TResult Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult Function(RateLimitFailure value)? rateLimitFailure,
-    TResult Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult Function(PersonalizationFailure value)? personalizationFailure,
     TResult Function(DataQualityFailure value)? dataQualityFailure,
     required TResult orElse(),
   }) {
@@ -5430,13 +4562,13 @@ class _$NLPProcessingFailureImpl implements NLPProcessingFailure {
 abstract class NLPProcessingFailure implements Failure {
   const factory NLPProcessingFailure(
       {required final String message,
-      final String? bookId,
-      final String? nlpOperation}) = _$NLPProcessingFailureImpl;
+      final String? operation,
+      final String? text}) = _$NLPProcessingFailureImpl;
 
   @override
   String get message;
-  String? get bookId;
-  String? get nlpOperation;
+  String? get operation;
+  String? get text;
 
   /// Create a copy of Failure
   /// with the given fields replaced by the non-null parameter values.
@@ -5447,22 +4579,24 @@ abstract class NLPProcessingFailure implements Failure {
 }
 
 /// @nodoc
-abstract class _$$ModelTrainingFailureImplCopyWith<$Res>
+abstract class _$$SentimentAnalysisFailureImplCopyWith<$Res>
     implements $FailureCopyWith<$Res> {
-  factory _$$ModelTrainingFailureImplCopyWith(_$ModelTrainingFailureImpl value,
-          $Res Function(_$ModelTrainingFailureImpl) then) =
-      __$$ModelTrainingFailureImplCopyWithImpl<$Res>;
+  factory _$$SentimentAnalysisFailureImplCopyWith(
+          _$SentimentAnalysisFailureImpl value,
+          $Res Function(_$SentimentAnalysisFailureImpl) then) =
+      __$$SentimentAnalysisFailureImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String message, String? modelName, String? trainingData});
+  $Res call({String message, String? bookId, String? analysisType});
 }
 
 /// @nodoc
-class __$$ModelTrainingFailureImplCopyWithImpl<$Res>
-    extends _$FailureCopyWithImpl<$Res, _$ModelTrainingFailureImpl>
-    implements _$$ModelTrainingFailureImplCopyWith<$Res> {
-  __$$ModelTrainingFailureImplCopyWithImpl(_$ModelTrainingFailureImpl _value,
-      $Res Function(_$ModelTrainingFailureImpl) _then)
+class __$$SentimentAnalysisFailureImplCopyWithImpl<$Res>
+    extends _$FailureCopyWithImpl<$Res, _$SentimentAnalysisFailureImpl>
+    implements _$$SentimentAnalysisFailureImplCopyWith<$Res> {
+  __$$SentimentAnalysisFailureImplCopyWithImpl(
+      _$SentimentAnalysisFailureImpl _value,
+      $Res Function(_$SentimentAnalysisFailureImpl) _then)
       : super(_value, _then);
 
   /// Create a copy of Failure
@@ -5471,21 +4605,21 @@ class __$$ModelTrainingFailureImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? message = null,
-    Object? modelName = freezed,
-    Object? trainingData = freezed,
+    Object? bookId = freezed,
+    Object? analysisType = freezed,
   }) {
-    return _then(_$ModelTrainingFailureImpl(
+    return _then(_$SentimentAnalysisFailureImpl(
       message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      modelName: freezed == modelName
-          ? _value.modelName
-          : modelName // ignore: cast_nullable_to_non_nullable
+      bookId: freezed == bookId
+          ? _value.bookId
+          : bookId // ignore: cast_nullable_to_non_nullable
               as String?,
-      trainingData: freezed == trainingData
-          ? _value.trainingData
-          : trainingData // ignore: cast_nullable_to_non_nullable
+      analysisType: freezed == analysisType
+          ? _value.analysisType
+          : analysisType // ignore: cast_nullable_to_non_nullable
               as String?,
     ));
   }
@@ -5493,46 +4627,380 @@ class __$$ModelTrainingFailureImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$ModelTrainingFailureImpl implements ModelTrainingFailure {
-  const _$ModelTrainingFailureImpl(
-      {required this.message, this.modelName, this.trainingData});
+class _$SentimentAnalysisFailureImpl implements SentimentAnalysisFailure {
+  const _$SentimentAnalysisFailureImpl(
+      {required this.message, this.bookId, this.analysisType});
 
   @override
   final String message;
   @override
-  final String? modelName;
+  final String? bookId;
   @override
-  final String? trainingData;
+  final String? analysisType;
 
   @override
   String toString() {
-    return 'Failure.modelTrainingFailure(message: $message, modelName: $modelName, trainingData: $trainingData)';
+    return 'Failure.sentimentAnalysisFailure(message: $message, bookId: $bookId, analysisType: $analysisType)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ModelTrainingFailureImpl &&
+            other is _$SentimentAnalysisFailureImpl &&
             (identical(other.message, message) || other.message == message) &&
-            (identical(other.modelName, modelName) ||
-                other.modelName == modelName) &&
-            (identical(other.trainingData, trainingData) ||
-                other.trainingData == trainingData));
+            (identical(other.bookId, bookId) || other.bookId == bookId) &&
+            (identical(other.analysisType, analysisType) ||
+                other.analysisType == analysisType));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, message, modelName, trainingData);
+  int get hashCode => Object.hash(runtimeType, message, bookId, analysisType);
 
   /// Create a copy of Failure
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$ModelTrainingFailureImplCopyWith<_$ModelTrainingFailureImpl>
+  _$$SentimentAnalysisFailureImplCopyWith<_$SentimentAnalysisFailureImpl>
+      get copyWith => __$$SentimentAnalysisFailureImplCopyWithImpl<
+          _$SentimentAnalysisFailureImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String message, int? statusCode) serverFailure,
+    required TResult Function(String message) networkFailure,
+    required TResult Function(String message) cacheFailure,
+    required TResult Function(String message, String? field)
+        invalidInputFailure,
+    required TResult Function(String message) authFailure,
+    required TResult Function(
+            String message, String? modelName, String? operation)
+        aiModelFailure,
+    required TResult Function(
+            String message, int? minimumDataPoints, String? dataType)
+        insufficientDataFailure,
+    required TResult Function(
+            String message, String? recommendationType, String? reason)
+        recommendationGenerationFailure,
+    required TResult Function(
+            String message, String? analysisType, String? bookId)
+        contentAnalysisFailure,
+    required TResult Function(
+            String message, String? bookId, String? assessmentType)
+        difficultyAssessmentFailure,
+    required TResult Function(String message, String? pathId, String? operation)
+        learningPathFailure,
+    required TResult Function(String message, String? userId, String? bookId,
+            String? assessmentType)
+        comprehensionAssessmentFailure,
+    required TResult Function(String message, String? operation, String? text)
+        nlpProcessingFailure,
+    required TResult Function(
+            String message, String? bookId, String? analysisType)
+        sentimentAnalysisFailure,
+    required TResult Function(String message, String? bookId, String? modelType)
+        topicModelingFailure,
+    required TResult Function(
+            String message, String? bookId, String? assessmentMethod)
+        readingLevelAssessmentFailure,
+    required TResult Function(
+            String message, String? userId, String? personalizationType)
+        personalizationFailure,
+    required TResult Function(
+            String message, String? dataSource, String? qualityIssue)
+        dataQualityFailure,
+  }) {
+    return sentimentAnalysisFailure(message, bookId, analysisType);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(String message, int? statusCode)? serverFailure,
+    TResult? Function(String message)? networkFailure,
+    TResult? Function(String message)? cacheFailure,
+    TResult? Function(String message, String? field)? invalidInputFailure,
+    TResult? Function(String message)? authFailure,
+    TResult? Function(String message, String? modelName, String? operation)?
+        aiModelFailure,
+    TResult? Function(String message, int? minimumDataPoints, String? dataType)?
+        insufficientDataFailure,
+    TResult? Function(
+            String message, String? recommendationType, String? reason)?
+        recommendationGenerationFailure,
+    TResult? Function(String message, String? analysisType, String? bookId)?
+        contentAnalysisFailure,
+    TResult? Function(String message, String? bookId, String? assessmentType)?
+        difficultyAssessmentFailure,
+    TResult? Function(String message, String? pathId, String? operation)?
+        learningPathFailure,
+    TResult? Function(String message, String? userId, String? bookId,
+            String? assessmentType)?
+        comprehensionAssessmentFailure,
+    TResult? Function(String message, String? operation, String? text)?
+        nlpProcessingFailure,
+    TResult? Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult? Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult? Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult? Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult? Function(String message, String? dataSource, String? qualityIssue)?
+        dataQualityFailure,
+  }) {
+    return sentimentAnalysisFailure?.call(message, bookId, analysisType);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String message, int? statusCode)? serverFailure,
+    TResult Function(String message)? networkFailure,
+    TResult Function(String message)? cacheFailure,
+    TResult Function(String message, String? field)? invalidInputFailure,
+    TResult Function(String message)? authFailure,
+    TResult Function(String message, String? modelName, String? operation)?
+        aiModelFailure,
+    TResult Function(String message, int? minimumDataPoints, String? dataType)?
+        insufficientDataFailure,
+    TResult Function(
+            String message, String? recommendationType, String? reason)?
+        recommendationGenerationFailure,
+    TResult Function(String message, String? analysisType, String? bookId)?
+        contentAnalysisFailure,
+    TResult Function(String message, String? bookId, String? assessmentType)?
+        difficultyAssessmentFailure,
+    TResult Function(String message, String? pathId, String? operation)?
+        learningPathFailure,
+    TResult Function(String message, String? userId, String? bookId,
+            String? assessmentType)?
+        comprehensionAssessmentFailure,
+    TResult Function(String message, String? operation, String? text)?
+        nlpProcessingFailure,
+    TResult Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult Function(String message, String? dataSource, String? qualityIssue)?
+        dataQualityFailure,
+    required TResult orElse(),
+  }) {
+    if (sentimentAnalysisFailure != null) {
+      return sentimentAnalysisFailure(message, bookId, analysisType);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(ServerFailure value) serverFailure,
+    required TResult Function(NetworkFailure value) networkFailure,
+    required TResult Function(CacheFailure value) cacheFailure,
+    required TResult Function(InvalidInputFailure value) invalidInputFailure,
+    required TResult Function(AuthFailure value) authFailure,
+    required TResult Function(AIModelFailure value) aiModelFailure,
+    required TResult Function(InsufficientDataFailure value)
+        insufficientDataFailure,
+    required TResult Function(RecommendationGenerationFailure value)
+        recommendationGenerationFailure,
+    required TResult Function(ContentAnalysisFailure value)
+        contentAnalysisFailure,
+    required TResult Function(DifficultyAssessmentFailure value)
+        difficultyAssessmentFailure,
+    required TResult Function(LearningPathFailure value) learningPathFailure,
+    required TResult Function(ComprehensionAssessmentFailure value)
+        comprehensionAssessmentFailure,
+    required TResult Function(NLPProcessingFailure value) nlpProcessingFailure,
+    required TResult Function(SentimentAnalysisFailure value)
+        sentimentAnalysisFailure,
+    required TResult Function(TopicModelingFailure value) topicModelingFailure,
+    required TResult Function(ReadingLevelAssessmentFailure value)
+        readingLevelAssessmentFailure,
+    required TResult Function(PersonalizationFailure value)
+        personalizationFailure,
+    required TResult Function(DataQualityFailure value) dataQualityFailure,
+  }) {
+    return sentimentAnalysisFailure(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(ServerFailure value)? serverFailure,
+    TResult? Function(NetworkFailure value)? networkFailure,
+    TResult? Function(CacheFailure value)? cacheFailure,
+    TResult? Function(InvalidInputFailure value)? invalidInputFailure,
+    TResult? Function(AuthFailure value)? authFailure,
+    TResult? Function(AIModelFailure value)? aiModelFailure,
+    TResult? Function(InsufficientDataFailure value)? insufficientDataFailure,
+    TResult? Function(RecommendationGenerationFailure value)?
+        recommendationGenerationFailure,
+    TResult? Function(ContentAnalysisFailure value)? contentAnalysisFailure,
+    TResult? Function(DifficultyAssessmentFailure value)?
+        difficultyAssessmentFailure,
+    TResult? Function(LearningPathFailure value)? learningPathFailure,
+    TResult? Function(ComprehensionAssessmentFailure value)?
+        comprehensionAssessmentFailure,
+    TResult? Function(NLPProcessingFailure value)? nlpProcessingFailure,
+    TResult? Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult? Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult? Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult? Function(PersonalizationFailure value)? personalizationFailure,
+    TResult? Function(DataQualityFailure value)? dataQualityFailure,
+  }) {
+    return sentimentAnalysisFailure?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(ServerFailure value)? serverFailure,
+    TResult Function(NetworkFailure value)? networkFailure,
+    TResult Function(CacheFailure value)? cacheFailure,
+    TResult Function(InvalidInputFailure value)? invalidInputFailure,
+    TResult Function(AuthFailure value)? authFailure,
+    TResult Function(AIModelFailure value)? aiModelFailure,
+    TResult Function(InsufficientDataFailure value)? insufficientDataFailure,
+    TResult Function(RecommendationGenerationFailure value)?
+        recommendationGenerationFailure,
+    TResult Function(ContentAnalysisFailure value)? contentAnalysisFailure,
+    TResult Function(DifficultyAssessmentFailure value)?
+        difficultyAssessmentFailure,
+    TResult Function(LearningPathFailure value)? learningPathFailure,
+    TResult Function(ComprehensionAssessmentFailure value)?
+        comprehensionAssessmentFailure,
+    TResult Function(NLPProcessingFailure value)? nlpProcessingFailure,
+    TResult Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult Function(PersonalizationFailure value)? personalizationFailure,
+    TResult Function(DataQualityFailure value)? dataQualityFailure,
+    required TResult orElse(),
+  }) {
+    if (sentimentAnalysisFailure != null) {
+      return sentimentAnalysisFailure(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class SentimentAnalysisFailure implements Failure {
+  const factory SentimentAnalysisFailure(
+      {required final String message,
+      final String? bookId,
+      final String? analysisType}) = _$SentimentAnalysisFailureImpl;
+
+  @override
+  String get message;
+  String? get bookId;
+  String? get analysisType;
+
+  /// Create a copy of Failure
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SentimentAnalysisFailureImplCopyWith<_$SentimentAnalysisFailureImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$TopicModelingFailureImplCopyWith<$Res>
+    implements $FailureCopyWith<$Res> {
+  factory _$$TopicModelingFailureImplCopyWith(_$TopicModelingFailureImpl value,
+          $Res Function(_$TopicModelingFailureImpl) then) =
+      __$$TopicModelingFailureImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String message, String? bookId, String? modelType});
+}
+
+/// @nodoc
+class __$$TopicModelingFailureImplCopyWithImpl<$Res>
+    extends _$FailureCopyWithImpl<$Res, _$TopicModelingFailureImpl>
+    implements _$$TopicModelingFailureImplCopyWith<$Res> {
+  __$$TopicModelingFailureImplCopyWithImpl(_$TopicModelingFailureImpl _value,
+      $Res Function(_$TopicModelingFailureImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of Failure
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? message = null,
+    Object? bookId = freezed,
+    Object? modelType = freezed,
+  }) {
+    return _then(_$TopicModelingFailureImpl(
+      message: null == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+      bookId: freezed == bookId
+          ? _value.bookId
+          : bookId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      modelType: freezed == modelType
+          ? _value.modelType
+          : modelType // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$TopicModelingFailureImpl implements TopicModelingFailure {
+  const _$TopicModelingFailureImpl(
+      {required this.message, this.bookId, this.modelType});
+
+  @override
+  final String message;
+  @override
+  final String? bookId;
+  @override
+  final String? modelType;
+
+  @override
+  String toString() {
+    return 'Failure.topicModelingFailure(message: $message, bookId: $bookId, modelType: $modelType)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$TopicModelingFailureImpl &&
+            (identical(other.message, message) || other.message == message) &&
+            (identical(other.bookId, bookId) || other.bookId == bookId) &&
+            (identical(other.modelType, modelType) ||
+                other.modelType == modelType));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, message, bookId, modelType);
+
+  /// Create a copy of Failure
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$TopicModelingFailureImplCopyWith<_$TopicModelingFailureImpl>
       get copyWith =>
-          __$$ModelTrainingFailureImplCopyWithImpl<_$ModelTrainingFailureImpl>(
+          __$$TopicModelingFailureImplCopyWithImpl<_$TopicModelingFailureImpl>(
               this, _$identity);
 
   @override
@@ -5548,7 +5016,7 @@ class _$ModelTrainingFailureImpl implements ModelTrainingFailure {
             String message, String? modelName, String? operation)
         aiModelFailure,
     required TResult Function(
-            String message, int minimumDataPoints, String? dataType)
+            String message, int? minimumDataPoints, String? dataType)
         insufficientDataFailure,
     required TResult Function(
             String message, String? recommendationType, String? reason)
@@ -5564,41 +5032,24 @@ class _$ModelTrainingFailureImpl implements ModelTrainingFailure {
     required TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)
         comprehensionAssessmentFailure,
-    required TResult Function(
-            String message, String? bookId, String? nlpOperation)
+    required TResult Function(String message, String? operation, String? text)
         nlpProcessingFailure,
     required TResult Function(
-            String message, String? modelName, String? trainingData)
-        modelTrainingFailure,
+            String message, String? bookId, String? analysisType)
+        sentimentAnalysisFailure,
+    required TResult Function(String message, String? bookId, String? modelType)
+        topicModelingFailure,
     required TResult Function(
-            String message, String? userId, String? preferenceType)
-        preferenceUpdateFailure,
+            String message, String? bookId, String? assessmentMethod)
+        readingLevelAssessmentFailure,
     required TResult Function(
-            String message, String? insightType, String? context)
-        insightGenerationFailure,
-    required TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)
-        scheduleGenerationFailure,
+            String message, String? userId, String? personalizationType)
+        personalizationFailure,
     required TResult Function(
-            String message, String? userId, String? goalType, String? timeframe)
-        goalGenerationFailure,
-    required TResult Function(String message, String? userId,
-            String? challengeType, String? difficulty)
-        challengeGenerationFailure,
-    required TResult Function(
-            String message, String? reason, String? contentType)
-        contentModerationFailure,
-    required TResult Function(
-            String message, Duration cooldown, String? operation)
-        rateLimitFailure,
-    required TResult Function(
-            String message, String? modelName, String? alternative)
-        modelUnavailableFailure,
-    required TResult Function(
-            String message, String? dataType, String? qualityIssue)
+            String message, String? dataSource, String? qualityIssue)
         dataQualityFailure,
   }) {
-    return modelTrainingFailure(message, modelName, trainingData);
+    return topicModelingFailure(message, bookId, modelType);
   }
 
   @override
@@ -5611,7 +5062,7 @@ class _$ModelTrainingFailureImpl implements ModelTrainingFailure {
     TResult? Function(String message)? authFailure,
     TResult? Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult? Function(String message, int minimumDataPoints, String? dataType)?
+    TResult? Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult? Function(
             String message, String? recommendationType, String? reason)?
@@ -5625,33 +5076,21 @@ class _$ModelTrainingFailureImpl implements ModelTrainingFailure {
     TResult? Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult? Function(String message, String? bookId, String? nlpOperation)?
+    TResult? Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult? Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult? Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult? Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult? Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult? Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult? Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult? Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult? Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult? Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult? Function(String message, String? dataType, String? qualityIssue)?
+    TResult? Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult? Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult? Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult? Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult? Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
   }) {
-    return modelTrainingFailure?.call(message, modelName, trainingData);
+    return topicModelingFailure?.call(message, bookId, modelType);
   }
 
   @override
@@ -5664,7 +5103,7 @@ class _$ModelTrainingFailureImpl implements ModelTrainingFailure {
     TResult Function(String message)? authFailure,
     TResult Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult Function(String message, int minimumDataPoints, String? dataType)?
+    TResult Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult Function(
             String message, String? recommendationType, String? reason)?
@@ -5678,35 +5117,23 @@ class _$ModelTrainingFailureImpl implements ModelTrainingFailure {
     TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult Function(String message, String? bookId, String? nlpOperation)?
+    TResult Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult Function(String message, String? dataType, String? qualityIssue)?
+    TResult Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
     required TResult orElse(),
   }) {
-    if (modelTrainingFailure != null) {
-      return modelTrainingFailure(message, modelName, trainingData);
+    if (topicModelingFailure != null) {
+      return topicModelingFailure(message, bookId, modelType);
     }
     return orElse();
   }
@@ -5732,25 +5159,16 @@ class _$ModelTrainingFailureImpl implements ModelTrainingFailure {
     required TResult Function(ComprehensionAssessmentFailure value)
         comprehensionAssessmentFailure,
     required TResult Function(NLPProcessingFailure value) nlpProcessingFailure,
-    required TResult Function(ModelTrainingFailure value) modelTrainingFailure,
-    required TResult Function(PreferenceUpdateFailure value)
-        preferenceUpdateFailure,
-    required TResult Function(InsightGenerationFailure value)
-        insightGenerationFailure,
-    required TResult Function(ScheduleGenerationFailure value)
-        scheduleGenerationFailure,
-    required TResult Function(GoalGenerationFailure value)
-        goalGenerationFailure,
-    required TResult Function(ChallengeGenerationFailure value)
-        challengeGenerationFailure,
-    required TResult Function(ContentModerationFailure value)
-        contentModerationFailure,
-    required TResult Function(RateLimitFailure value) rateLimitFailure,
-    required TResult Function(ModelUnavailableFailure value)
-        modelUnavailableFailure,
+    required TResult Function(SentimentAnalysisFailure value)
+        sentimentAnalysisFailure,
+    required TResult Function(TopicModelingFailure value) topicModelingFailure,
+    required TResult Function(ReadingLevelAssessmentFailure value)
+        readingLevelAssessmentFailure,
+    required TResult Function(PersonalizationFailure value)
+        personalizationFailure,
     required TResult Function(DataQualityFailure value) dataQualityFailure,
   }) {
-    return modelTrainingFailure(this);
+    return topicModelingFailure(this);
   }
 
   @override
@@ -5772,20 +5190,14 @@ class _$ModelTrainingFailureImpl implements ModelTrainingFailure {
     TResult? Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult? Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult? Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult? Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult? Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult? Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult? Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult? Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult? Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult? Function(RateLimitFailure value)? rateLimitFailure,
-    TResult? Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult? Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult? Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult? Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult? Function(PersonalizationFailure value)? personalizationFailure,
     TResult? Function(DataQualityFailure value)? dataQualityFailure,
   }) {
-    return modelTrainingFailure?.call(this);
+    return topicModelingFailure?.call(this);
   }
 
   @override
@@ -5807,65 +5219,59 @@ class _$ModelTrainingFailureImpl implements ModelTrainingFailure {
     TResult Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult Function(RateLimitFailure value)? rateLimitFailure,
-    TResult Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult Function(PersonalizationFailure value)? personalizationFailure,
     TResult Function(DataQualityFailure value)? dataQualityFailure,
     required TResult orElse(),
   }) {
-    if (modelTrainingFailure != null) {
-      return modelTrainingFailure(this);
+    if (topicModelingFailure != null) {
+      return topicModelingFailure(this);
     }
     return orElse();
   }
 }
 
-abstract class ModelTrainingFailure implements Failure {
-  const factory ModelTrainingFailure(
+abstract class TopicModelingFailure implements Failure {
+  const factory TopicModelingFailure(
       {required final String message,
-      final String? modelName,
-      final String? trainingData}) = _$ModelTrainingFailureImpl;
+      final String? bookId,
+      final String? modelType}) = _$TopicModelingFailureImpl;
 
   @override
   String get message;
-  String? get modelName;
-  String? get trainingData;
+  String? get bookId;
+  String? get modelType;
 
   /// Create a copy of Failure
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ModelTrainingFailureImplCopyWith<_$ModelTrainingFailureImpl>
+  _$$TopicModelingFailureImplCopyWith<_$TopicModelingFailureImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$PreferenceUpdateFailureImplCopyWith<$Res>
+abstract class _$$ReadingLevelAssessmentFailureImplCopyWith<$Res>
     implements $FailureCopyWith<$Res> {
-  factory _$$PreferenceUpdateFailureImplCopyWith(
-          _$PreferenceUpdateFailureImpl value,
-          $Res Function(_$PreferenceUpdateFailureImpl) then) =
-      __$$PreferenceUpdateFailureImplCopyWithImpl<$Res>;
+  factory _$$ReadingLevelAssessmentFailureImplCopyWith(
+          _$ReadingLevelAssessmentFailureImpl value,
+          $Res Function(_$ReadingLevelAssessmentFailureImpl) then) =
+      __$$ReadingLevelAssessmentFailureImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String message, String? userId, String? preferenceType});
+  $Res call({String message, String? bookId, String? assessmentMethod});
 }
 
 /// @nodoc
-class __$$PreferenceUpdateFailureImplCopyWithImpl<$Res>
-    extends _$FailureCopyWithImpl<$Res, _$PreferenceUpdateFailureImpl>
-    implements _$$PreferenceUpdateFailureImplCopyWith<$Res> {
-  __$$PreferenceUpdateFailureImplCopyWithImpl(
-      _$PreferenceUpdateFailureImpl _value,
-      $Res Function(_$PreferenceUpdateFailureImpl) _then)
+class __$$ReadingLevelAssessmentFailureImplCopyWithImpl<$Res>
+    extends _$FailureCopyWithImpl<$Res, _$ReadingLevelAssessmentFailureImpl>
+    implements _$$ReadingLevelAssessmentFailureImplCopyWith<$Res> {
+  __$$ReadingLevelAssessmentFailureImplCopyWithImpl(
+      _$ReadingLevelAssessmentFailureImpl _value,
+      $Res Function(_$ReadingLevelAssessmentFailureImpl) _then)
       : super(_value, _then);
 
   /// Create a copy of Failure
@@ -5874,827 +5280,21 @@ class __$$PreferenceUpdateFailureImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? message = null,
-    Object? userId = freezed,
-    Object? preferenceType = freezed,
-  }) {
-    return _then(_$PreferenceUpdateFailureImpl(
-      message: null == message
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String,
-      userId: freezed == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      preferenceType: freezed == preferenceType
-          ? _value.preferenceType
-          : preferenceType // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$PreferenceUpdateFailureImpl implements PreferenceUpdateFailure {
-  const _$PreferenceUpdateFailureImpl(
-      {required this.message, this.userId, this.preferenceType});
-
-  @override
-  final String message;
-  @override
-  final String? userId;
-  @override
-  final String? preferenceType;
-
-  @override
-  String toString() {
-    return 'Failure.preferenceUpdateFailure(message: $message, userId: $userId, preferenceType: $preferenceType)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$PreferenceUpdateFailureImpl &&
-            (identical(other.message, message) || other.message == message) &&
-            (identical(other.userId, userId) || other.userId == userId) &&
-            (identical(other.preferenceType, preferenceType) ||
-                other.preferenceType == preferenceType));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, message, userId, preferenceType);
-
-  /// Create a copy of Failure
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$PreferenceUpdateFailureImplCopyWith<_$PreferenceUpdateFailureImpl>
-      get copyWith => __$$PreferenceUpdateFailureImplCopyWithImpl<
-          _$PreferenceUpdateFailureImpl>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String message, int? statusCode) serverFailure,
-    required TResult Function(String message) networkFailure,
-    required TResult Function(String message) cacheFailure,
-    required TResult Function(String message, String? field)
-        invalidInputFailure,
-    required TResult Function(String message) authFailure,
-    required TResult Function(
-            String message, String? modelName, String? operation)
-        aiModelFailure,
-    required TResult Function(
-            String message, int minimumDataPoints, String? dataType)
-        insufficientDataFailure,
-    required TResult Function(
-            String message, String? recommendationType, String? reason)
-        recommendationGenerationFailure,
-    required TResult Function(
-            String message, String? analysisType, String? bookId)
-        contentAnalysisFailure,
-    required TResult Function(
-            String message, String? bookId, String? assessmentType)
-        difficultyAssessmentFailure,
-    required TResult Function(String message, String? pathId, String? operation)
-        learningPathFailure,
-    required TResult Function(String message, String? userId, String? bookId,
-            String? assessmentType)
-        comprehensionAssessmentFailure,
-    required TResult Function(
-            String message, String? bookId, String? nlpOperation)
-        nlpProcessingFailure,
-    required TResult Function(
-            String message, String? modelName, String? trainingData)
-        modelTrainingFailure,
-    required TResult Function(
-            String message, String? userId, String? preferenceType)
-        preferenceUpdateFailure,
-    required TResult Function(
-            String message, String? insightType, String? context)
-        insightGenerationFailure,
-    required TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)
-        scheduleGenerationFailure,
-    required TResult Function(
-            String message, String? userId, String? goalType, String? timeframe)
-        goalGenerationFailure,
-    required TResult Function(String message, String? userId,
-            String? challengeType, String? difficulty)
-        challengeGenerationFailure,
-    required TResult Function(
-            String message, String? reason, String? contentType)
-        contentModerationFailure,
-    required TResult Function(
-            String message, Duration cooldown, String? operation)
-        rateLimitFailure,
-    required TResult Function(
-            String message, String? modelName, String? alternative)
-        modelUnavailableFailure,
-    required TResult Function(
-            String message, String? dataType, String? qualityIssue)
-        dataQualityFailure,
-  }) {
-    return preferenceUpdateFailure(message, userId, preferenceType);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String message, int? statusCode)? serverFailure,
-    TResult? Function(String message)? networkFailure,
-    TResult? Function(String message)? cacheFailure,
-    TResult? Function(String message, String? field)? invalidInputFailure,
-    TResult? Function(String message)? authFailure,
-    TResult? Function(String message, String? modelName, String? operation)?
-        aiModelFailure,
-    TResult? Function(String message, int minimumDataPoints, String? dataType)?
-        insufficientDataFailure,
-    TResult? Function(
-            String message, String? recommendationType, String? reason)?
-        recommendationGenerationFailure,
-    TResult? Function(String message, String? analysisType, String? bookId)?
-        contentAnalysisFailure,
-    TResult? Function(String message, String? bookId, String? assessmentType)?
-        difficultyAssessmentFailure,
-    TResult? Function(String message, String? pathId, String? operation)?
-        learningPathFailure,
-    TResult? Function(String message, String? userId, String? bookId,
-            String? assessmentType)?
-        comprehensionAssessmentFailure,
-    TResult? Function(String message, String? bookId, String? nlpOperation)?
-        nlpProcessingFailure,
-    TResult? Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult? Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult? Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult? Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult? Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult? Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult? Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult? Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult? Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult? Function(String message, String? dataType, String? qualityIssue)?
-        dataQualityFailure,
-  }) {
-    return preferenceUpdateFailure?.call(message, userId, preferenceType);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String message, int? statusCode)? serverFailure,
-    TResult Function(String message)? networkFailure,
-    TResult Function(String message)? cacheFailure,
-    TResult Function(String message, String? field)? invalidInputFailure,
-    TResult Function(String message)? authFailure,
-    TResult Function(String message, String? modelName, String? operation)?
-        aiModelFailure,
-    TResult Function(String message, int minimumDataPoints, String? dataType)?
-        insufficientDataFailure,
-    TResult Function(
-            String message, String? recommendationType, String? reason)?
-        recommendationGenerationFailure,
-    TResult Function(String message, String? analysisType, String? bookId)?
-        contentAnalysisFailure,
-    TResult Function(String message, String? bookId, String? assessmentType)?
-        difficultyAssessmentFailure,
-    TResult Function(String message, String? pathId, String? operation)?
-        learningPathFailure,
-    TResult Function(String message, String? userId, String? bookId,
-            String? assessmentType)?
-        comprehensionAssessmentFailure,
-    TResult Function(String message, String? bookId, String? nlpOperation)?
-        nlpProcessingFailure,
-    TResult Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult Function(String message, String? dataType, String? qualityIssue)?
-        dataQualityFailure,
-    required TResult orElse(),
-  }) {
-    if (preferenceUpdateFailure != null) {
-      return preferenceUpdateFailure(message, userId, preferenceType);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(ServerFailure value) serverFailure,
-    required TResult Function(NetworkFailure value) networkFailure,
-    required TResult Function(CacheFailure value) cacheFailure,
-    required TResult Function(InvalidInputFailure value) invalidInputFailure,
-    required TResult Function(AuthFailure value) authFailure,
-    required TResult Function(AIModelFailure value) aiModelFailure,
-    required TResult Function(InsufficientDataFailure value)
-        insufficientDataFailure,
-    required TResult Function(RecommendationGenerationFailure value)
-        recommendationGenerationFailure,
-    required TResult Function(ContentAnalysisFailure value)
-        contentAnalysisFailure,
-    required TResult Function(DifficultyAssessmentFailure value)
-        difficultyAssessmentFailure,
-    required TResult Function(LearningPathFailure value) learningPathFailure,
-    required TResult Function(ComprehensionAssessmentFailure value)
-        comprehensionAssessmentFailure,
-    required TResult Function(NLPProcessingFailure value) nlpProcessingFailure,
-    required TResult Function(ModelTrainingFailure value) modelTrainingFailure,
-    required TResult Function(PreferenceUpdateFailure value)
-        preferenceUpdateFailure,
-    required TResult Function(InsightGenerationFailure value)
-        insightGenerationFailure,
-    required TResult Function(ScheduleGenerationFailure value)
-        scheduleGenerationFailure,
-    required TResult Function(GoalGenerationFailure value)
-        goalGenerationFailure,
-    required TResult Function(ChallengeGenerationFailure value)
-        challengeGenerationFailure,
-    required TResult Function(ContentModerationFailure value)
-        contentModerationFailure,
-    required TResult Function(RateLimitFailure value) rateLimitFailure,
-    required TResult Function(ModelUnavailableFailure value)
-        modelUnavailableFailure,
-    required TResult Function(DataQualityFailure value) dataQualityFailure,
-  }) {
-    return preferenceUpdateFailure(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(ServerFailure value)? serverFailure,
-    TResult? Function(NetworkFailure value)? networkFailure,
-    TResult? Function(CacheFailure value)? cacheFailure,
-    TResult? Function(InvalidInputFailure value)? invalidInputFailure,
-    TResult? Function(AuthFailure value)? authFailure,
-    TResult? Function(AIModelFailure value)? aiModelFailure,
-    TResult? Function(InsufficientDataFailure value)? insufficientDataFailure,
-    TResult? Function(RecommendationGenerationFailure value)?
-        recommendationGenerationFailure,
-    TResult? Function(ContentAnalysisFailure value)? contentAnalysisFailure,
-    TResult? Function(DifficultyAssessmentFailure value)?
-        difficultyAssessmentFailure,
-    TResult? Function(LearningPathFailure value)? learningPathFailure,
-    TResult? Function(ComprehensionAssessmentFailure value)?
-        comprehensionAssessmentFailure,
-    TResult? Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult? Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult? Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult? Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult? Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult? Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult? Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult? Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult? Function(RateLimitFailure value)? rateLimitFailure,
-    TResult? Function(ModelUnavailableFailure value)? modelUnavailableFailure,
-    TResult? Function(DataQualityFailure value)? dataQualityFailure,
-  }) {
-    return preferenceUpdateFailure?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(ServerFailure value)? serverFailure,
-    TResult Function(NetworkFailure value)? networkFailure,
-    TResult Function(CacheFailure value)? cacheFailure,
-    TResult Function(InvalidInputFailure value)? invalidInputFailure,
-    TResult Function(AuthFailure value)? authFailure,
-    TResult Function(AIModelFailure value)? aiModelFailure,
-    TResult Function(InsufficientDataFailure value)? insufficientDataFailure,
-    TResult Function(RecommendationGenerationFailure value)?
-        recommendationGenerationFailure,
-    TResult Function(ContentAnalysisFailure value)? contentAnalysisFailure,
-    TResult Function(DifficultyAssessmentFailure value)?
-        difficultyAssessmentFailure,
-    TResult Function(LearningPathFailure value)? learningPathFailure,
-    TResult Function(ComprehensionAssessmentFailure value)?
-        comprehensionAssessmentFailure,
-    TResult Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult Function(RateLimitFailure value)? rateLimitFailure,
-    TResult Function(ModelUnavailableFailure value)? modelUnavailableFailure,
-    TResult Function(DataQualityFailure value)? dataQualityFailure,
-    required TResult orElse(),
-  }) {
-    if (preferenceUpdateFailure != null) {
-      return preferenceUpdateFailure(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class PreferenceUpdateFailure implements Failure {
-  const factory PreferenceUpdateFailure(
-      {required final String message,
-      final String? userId,
-      final String? preferenceType}) = _$PreferenceUpdateFailureImpl;
-
-  @override
-  String get message;
-  String? get userId;
-  String? get preferenceType;
-
-  /// Create a copy of Failure
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$PreferenceUpdateFailureImplCopyWith<_$PreferenceUpdateFailureImpl>
-      get copyWith => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$InsightGenerationFailureImplCopyWith<$Res>
-    implements $FailureCopyWith<$Res> {
-  factory _$$InsightGenerationFailureImplCopyWith(
-          _$InsightGenerationFailureImpl value,
-          $Res Function(_$InsightGenerationFailureImpl) then) =
-      __$$InsightGenerationFailureImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({String message, String? insightType, String? context});
-}
-
-/// @nodoc
-class __$$InsightGenerationFailureImplCopyWithImpl<$Res>
-    extends _$FailureCopyWithImpl<$Res, _$InsightGenerationFailureImpl>
-    implements _$$InsightGenerationFailureImplCopyWith<$Res> {
-  __$$InsightGenerationFailureImplCopyWithImpl(
-      _$InsightGenerationFailureImpl _value,
-      $Res Function(_$InsightGenerationFailureImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of Failure
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? message = null,
-    Object? insightType = freezed,
-    Object? context = freezed,
-  }) {
-    return _then(_$InsightGenerationFailureImpl(
-      message: null == message
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String,
-      insightType: freezed == insightType
-          ? _value.insightType
-          : insightType // ignore: cast_nullable_to_non_nullable
-              as String?,
-      context: freezed == context
-          ? _value.context
-          : context // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$InsightGenerationFailureImpl implements InsightGenerationFailure {
-  const _$InsightGenerationFailureImpl(
-      {required this.message, this.insightType, this.context});
-
-  @override
-  final String message;
-  @override
-  final String? insightType;
-  @override
-  final String? context;
-
-  @override
-  String toString() {
-    return 'Failure.insightGenerationFailure(message: $message, insightType: $insightType, context: $context)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$InsightGenerationFailureImpl &&
-            (identical(other.message, message) || other.message == message) &&
-            (identical(other.insightType, insightType) ||
-                other.insightType == insightType) &&
-            (identical(other.context, context) || other.context == context));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, message, insightType, context);
-
-  /// Create a copy of Failure
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$InsightGenerationFailureImplCopyWith<_$InsightGenerationFailureImpl>
-      get copyWith => __$$InsightGenerationFailureImplCopyWithImpl<
-          _$InsightGenerationFailureImpl>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String message, int? statusCode) serverFailure,
-    required TResult Function(String message) networkFailure,
-    required TResult Function(String message) cacheFailure,
-    required TResult Function(String message, String? field)
-        invalidInputFailure,
-    required TResult Function(String message) authFailure,
-    required TResult Function(
-            String message, String? modelName, String? operation)
-        aiModelFailure,
-    required TResult Function(
-            String message, int minimumDataPoints, String? dataType)
-        insufficientDataFailure,
-    required TResult Function(
-            String message, String? recommendationType, String? reason)
-        recommendationGenerationFailure,
-    required TResult Function(
-            String message, String? analysisType, String? bookId)
-        contentAnalysisFailure,
-    required TResult Function(
-            String message, String? bookId, String? assessmentType)
-        difficultyAssessmentFailure,
-    required TResult Function(String message, String? pathId, String? operation)
-        learningPathFailure,
-    required TResult Function(String message, String? userId, String? bookId,
-            String? assessmentType)
-        comprehensionAssessmentFailure,
-    required TResult Function(
-            String message, String? bookId, String? nlpOperation)
-        nlpProcessingFailure,
-    required TResult Function(
-            String message, String? modelName, String? trainingData)
-        modelTrainingFailure,
-    required TResult Function(
-            String message, String? userId, String? preferenceType)
-        preferenceUpdateFailure,
-    required TResult Function(
-            String message, String? insightType, String? context)
-        insightGenerationFailure,
-    required TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)
-        scheduleGenerationFailure,
-    required TResult Function(
-            String message, String? userId, String? goalType, String? timeframe)
-        goalGenerationFailure,
-    required TResult Function(String message, String? userId,
-            String? challengeType, String? difficulty)
-        challengeGenerationFailure,
-    required TResult Function(
-            String message, String? reason, String? contentType)
-        contentModerationFailure,
-    required TResult Function(
-            String message, Duration cooldown, String? operation)
-        rateLimitFailure,
-    required TResult Function(
-            String message, String? modelName, String? alternative)
-        modelUnavailableFailure,
-    required TResult Function(
-            String message, String? dataType, String? qualityIssue)
-        dataQualityFailure,
-  }) {
-    return insightGenerationFailure(message, insightType, context);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String message, int? statusCode)? serverFailure,
-    TResult? Function(String message)? networkFailure,
-    TResult? Function(String message)? cacheFailure,
-    TResult? Function(String message, String? field)? invalidInputFailure,
-    TResult? Function(String message)? authFailure,
-    TResult? Function(String message, String? modelName, String? operation)?
-        aiModelFailure,
-    TResult? Function(String message, int minimumDataPoints, String? dataType)?
-        insufficientDataFailure,
-    TResult? Function(
-            String message, String? recommendationType, String? reason)?
-        recommendationGenerationFailure,
-    TResult? Function(String message, String? analysisType, String? bookId)?
-        contentAnalysisFailure,
-    TResult? Function(String message, String? bookId, String? assessmentType)?
-        difficultyAssessmentFailure,
-    TResult? Function(String message, String? pathId, String? operation)?
-        learningPathFailure,
-    TResult? Function(String message, String? userId, String? bookId,
-            String? assessmentType)?
-        comprehensionAssessmentFailure,
-    TResult? Function(String message, String? bookId, String? nlpOperation)?
-        nlpProcessingFailure,
-    TResult? Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult? Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult? Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult? Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult? Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult? Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult? Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult? Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult? Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult? Function(String message, String? dataType, String? qualityIssue)?
-        dataQualityFailure,
-  }) {
-    return insightGenerationFailure?.call(message, insightType, context);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String message, int? statusCode)? serverFailure,
-    TResult Function(String message)? networkFailure,
-    TResult Function(String message)? cacheFailure,
-    TResult Function(String message, String? field)? invalidInputFailure,
-    TResult Function(String message)? authFailure,
-    TResult Function(String message, String? modelName, String? operation)?
-        aiModelFailure,
-    TResult Function(String message, int minimumDataPoints, String? dataType)?
-        insufficientDataFailure,
-    TResult Function(
-            String message, String? recommendationType, String? reason)?
-        recommendationGenerationFailure,
-    TResult Function(String message, String? analysisType, String? bookId)?
-        contentAnalysisFailure,
-    TResult Function(String message, String? bookId, String? assessmentType)?
-        difficultyAssessmentFailure,
-    TResult Function(String message, String? pathId, String? operation)?
-        learningPathFailure,
-    TResult Function(String message, String? userId, String? bookId,
-            String? assessmentType)?
-        comprehensionAssessmentFailure,
-    TResult Function(String message, String? bookId, String? nlpOperation)?
-        nlpProcessingFailure,
-    TResult Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult Function(String message, String? dataType, String? qualityIssue)?
-        dataQualityFailure,
-    required TResult orElse(),
-  }) {
-    if (insightGenerationFailure != null) {
-      return insightGenerationFailure(message, insightType, context);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(ServerFailure value) serverFailure,
-    required TResult Function(NetworkFailure value) networkFailure,
-    required TResult Function(CacheFailure value) cacheFailure,
-    required TResult Function(InvalidInputFailure value) invalidInputFailure,
-    required TResult Function(AuthFailure value) authFailure,
-    required TResult Function(AIModelFailure value) aiModelFailure,
-    required TResult Function(InsufficientDataFailure value)
-        insufficientDataFailure,
-    required TResult Function(RecommendationGenerationFailure value)
-        recommendationGenerationFailure,
-    required TResult Function(ContentAnalysisFailure value)
-        contentAnalysisFailure,
-    required TResult Function(DifficultyAssessmentFailure value)
-        difficultyAssessmentFailure,
-    required TResult Function(LearningPathFailure value) learningPathFailure,
-    required TResult Function(ComprehensionAssessmentFailure value)
-        comprehensionAssessmentFailure,
-    required TResult Function(NLPProcessingFailure value) nlpProcessingFailure,
-    required TResult Function(ModelTrainingFailure value) modelTrainingFailure,
-    required TResult Function(PreferenceUpdateFailure value)
-        preferenceUpdateFailure,
-    required TResult Function(InsightGenerationFailure value)
-        insightGenerationFailure,
-    required TResult Function(ScheduleGenerationFailure value)
-        scheduleGenerationFailure,
-    required TResult Function(GoalGenerationFailure value)
-        goalGenerationFailure,
-    required TResult Function(ChallengeGenerationFailure value)
-        challengeGenerationFailure,
-    required TResult Function(ContentModerationFailure value)
-        contentModerationFailure,
-    required TResult Function(RateLimitFailure value) rateLimitFailure,
-    required TResult Function(ModelUnavailableFailure value)
-        modelUnavailableFailure,
-    required TResult Function(DataQualityFailure value) dataQualityFailure,
-  }) {
-    return insightGenerationFailure(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(ServerFailure value)? serverFailure,
-    TResult? Function(NetworkFailure value)? networkFailure,
-    TResult? Function(CacheFailure value)? cacheFailure,
-    TResult? Function(InvalidInputFailure value)? invalidInputFailure,
-    TResult? Function(AuthFailure value)? authFailure,
-    TResult? Function(AIModelFailure value)? aiModelFailure,
-    TResult? Function(InsufficientDataFailure value)? insufficientDataFailure,
-    TResult? Function(RecommendationGenerationFailure value)?
-        recommendationGenerationFailure,
-    TResult? Function(ContentAnalysisFailure value)? contentAnalysisFailure,
-    TResult? Function(DifficultyAssessmentFailure value)?
-        difficultyAssessmentFailure,
-    TResult? Function(LearningPathFailure value)? learningPathFailure,
-    TResult? Function(ComprehensionAssessmentFailure value)?
-        comprehensionAssessmentFailure,
-    TResult? Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult? Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult? Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult? Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult? Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult? Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult? Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult? Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult? Function(RateLimitFailure value)? rateLimitFailure,
-    TResult? Function(ModelUnavailableFailure value)? modelUnavailableFailure,
-    TResult? Function(DataQualityFailure value)? dataQualityFailure,
-  }) {
-    return insightGenerationFailure?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(ServerFailure value)? serverFailure,
-    TResult Function(NetworkFailure value)? networkFailure,
-    TResult Function(CacheFailure value)? cacheFailure,
-    TResult Function(InvalidInputFailure value)? invalidInputFailure,
-    TResult Function(AuthFailure value)? authFailure,
-    TResult Function(AIModelFailure value)? aiModelFailure,
-    TResult Function(InsufficientDataFailure value)? insufficientDataFailure,
-    TResult Function(RecommendationGenerationFailure value)?
-        recommendationGenerationFailure,
-    TResult Function(ContentAnalysisFailure value)? contentAnalysisFailure,
-    TResult Function(DifficultyAssessmentFailure value)?
-        difficultyAssessmentFailure,
-    TResult Function(LearningPathFailure value)? learningPathFailure,
-    TResult Function(ComprehensionAssessmentFailure value)?
-        comprehensionAssessmentFailure,
-    TResult Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult Function(RateLimitFailure value)? rateLimitFailure,
-    TResult Function(ModelUnavailableFailure value)? modelUnavailableFailure,
-    TResult Function(DataQualityFailure value)? dataQualityFailure,
-    required TResult orElse(),
-  }) {
-    if (insightGenerationFailure != null) {
-      return insightGenerationFailure(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class InsightGenerationFailure implements Failure {
-  const factory InsightGenerationFailure(
-      {required final String message,
-      final String? insightType,
-      final String? context}) = _$InsightGenerationFailureImpl;
-
-  @override
-  String get message;
-  String? get insightType;
-  String? get context;
-
-  /// Create a copy of Failure
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$InsightGenerationFailureImplCopyWith<_$InsightGenerationFailureImpl>
-      get copyWith => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$ScheduleGenerationFailureImplCopyWith<$Res>
-    implements $FailureCopyWith<$Res> {
-  factory _$$ScheduleGenerationFailureImplCopyWith(
-          _$ScheduleGenerationFailureImpl value,
-          $Res Function(_$ScheduleGenerationFailureImpl) then) =
-      __$$ScheduleGenerationFailureImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {String message, String? userId, String? bookId, String? scheduleType});
-}
-
-/// @nodoc
-class __$$ScheduleGenerationFailureImplCopyWithImpl<$Res>
-    extends _$FailureCopyWithImpl<$Res, _$ScheduleGenerationFailureImpl>
-    implements _$$ScheduleGenerationFailureImplCopyWith<$Res> {
-  __$$ScheduleGenerationFailureImplCopyWithImpl(
-      _$ScheduleGenerationFailureImpl _value,
-      $Res Function(_$ScheduleGenerationFailureImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of Failure
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? message = null,
-    Object? userId = freezed,
     Object? bookId = freezed,
-    Object? scheduleType = freezed,
+    Object? assessmentMethod = freezed,
   }) {
-    return _then(_$ScheduleGenerationFailureImpl(
+    return _then(_$ReadingLevelAssessmentFailureImpl(
       message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      userId: freezed == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as String?,
       bookId: freezed == bookId
           ? _value.bookId
           : bookId // ignore: cast_nullable_to_non_nullable
               as String?,
-      scheduleType: freezed == scheduleType
-          ? _value.scheduleType
-          : scheduleType // ignore: cast_nullable_to_non_nullable
+      assessmentMethod: freezed == assessmentMethod
+          ? _value.assessmentMethod
+          : assessmentMethod // ignore: cast_nullable_to_non_nullable
               as String?,
     ));
   }
@@ -6702,48 +5302,47 @@ class __$$ScheduleGenerationFailureImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$ScheduleGenerationFailureImpl implements ScheduleGenerationFailure {
-  const _$ScheduleGenerationFailureImpl(
-      {required this.message, this.userId, this.bookId, this.scheduleType});
+class _$ReadingLevelAssessmentFailureImpl
+    implements ReadingLevelAssessmentFailure {
+  const _$ReadingLevelAssessmentFailureImpl(
+      {required this.message, this.bookId, this.assessmentMethod});
 
   @override
   final String message;
-  @override
-  final String? userId;
   @override
   final String? bookId;
   @override
-  final String? scheduleType;
+  final String? assessmentMethod;
 
   @override
   String toString() {
-    return 'Failure.scheduleGenerationFailure(message: $message, userId: $userId, bookId: $bookId, scheduleType: $scheduleType)';
+    return 'Failure.readingLevelAssessmentFailure(message: $message, bookId: $bookId, assessmentMethod: $assessmentMethod)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ScheduleGenerationFailureImpl &&
+            other is _$ReadingLevelAssessmentFailureImpl &&
             (identical(other.message, message) || other.message == message) &&
-            (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.bookId, bookId) || other.bookId == bookId) &&
-            (identical(other.scheduleType, scheduleType) ||
-                other.scheduleType == scheduleType));
+            (identical(other.assessmentMethod, assessmentMethod) ||
+                other.assessmentMethod == assessmentMethod));
   }
 
   @override
   int get hashCode =>
-      Object.hash(runtimeType, message, userId, bookId, scheduleType);
+      Object.hash(runtimeType, message, bookId, assessmentMethod);
 
   /// Create a copy of Failure
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$ScheduleGenerationFailureImplCopyWith<_$ScheduleGenerationFailureImpl>
-      get copyWith => __$$ScheduleGenerationFailureImplCopyWithImpl<
-          _$ScheduleGenerationFailureImpl>(this, _$identity);
+  _$$ReadingLevelAssessmentFailureImplCopyWith<
+          _$ReadingLevelAssessmentFailureImpl>
+      get copyWith => __$$ReadingLevelAssessmentFailureImplCopyWithImpl<
+          _$ReadingLevelAssessmentFailureImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -6758,7 +5357,7 @@ class _$ScheduleGenerationFailureImpl implements ScheduleGenerationFailure {
             String message, String? modelName, String? operation)
         aiModelFailure,
     required TResult Function(
-            String message, int minimumDataPoints, String? dataType)
+            String message, int? minimumDataPoints, String? dataType)
         insufficientDataFailure,
     required TResult Function(
             String message, String? recommendationType, String? reason)
@@ -6774,41 +5373,24 @@ class _$ScheduleGenerationFailureImpl implements ScheduleGenerationFailure {
     required TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)
         comprehensionAssessmentFailure,
-    required TResult Function(
-            String message, String? bookId, String? nlpOperation)
+    required TResult Function(String message, String? operation, String? text)
         nlpProcessingFailure,
     required TResult Function(
-            String message, String? modelName, String? trainingData)
-        modelTrainingFailure,
+            String message, String? bookId, String? analysisType)
+        sentimentAnalysisFailure,
+    required TResult Function(String message, String? bookId, String? modelType)
+        topicModelingFailure,
     required TResult Function(
-            String message, String? userId, String? preferenceType)
-        preferenceUpdateFailure,
+            String message, String? bookId, String? assessmentMethod)
+        readingLevelAssessmentFailure,
     required TResult Function(
-            String message, String? insightType, String? context)
-        insightGenerationFailure,
-    required TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)
-        scheduleGenerationFailure,
+            String message, String? userId, String? personalizationType)
+        personalizationFailure,
     required TResult Function(
-            String message, String? userId, String? goalType, String? timeframe)
-        goalGenerationFailure,
-    required TResult Function(String message, String? userId,
-            String? challengeType, String? difficulty)
-        challengeGenerationFailure,
-    required TResult Function(
-            String message, String? reason, String? contentType)
-        contentModerationFailure,
-    required TResult Function(
-            String message, Duration cooldown, String? operation)
-        rateLimitFailure,
-    required TResult Function(
-            String message, String? modelName, String? alternative)
-        modelUnavailableFailure,
-    required TResult Function(
-            String message, String? dataType, String? qualityIssue)
+            String message, String? dataSource, String? qualityIssue)
         dataQualityFailure,
   }) {
-    return scheduleGenerationFailure(message, userId, bookId, scheduleType);
+    return readingLevelAssessmentFailure(message, bookId, assessmentMethod);
   }
 
   @override
@@ -6821,7 +5403,7 @@ class _$ScheduleGenerationFailureImpl implements ScheduleGenerationFailure {
     TResult? Function(String message)? authFailure,
     TResult? Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult? Function(String message, int minimumDataPoints, String? dataType)?
+    TResult? Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult? Function(
             String message, String? recommendationType, String? reason)?
@@ -6835,34 +5417,22 @@ class _$ScheduleGenerationFailureImpl implements ScheduleGenerationFailure {
     TResult? Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult? Function(String message, String? bookId, String? nlpOperation)?
+    TResult? Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult? Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult? Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult? Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult? Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult? Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult? Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult? Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult? Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult? Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult? Function(String message, String? dataType, String? qualityIssue)?
+    TResult? Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult? Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult? Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult? Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult? Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
   }) {
-    return scheduleGenerationFailure?.call(
-        message, userId, bookId, scheduleType);
+    return readingLevelAssessmentFailure?.call(
+        message, bookId, assessmentMethod);
   }
 
   @override
@@ -6875,7 +5445,7 @@ class _$ScheduleGenerationFailureImpl implements ScheduleGenerationFailure {
     TResult Function(String message)? authFailure,
     TResult Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult Function(String message, int minimumDataPoints, String? dataType)?
+    TResult Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult Function(
             String message, String? recommendationType, String? reason)?
@@ -6889,35 +5459,23 @@ class _$ScheduleGenerationFailureImpl implements ScheduleGenerationFailure {
     TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult Function(String message, String? bookId, String? nlpOperation)?
+    TResult Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult Function(String message, String? dataType, String? qualityIssue)?
+    TResult Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
     required TResult orElse(),
   }) {
-    if (scheduleGenerationFailure != null) {
-      return scheduleGenerationFailure(message, userId, bookId, scheduleType);
+    if (readingLevelAssessmentFailure != null) {
+      return readingLevelAssessmentFailure(message, bookId, assessmentMethod);
     }
     return orElse();
   }
@@ -6943,25 +5501,16 @@ class _$ScheduleGenerationFailureImpl implements ScheduleGenerationFailure {
     required TResult Function(ComprehensionAssessmentFailure value)
         comprehensionAssessmentFailure,
     required TResult Function(NLPProcessingFailure value) nlpProcessingFailure,
-    required TResult Function(ModelTrainingFailure value) modelTrainingFailure,
-    required TResult Function(PreferenceUpdateFailure value)
-        preferenceUpdateFailure,
-    required TResult Function(InsightGenerationFailure value)
-        insightGenerationFailure,
-    required TResult Function(ScheduleGenerationFailure value)
-        scheduleGenerationFailure,
-    required TResult Function(GoalGenerationFailure value)
-        goalGenerationFailure,
-    required TResult Function(ChallengeGenerationFailure value)
-        challengeGenerationFailure,
-    required TResult Function(ContentModerationFailure value)
-        contentModerationFailure,
-    required TResult Function(RateLimitFailure value) rateLimitFailure,
-    required TResult Function(ModelUnavailableFailure value)
-        modelUnavailableFailure,
+    required TResult Function(SentimentAnalysisFailure value)
+        sentimentAnalysisFailure,
+    required TResult Function(TopicModelingFailure value) topicModelingFailure,
+    required TResult Function(ReadingLevelAssessmentFailure value)
+        readingLevelAssessmentFailure,
+    required TResult Function(PersonalizationFailure value)
+        personalizationFailure,
     required TResult Function(DataQualityFailure value) dataQualityFailure,
   }) {
-    return scheduleGenerationFailure(this);
+    return readingLevelAssessmentFailure(this);
   }
 
   @override
@@ -6983,20 +5532,14 @@ class _$ScheduleGenerationFailureImpl implements ScheduleGenerationFailure {
     TResult? Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult? Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult? Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult? Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult? Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult? Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult? Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult? Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult? Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult? Function(RateLimitFailure value)? rateLimitFailure,
-    TResult? Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult? Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult? Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult? Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult? Function(PersonalizationFailure value)? personalizationFailure,
     TResult? Function(DataQualityFailure value)? dataQualityFailure,
   }) {
-    return scheduleGenerationFailure?.call(this);
+    return readingLevelAssessmentFailure?.call(this);
   }
 
   @override
@@ -7018,67 +5561,60 @@ class _$ScheduleGenerationFailureImpl implements ScheduleGenerationFailure {
     TResult Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult Function(RateLimitFailure value)? rateLimitFailure,
-    TResult Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult Function(PersonalizationFailure value)? personalizationFailure,
     TResult Function(DataQualityFailure value)? dataQualityFailure,
     required TResult orElse(),
   }) {
-    if (scheduleGenerationFailure != null) {
-      return scheduleGenerationFailure(this);
+    if (readingLevelAssessmentFailure != null) {
+      return readingLevelAssessmentFailure(this);
     }
     return orElse();
   }
 }
 
-abstract class ScheduleGenerationFailure implements Failure {
-  const factory ScheduleGenerationFailure(
+abstract class ReadingLevelAssessmentFailure implements Failure {
+  const factory ReadingLevelAssessmentFailure(
       {required final String message,
-      final String? userId,
       final String? bookId,
-      final String? scheduleType}) = _$ScheduleGenerationFailureImpl;
+      final String? assessmentMethod}) = _$ReadingLevelAssessmentFailureImpl;
 
   @override
   String get message;
-  String? get userId;
   String? get bookId;
-  String? get scheduleType;
+  String? get assessmentMethod;
 
   /// Create a copy of Failure
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ScheduleGenerationFailureImplCopyWith<_$ScheduleGenerationFailureImpl>
+  _$$ReadingLevelAssessmentFailureImplCopyWith<
+          _$ReadingLevelAssessmentFailureImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$GoalGenerationFailureImplCopyWith<$Res>
+abstract class _$$PersonalizationFailureImplCopyWith<$Res>
     implements $FailureCopyWith<$Res> {
-  factory _$$GoalGenerationFailureImplCopyWith(
-          _$GoalGenerationFailureImpl value,
-          $Res Function(_$GoalGenerationFailureImpl) then) =
-      __$$GoalGenerationFailureImplCopyWithImpl<$Res>;
+  factory _$$PersonalizationFailureImplCopyWith(
+          _$PersonalizationFailureImpl value,
+          $Res Function(_$PersonalizationFailureImpl) then) =
+      __$$PersonalizationFailureImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String message, String? userId, String? goalType, String? timeframe});
+  $Res call({String message, String? userId, String? personalizationType});
 }
 
 /// @nodoc
-class __$$GoalGenerationFailureImplCopyWithImpl<$Res>
-    extends _$FailureCopyWithImpl<$Res, _$GoalGenerationFailureImpl>
-    implements _$$GoalGenerationFailureImplCopyWith<$Res> {
-  __$$GoalGenerationFailureImplCopyWithImpl(_$GoalGenerationFailureImpl _value,
-      $Res Function(_$GoalGenerationFailureImpl) _then)
+class __$$PersonalizationFailureImplCopyWithImpl<$Res>
+    extends _$FailureCopyWithImpl<$Res, _$PersonalizationFailureImpl>
+    implements _$$PersonalizationFailureImplCopyWith<$Res> {
+  __$$PersonalizationFailureImplCopyWithImpl(
+      _$PersonalizationFailureImpl _value,
+      $Res Function(_$PersonalizationFailureImpl) _then)
       : super(_value, _then);
 
   /// Create a copy of Failure
@@ -7088,10 +5624,9 @@ class __$$GoalGenerationFailureImplCopyWithImpl<$Res>
   $Res call({
     Object? message = null,
     Object? userId = freezed,
-    Object? goalType = freezed,
-    Object? timeframe = freezed,
+    Object? personalizationType = freezed,
   }) {
-    return _then(_$GoalGenerationFailureImpl(
+    return _then(_$PersonalizationFailureImpl(
       message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -7100,13 +5635,9 @@ class __$$GoalGenerationFailureImplCopyWithImpl<$Res>
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String?,
-      goalType: freezed == goalType
-          ? _value.goalType
-          : goalType // ignore: cast_nullable_to_non_nullable
-              as String?,
-      timeframe: freezed == timeframe
-          ? _value.timeframe
-          : timeframe // ignore: cast_nullable_to_non_nullable
+      personalizationType: freezed == personalizationType
+          ? _value.personalizationType
+          : personalizationType // ignore: cast_nullable_to_non_nullable
               as String?,
     ));
   }
@@ -7114,49 +5645,45 @@ class __$$GoalGenerationFailureImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$GoalGenerationFailureImpl implements GoalGenerationFailure {
-  const _$GoalGenerationFailureImpl(
-      {required this.message, this.userId, this.goalType, this.timeframe});
+class _$PersonalizationFailureImpl implements PersonalizationFailure {
+  const _$PersonalizationFailureImpl(
+      {required this.message, this.userId, this.personalizationType});
 
   @override
   final String message;
   @override
   final String? userId;
   @override
-  final String? goalType;
-  @override
-  final String? timeframe;
+  final String? personalizationType;
 
   @override
   String toString() {
-    return 'Failure.goalGenerationFailure(message: $message, userId: $userId, goalType: $goalType, timeframe: $timeframe)';
+    return 'Failure.personalizationFailure(message: $message, userId: $userId, personalizationType: $personalizationType)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$GoalGenerationFailureImpl &&
+            other is _$PersonalizationFailureImpl &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.userId, userId) || other.userId == userId) &&
-            (identical(other.goalType, goalType) ||
-                other.goalType == goalType) &&
-            (identical(other.timeframe, timeframe) ||
-                other.timeframe == timeframe));
+            (identical(other.personalizationType, personalizationType) ||
+                other.personalizationType == personalizationType));
   }
 
   @override
   int get hashCode =>
-      Object.hash(runtimeType, message, userId, goalType, timeframe);
+      Object.hash(runtimeType, message, userId, personalizationType);
 
   /// Create a copy of Failure
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$GoalGenerationFailureImplCopyWith<_$GoalGenerationFailureImpl>
-      get copyWith => __$$GoalGenerationFailureImplCopyWithImpl<
-          _$GoalGenerationFailureImpl>(this, _$identity);
+  _$$PersonalizationFailureImplCopyWith<_$PersonalizationFailureImpl>
+      get copyWith => __$$PersonalizationFailureImplCopyWithImpl<
+          _$PersonalizationFailureImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -7171,7 +5698,7 @@ class _$GoalGenerationFailureImpl implements GoalGenerationFailure {
             String message, String? modelName, String? operation)
         aiModelFailure,
     required TResult Function(
-            String message, int minimumDataPoints, String? dataType)
+            String message, int? minimumDataPoints, String? dataType)
         insufficientDataFailure,
     required TResult Function(
             String message, String? recommendationType, String? reason)
@@ -7187,41 +5714,24 @@ class _$GoalGenerationFailureImpl implements GoalGenerationFailure {
     required TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)
         comprehensionAssessmentFailure,
-    required TResult Function(
-            String message, String? bookId, String? nlpOperation)
+    required TResult Function(String message, String? operation, String? text)
         nlpProcessingFailure,
     required TResult Function(
-            String message, String? modelName, String? trainingData)
-        modelTrainingFailure,
+            String message, String? bookId, String? analysisType)
+        sentimentAnalysisFailure,
+    required TResult Function(String message, String? bookId, String? modelType)
+        topicModelingFailure,
     required TResult Function(
-            String message, String? userId, String? preferenceType)
-        preferenceUpdateFailure,
+            String message, String? bookId, String? assessmentMethod)
+        readingLevelAssessmentFailure,
     required TResult Function(
-            String message, String? insightType, String? context)
-        insightGenerationFailure,
-    required TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)
-        scheduleGenerationFailure,
+            String message, String? userId, String? personalizationType)
+        personalizationFailure,
     required TResult Function(
-            String message, String? userId, String? goalType, String? timeframe)
-        goalGenerationFailure,
-    required TResult Function(String message, String? userId,
-            String? challengeType, String? difficulty)
-        challengeGenerationFailure,
-    required TResult Function(
-            String message, String? reason, String? contentType)
-        contentModerationFailure,
-    required TResult Function(
-            String message, Duration cooldown, String? operation)
-        rateLimitFailure,
-    required TResult Function(
-            String message, String? modelName, String? alternative)
-        modelUnavailableFailure,
-    required TResult Function(
-            String message, String? dataType, String? qualityIssue)
+            String message, String? dataSource, String? qualityIssue)
         dataQualityFailure,
   }) {
-    return goalGenerationFailure(message, userId, goalType, timeframe);
+    return personalizationFailure(message, userId, personalizationType);
   }
 
   @override
@@ -7234,7 +5744,7 @@ class _$GoalGenerationFailureImpl implements GoalGenerationFailure {
     TResult? Function(String message)? authFailure,
     TResult? Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult? Function(String message, int minimumDataPoints, String? dataType)?
+    TResult? Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult? Function(
             String message, String? recommendationType, String? reason)?
@@ -7248,33 +5758,21 @@ class _$GoalGenerationFailureImpl implements GoalGenerationFailure {
     TResult? Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult? Function(String message, String? bookId, String? nlpOperation)?
+    TResult? Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult? Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult? Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult? Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult? Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult? Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult? Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult? Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult? Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult? Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult? Function(String message, String? dataType, String? qualityIssue)?
+    TResult? Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult? Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult? Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult? Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult? Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
   }) {
-    return goalGenerationFailure?.call(message, userId, goalType, timeframe);
+    return personalizationFailure?.call(message, userId, personalizationType);
   }
 
   @override
@@ -7287,7 +5785,7 @@ class _$GoalGenerationFailureImpl implements GoalGenerationFailure {
     TResult Function(String message)? authFailure,
     TResult Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult Function(String message, int minimumDataPoints, String? dataType)?
+    TResult Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult Function(
             String message, String? recommendationType, String? reason)?
@@ -7301,35 +5799,23 @@ class _$GoalGenerationFailureImpl implements GoalGenerationFailure {
     TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult Function(String message, String? bookId, String? nlpOperation)?
+    TResult Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult Function(String message, String? dataType, String? qualityIssue)?
+    TResult Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
     required TResult orElse(),
   }) {
-    if (goalGenerationFailure != null) {
-      return goalGenerationFailure(message, userId, goalType, timeframe);
+    if (personalizationFailure != null) {
+      return personalizationFailure(message, userId, personalizationType);
     }
     return orElse();
   }
@@ -7355,25 +5841,16 @@ class _$GoalGenerationFailureImpl implements GoalGenerationFailure {
     required TResult Function(ComprehensionAssessmentFailure value)
         comprehensionAssessmentFailure,
     required TResult Function(NLPProcessingFailure value) nlpProcessingFailure,
-    required TResult Function(ModelTrainingFailure value) modelTrainingFailure,
-    required TResult Function(PreferenceUpdateFailure value)
-        preferenceUpdateFailure,
-    required TResult Function(InsightGenerationFailure value)
-        insightGenerationFailure,
-    required TResult Function(ScheduleGenerationFailure value)
-        scheduleGenerationFailure,
-    required TResult Function(GoalGenerationFailure value)
-        goalGenerationFailure,
-    required TResult Function(ChallengeGenerationFailure value)
-        challengeGenerationFailure,
-    required TResult Function(ContentModerationFailure value)
-        contentModerationFailure,
-    required TResult Function(RateLimitFailure value) rateLimitFailure,
-    required TResult Function(ModelUnavailableFailure value)
-        modelUnavailableFailure,
+    required TResult Function(SentimentAnalysisFailure value)
+        sentimentAnalysisFailure,
+    required TResult Function(TopicModelingFailure value) topicModelingFailure,
+    required TResult Function(ReadingLevelAssessmentFailure value)
+        readingLevelAssessmentFailure,
+    required TResult Function(PersonalizationFailure value)
+        personalizationFailure,
     required TResult Function(DataQualityFailure value) dataQualityFailure,
   }) {
-    return goalGenerationFailure(this);
+    return personalizationFailure(this);
   }
 
   @override
@@ -7395,20 +5872,14 @@ class _$GoalGenerationFailureImpl implements GoalGenerationFailure {
     TResult? Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult? Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult? Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult? Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult? Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult? Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult? Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult? Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult? Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult? Function(RateLimitFailure value)? rateLimitFailure,
-    TResult? Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult? Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult? Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult? Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult? Function(PersonalizationFailure value)? personalizationFailure,
     TResult? Function(DataQualityFailure value)? dataQualityFailure,
   }) {
-    return goalGenerationFailure?.call(this);
+    return personalizationFailure?.call(this);
   }
 
   @override
@@ -7430,1667 +5901,37 @@ class _$GoalGenerationFailureImpl implements GoalGenerationFailure {
     TResult Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult Function(RateLimitFailure value)? rateLimitFailure,
-    TResult Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult Function(PersonalizationFailure value)? personalizationFailure,
     TResult Function(DataQualityFailure value)? dataQualityFailure,
     required TResult orElse(),
   }) {
-    if (goalGenerationFailure != null) {
-      return goalGenerationFailure(this);
+    if (personalizationFailure != null) {
+      return personalizationFailure(this);
     }
     return orElse();
   }
 }
 
-abstract class GoalGenerationFailure implements Failure {
-  const factory GoalGenerationFailure(
+abstract class PersonalizationFailure implements Failure {
+  const factory PersonalizationFailure(
       {required final String message,
       final String? userId,
-      final String? goalType,
-      final String? timeframe}) = _$GoalGenerationFailureImpl;
+      final String? personalizationType}) = _$PersonalizationFailureImpl;
 
   @override
   String get message;
   String? get userId;
-  String? get goalType;
-  String? get timeframe;
+  String? get personalizationType;
 
   /// Create a copy of Failure
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$GoalGenerationFailureImplCopyWith<_$GoalGenerationFailureImpl>
-      get copyWith => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$ChallengeGenerationFailureImplCopyWith<$Res>
-    implements $FailureCopyWith<$Res> {
-  factory _$$ChallengeGenerationFailureImplCopyWith(
-          _$ChallengeGenerationFailureImpl value,
-          $Res Function(_$ChallengeGenerationFailureImpl) then) =
-      __$$ChallengeGenerationFailureImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {String message,
-      String? userId,
-      String? challengeType,
-      String? difficulty});
-}
-
-/// @nodoc
-class __$$ChallengeGenerationFailureImplCopyWithImpl<$Res>
-    extends _$FailureCopyWithImpl<$Res, _$ChallengeGenerationFailureImpl>
-    implements _$$ChallengeGenerationFailureImplCopyWith<$Res> {
-  __$$ChallengeGenerationFailureImplCopyWithImpl(
-      _$ChallengeGenerationFailureImpl _value,
-      $Res Function(_$ChallengeGenerationFailureImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of Failure
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? message = null,
-    Object? userId = freezed,
-    Object? challengeType = freezed,
-    Object? difficulty = freezed,
-  }) {
-    return _then(_$ChallengeGenerationFailureImpl(
-      message: null == message
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String,
-      userId: freezed == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      challengeType: freezed == challengeType
-          ? _value.challengeType
-          : challengeType // ignore: cast_nullable_to_non_nullable
-              as String?,
-      difficulty: freezed == difficulty
-          ? _value.difficulty
-          : difficulty // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$ChallengeGenerationFailureImpl implements ChallengeGenerationFailure {
-  const _$ChallengeGenerationFailureImpl(
-      {required this.message,
-      this.userId,
-      this.challengeType,
-      this.difficulty});
-
-  @override
-  final String message;
-  @override
-  final String? userId;
-  @override
-  final String? challengeType;
-  @override
-  final String? difficulty;
-
-  @override
-  String toString() {
-    return 'Failure.challengeGenerationFailure(message: $message, userId: $userId, challengeType: $challengeType, difficulty: $difficulty)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ChallengeGenerationFailureImpl &&
-            (identical(other.message, message) || other.message == message) &&
-            (identical(other.userId, userId) || other.userId == userId) &&
-            (identical(other.challengeType, challengeType) ||
-                other.challengeType == challengeType) &&
-            (identical(other.difficulty, difficulty) ||
-                other.difficulty == difficulty));
-  }
-
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, message, userId, challengeType, difficulty);
-
-  /// Create a copy of Failure
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$ChallengeGenerationFailureImplCopyWith<_$ChallengeGenerationFailureImpl>
-      get copyWith => __$$ChallengeGenerationFailureImplCopyWithImpl<
-          _$ChallengeGenerationFailureImpl>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String message, int? statusCode) serverFailure,
-    required TResult Function(String message) networkFailure,
-    required TResult Function(String message) cacheFailure,
-    required TResult Function(String message, String? field)
-        invalidInputFailure,
-    required TResult Function(String message) authFailure,
-    required TResult Function(
-            String message, String? modelName, String? operation)
-        aiModelFailure,
-    required TResult Function(
-            String message, int minimumDataPoints, String? dataType)
-        insufficientDataFailure,
-    required TResult Function(
-            String message, String? recommendationType, String? reason)
-        recommendationGenerationFailure,
-    required TResult Function(
-            String message, String? analysisType, String? bookId)
-        contentAnalysisFailure,
-    required TResult Function(
-            String message, String? bookId, String? assessmentType)
-        difficultyAssessmentFailure,
-    required TResult Function(String message, String? pathId, String? operation)
-        learningPathFailure,
-    required TResult Function(String message, String? userId, String? bookId,
-            String? assessmentType)
-        comprehensionAssessmentFailure,
-    required TResult Function(
-            String message, String? bookId, String? nlpOperation)
-        nlpProcessingFailure,
-    required TResult Function(
-            String message, String? modelName, String? trainingData)
-        modelTrainingFailure,
-    required TResult Function(
-            String message, String? userId, String? preferenceType)
-        preferenceUpdateFailure,
-    required TResult Function(
-            String message, String? insightType, String? context)
-        insightGenerationFailure,
-    required TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)
-        scheduleGenerationFailure,
-    required TResult Function(
-            String message, String? userId, String? goalType, String? timeframe)
-        goalGenerationFailure,
-    required TResult Function(String message, String? userId,
-            String? challengeType, String? difficulty)
-        challengeGenerationFailure,
-    required TResult Function(
-            String message, String? reason, String? contentType)
-        contentModerationFailure,
-    required TResult Function(
-            String message, Duration cooldown, String? operation)
-        rateLimitFailure,
-    required TResult Function(
-            String message, String? modelName, String? alternative)
-        modelUnavailableFailure,
-    required TResult Function(
-            String message, String? dataType, String? qualityIssue)
-        dataQualityFailure,
-  }) {
-    return challengeGenerationFailure(
-        message, userId, challengeType, difficulty);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String message, int? statusCode)? serverFailure,
-    TResult? Function(String message)? networkFailure,
-    TResult? Function(String message)? cacheFailure,
-    TResult? Function(String message, String? field)? invalidInputFailure,
-    TResult? Function(String message)? authFailure,
-    TResult? Function(String message, String? modelName, String? operation)?
-        aiModelFailure,
-    TResult? Function(String message, int minimumDataPoints, String? dataType)?
-        insufficientDataFailure,
-    TResult? Function(
-            String message, String? recommendationType, String? reason)?
-        recommendationGenerationFailure,
-    TResult? Function(String message, String? analysisType, String? bookId)?
-        contentAnalysisFailure,
-    TResult? Function(String message, String? bookId, String? assessmentType)?
-        difficultyAssessmentFailure,
-    TResult? Function(String message, String? pathId, String? operation)?
-        learningPathFailure,
-    TResult? Function(String message, String? userId, String? bookId,
-            String? assessmentType)?
-        comprehensionAssessmentFailure,
-    TResult? Function(String message, String? bookId, String? nlpOperation)?
-        nlpProcessingFailure,
-    TResult? Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult? Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult? Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult? Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult? Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult? Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult? Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult? Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult? Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult? Function(String message, String? dataType, String? qualityIssue)?
-        dataQualityFailure,
-  }) {
-    return challengeGenerationFailure?.call(
-        message, userId, challengeType, difficulty);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String message, int? statusCode)? serverFailure,
-    TResult Function(String message)? networkFailure,
-    TResult Function(String message)? cacheFailure,
-    TResult Function(String message, String? field)? invalidInputFailure,
-    TResult Function(String message)? authFailure,
-    TResult Function(String message, String? modelName, String? operation)?
-        aiModelFailure,
-    TResult Function(String message, int minimumDataPoints, String? dataType)?
-        insufficientDataFailure,
-    TResult Function(
-            String message, String? recommendationType, String? reason)?
-        recommendationGenerationFailure,
-    TResult Function(String message, String? analysisType, String? bookId)?
-        contentAnalysisFailure,
-    TResult Function(String message, String? bookId, String? assessmentType)?
-        difficultyAssessmentFailure,
-    TResult Function(String message, String? pathId, String? operation)?
-        learningPathFailure,
-    TResult Function(String message, String? userId, String? bookId,
-            String? assessmentType)?
-        comprehensionAssessmentFailure,
-    TResult Function(String message, String? bookId, String? nlpOperation)?
-        nlpProcessingFailure,
-    TResult Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult Function(String message, String? dataType, String? qualityIssue)?
-        dataQualityFailure,
-    required TResult orElse(),
-  }) {
-    if (challengeGenerationFailure != null) {
-      return challengeGenerationFailure(
-          message, userId, challengeType, difficulty);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(ServerFailure value) serverFailure,
-    required TResult Function(NetworkFailure value) networkFailure,
-    required TResult Function(CacheFailure value) cacheFailure,
-    required TResult Function(InvalidInputFailure value) invalidInputFailure,
-    required TResult Function(AuthFailure value) authFailure,
-    required TResult Function(AIModelFailure value) aiModelFailure,
-    required TResult Function(InsufficientDataFailure value)
-        insufficientDataFailure,
-    required TResult Function(RecommendationGenerationFailure value)
-        recommendationGenerationFailure,
-    required TResult Function(ContentAnalysisFailure value)
-        contentAnalysisFailure,
-    required TResult Function(DifficultyAssessmentFailure value)
-        difficultyAssessmentFailure,
-    required TResult Function(LearningPathFailure value) learningPathFailure,
-    required TResult Function(ComprehensionAssessmentFailure value)
-        comprehensionAssessmentFailure,
-    required TResult Function(NLPProcessingFailure value) nlpProcessingFailure,
-    required TResult Function(ModelTrainingFailure value) modelTrainingFailure,
-    required TResult Function(PreferenceUpdateFailure value)
-        preferenceUpdateFailure,
-    required TResult Function(InsightGenerationFailure value)
-        insightGenerationFailure,
-    required TResult Function(ScheduleGenerationFailure value)
-        scheduleGenerationFailure,
-    required TResult Function(GoalGenerationFailure value)
-        goalGenerationFailure,
-    required TResult Function(ChallengeGenerationFailure value)
-        challengeGenerationFailure,
-    required TResult Function(ContentModerationFailure value)
-        contentModerationFailure,
-    required TResult Function(RateLimitFailure value) rateLimitFailure,
-    required TResult Function(ModelUnavailableFailure value)
-        modelUnavailableFailure,
-    required TResult Function(DataQualityFailure value) dataQualityFailure,
-  }) {
-    return challengeGenerationFailure(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(ServerFailure value)? serverFailure,
-    TResult? Function(NetworkFailure value)? networkFailure,
-    TResult? Function(CacheFailure value)? cacheFailure,
-    TResult? Function(InvalidInputFailure value)? invalidInputFailure,
-    TResult? Function(AuthFailure value)? authFailure,
-    TResult? Function(AIModelFailure value)? aiModelFailure,
-    TResult? Function(InsufficientDataFailure value)? insufficientDataFailure,
-    TResult? Function(RecommendationGenerationFailure value)?
-        recommendationGenerationFailure,
-    TResult? Function(ContentAnalysisFailure value)? contentAnalysisFailure,
-    TResult? Function(DifficultyAssessmentFailure value)?
-        difficultyAssessmentFailure,
-    TResult? Function(LearningPathFailure value)? learningPathFailure,
-    TResult? Function(ComprehensionAssessmentFailure value)?
-        comprehensionAssessmentFailure,
-    TResult? Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult? Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult? Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult? Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult? Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult? Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult? Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult? Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult? Function(RateLimitFailure value)? rateLimitFailure,
-    TResult? Function(ModelUnavailableFailure value)? modelUnavailableFailure,
-    TResult? Function(DataQualityFailure value)? dataQualityFailure,
-  }) {
-    return challengeGenerationFailure?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(ServerFailure value)? serverFailure,
-    TResult Function(NetworkFailure value)? networkFailure,
-    TResult Function(CacheFailure value)? cacheFailure,
-    TResult Function(InvalidInputFailure value)? invalidInputFailure,
-    TResult Function(AuthFailure value)? authFailure,
-    TResult Function(AIModelFailure value)? aiModelFailure,
-    TResult Function(InsufficientDataFailure value)? insufficientDataFailure,
-    TResult Function(RecommendationGenerationFailure value)?
-        recommendationGenerationFailure,
-    TResult Function(ContentAnalysisFailure value)? contentAnalysisFailure,
-    TResult Function(DifficultyAssessmentFailure value)?
-        difficultyAssessmentFailure,
-    TResult Function(LearningPathFailure value)? learningPathFailure,
-    TResult Function(ComprehensionAssessmentFailure value)?
-        comprehensionAssessmentFailure,
-    TResult Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult Function(RateLimitFailure value)? rateLimitFailure,
-    TResult Function(ModelUnavailableFailure value)? modelUnavailableFailure,
-    TResult Function(DataQualityFailure value)? dataQualityFailure,
-    required TResult orElse(),
-  }) {
-    if (challengeGenerationFailure != null) {
-      return challengeGenerationFailure(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class ChallengeGenerationFailure implements Failure {
-  const factory ChallengeGenerationFailure(
-      {required final String message,
-      final String? userId,
-      final String? challengeType,
-      final String? difficulty}) = _$ChallengeGenerationFailureImpl;
-
-  @override
-  String get message;
-  String? get userId;
-  String? get challengeType;
-  String? get difficulty;
-
-  /// Create a copy of Failure
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ChallengeGenerationFailureImplCopyWith<_$ChallengeGenerationFailureImpl>
-      get copyWith => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$ContentModerationFailureImplCopyWith<$Res>
-    implements $FailureCopyWith<$Res> {
-  factory _$$ContentModerationFailureImplCopyWith(
-          _$ContentModerationFailureImpl value,
-          $Res Function(_$ContentModerationFailureImpl) then) =
-      __$$ContentModerationFailureImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({String message, String? reason, String? contentType});
-}
-
-/// @nodoc
-class __$$ContentModerationFailureImplCopyWithImpl<$Res>
-    extends _$FailureCopyWithImpl<$Res, _$ContentModerationFailureImpl>
-    implements _$$ContentModerationFailureImplCopyWith<$Res> {
-  __$$ContentModerationFailureImplCopyWithImpl(
-      _$ContentModerationFailureImpl _value,
-      $Res Function(_$ContentModerationFailureImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of Failure
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? message = null,
-    Object? reason = freezed,
-    Object? contentType = freezed,
-  }) {
-    return _then(_$ContentModerationFailureImpl(
-      message: null == message
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String,
-      reason: freezed == reason
-          ? _value.reason
-          : reason // ignore: cast_nullable_to_non_nullable
-              as String?,
-      contentType: freezed == contentType
-          ? _value.contentType
-          : contentType // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$ContentModerationFailureImpl implements ContentModerationFailure {
-  const _$ContentModerationFailureImpl(
-      {required this.message, this.reason, this.contentType});
-
-  @override
-  final String message;
-  @override
-  final String? reason;
-  @override
-  final String? contentType;
-
-  @override
-  String toString() {
-    return 'Failure.contentModerationFailure(message: $message, reason: $reason, contentType: $contentType)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ContentModerationFailureImpl &&
-            (identical(other.message, message) || other.message == message) &&
-            (identical(other.reason, reason) || other.reason == reason) &&
-            (identical(other.contentType, contentType) ||
-                other.contentType == contentType));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, message, reason, contentType);
-
-  /// Create a copy of Failure
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$ContentModerationFailureImplCopyWith<_$ContentModerationFailureImpl>
-      get copyWith => __$$ContentModerationFailureImplCopyWithImpl<
-          _$ContentModerationFailureImpl>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String message, int? statusCode) serverFailure,
-    required TResult Function(String message) networkFailure,
-    required TResult Function(String message) cacheFailure,
-    required TResult Function(String message, String? field)
-        invalidInputFailure,
-    required TResult Function(String message) authFailure,
-    required TResult Function(
-            String message, String? modelName, String? operation)
-        aiModelFailure,
-    required TResult Function(
-            String message, int minimumDataPoints, String? dataType)
-        insufficientDataFailure,
-    required TResult Function(
-            String message, String? recommendationType, String? reason)
-        recommendationGenerationFailure,
-    required TResult Function(
-            String message, String? analysisType, String? bookId)
-        contentAnalysisFailure,
-    required TResult Function(
-            String message, String? bookId, String? assessmentType)
-        difficultyAssessmentFailure,
-    required TResult Function(String message, String? pathId, String? operation)
-        learningPathFailure,
-    required TResult Function(String message, String? userId, String? bookId,
-            String? assessmentType)
-        comprehensionAssessmentFailure,
-    required TResult Function(
-            String message, String? bookId, String? nlpOperation)
-        nlpProcessingFailure,
-    required TResult Function(
-            String message, String? modelName, String? trainingData)
-        modelTrainingFailure,
-    required TResult Function(
-            String message, String? userId, String? preferenceType)
-        preferenceUpdateFailure,
-    required TResult Function(
-            String message, String? insightType, String? context)
-        insightGenerationFailure,
-    required TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)
-        scheduleGenerationFailure,
-    required TResult Function(
-            String message, String? userId, String? goalType, String? timeframe)
-        goalGenerationFailure,
-    required TResult Function(String message, String? userId,
-            String? challengeType, String? difficulty)
-        challengeGenerationFailure,
-    required TResult Function(
-            String message, String? reason, String? contentType)
-        contentModerationFailure,
-    required TResult Function(
-            String message, Duration cooldown, String? operation)
-        rateLimitFailure,
-    required TResult Function(
-            String message, String? modelName, String? alternative)
-        modelUnavailableFailure,
-    required TResult Function(
-            String message, String? dataType, String? qualityIssue)
-        dataQualityFailure,
-  }) {
-    return contentModerationFailure(message, reason, contentType);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String message, int? statusCode)? serverFailure,
-    TResult? Function(String message)? networkFailure,
-    TResult? Function(String message)? cacheFailure,
-    TResult? Function(String message, String? field)? invalidInputFailure,
-    TResult? Function(String message)? authFailure,
-    TResult? Function(String message, String? modelName, String? operation)?
-        aiModelFailure,
-    TResult? Function(String message, int minimumDataPoints, String? dataType)?
-        insufficientDataFailure,
-    TResult? Function(
-            String message, String? recommendationType, String? reason)?
-        recommendationGenerationFailure,
-    TResult? Function(String message, String? analysisType, String? bookId)?
-        contentAnalysisFailure,
-    TResult? Function(String message, String? bookId, String? assessmentType)?
-        difficultyAssessmentFailure,
-    TResult? Function(String message, String? pathId, String? operation)?
-        learningPathFailure,
-    TResult? Function(String message, String? userId, String? bookId,
-            String? assessmentType)?
-        comprehensionAssessmentFailure,
-    TResult? Function(String message, String? bookId, String? nlpOperation)?
-        nlpProcessingFailure,
-    TResult? Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult? Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult? Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult? Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult? Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult? Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult? Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult? Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult? Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult? Function(String message, String? dataType, String? qualityIssue)?
-        dataQualityFailure,
-  }) {
-    return contentModerationFailure?.call(message, reason, contentType);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String message, int? statusCode)? serverFailure,
-    TResult Function(String message)? networkFailure,
-    TResult Function(String message)? cacheFailure,
-    TResult Function(String message, String? field)? invalidInputFailure,
-    TResult Function(String message)? authFailure,
-    TResult Function(String message, String? modelName, String? operation)?
-        aiModelFailure,
-    TResult Function(String message, int minimumDataPoints, String? dataType)?
-        insufficientDataFailure,
-    TResult Function(
-            String message, String? recommendationType, String? reason)?
-        recommendationGenerationFailure,
-    TResult Function(String message, String? analysisType, String? bookId)?
-        contentAnalysisFailure,
-    TResult Function(String message, String? bookId, String? assessmentType)?
-        difficultyAssessmentFailure,
-    TResult Function(String message, String? pathId, String? operation)?
-        learningPathFailure,
-    TResult Function(String message, String? userId, String? bookId,
-            String? assessmentType)?
-        comprehensionAssessmentFailure,
-    TResult Function(String message, String? bookId, String? nlpOperation)?
-        nlpProcessingFailure,
-    TResult Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult Function(String message, String? dataType, String? qualityIssue)?
-        dataQualityFailure,
-    required TResult orElse(),
-  }) {
-    if (contentModerationFailure != null) {
-      return contentModerationFailure(message, reason, contentType);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(ServerFailure value) serverFailure,
-    required TResult Function(NetworkFailure value) networkFailure,
-    required TResult Function(CacheFailure value) cacheFailure,
-    required TResult Function(InvalidInputFailure value) invalidInputFailure,
-    required TResult Function(AuthFailure value) authFailure,
-    required TResult Function(AIModelFailure value) aiModelFailure,
-    required TResult Function(InsufficientDataFailure value)
-        insufficientDataFailure,
-    required TResult Function(RecommendationGenerationFailure value)
-        recommendationGenerationFailure,
-    required TResult Function(ContentAnalysisFailure value)
-        contentAnalysisFailure,
-    required TResult Function(DifficultyAssessmentFailure value)
-        difficultyAssessmentFailure,
-    required TResult Function(LearningPathFailure value) learningPathFailure,
-    required TResult Function(ComprehensionAssessmentFailure value)
-        comprehensionAssessmentFailure,
-    required TResult Function(NLPProcessingFailure value) nlpProcessingFailure,
-    required TResult Function(ModelTrainingFailure value) modelTrainingFailure,
-    required TResult Function(PreferenceUpdateFailure value)
-        preferenceUpdateFailure,
-    required TResult Function(InsightGenerationFailure value)
-        insightGenerationFailure,
-    required TResult Function(ScheduleGenerationFailure value)
-        scheduleGenerationFailure,
-    required TResult Function(GoalGenerationFailure value)
-        goalGenerationFailure,
-    required TResult Function(ChallengeGenerationFailure value)
-        challengeGenerationFailure,
-    required TResult Function(ContentModerationFailure value)
-        contentModerationFailure,
-    required TResult Function(RateLimitFailure value) rateLimitFailure,
-    required TResult Function(ModelUnavailableFailure value)
-        modelUnavailableFailure,
-    required TResult Function(DataQualityFailure value) dataQualityFailure,
-  }) {
-    return contentModerationFailure(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(ServerFailure value)? serverFailure,
-    TResult? Function(NetworkFailure value)? networkFailure,
-    TResult? Function(CacheFailure value)? cacheFailure,
-    TResult? Function(InvalidInputFailure value)? invalidInputFailure,
-    TResult? Function(AuthFailure value)? authFailure,
-    TResult? Function(AIModelFailure value)? aiModelFailure,
-    TResult? Function(InsufficientDataFailure value)? insufficientDataFailure,
-    TResult? Function(RecommendationGenerationFailure value)?
-        recommendationGenerationFailure,
-    TResult? Function(ContentAnalysisFailure value)? contentAnalysisFailure,
-    TResult? Function(DifficultyAssessmentFailure value)?
-        difficultyAssessmentFailure,
-    TResult? Function(LearningPathFailure value)? learningPathFailure,
-    TResult? Function(ComprehensionAssessmentFailure value)?
-        comprehensionAssessmentFailure,
-    TResult? Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult? Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult? Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult? Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult? Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult? Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult? Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult? Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult? Function(RateLimitFailure value)? rateLimitFailure,
-    TResult? Function(ModelUnavailableFailure value)? modelUnavailableFailure,
-    TResult? Function(DataQualityFailure value)? dataQualityFailure,
-  }) {
-    return contentModerationFailure?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(ServerFailure value)? serverFailure,
-    TResult Function(NetworkFailure value)? networkFailure,
-    TResult Function(CacheFailure value)? cacheFailure,
-    TResult Function(InvalidInputFailure value)? invalidInputFailure,
-    TResult Function(AuthFailure value)? authFailure,
-    TResult Function(AIModelFailure value)? aiModelFailure,
-    TResult Function(InsufficientDataFailure value)? insufficientDataFailure,
-    TResult Function(RecommendationGenerationFailure value)?
-        recommendationGenerationFailure,
-    TResult Function(ContentAnalysisFailure value)? contentAnalysisFailure,
-    TResult Function(DifficultyAssessmentFailure value)?
-        difficultyAssessmentFailure,
-    TResult Function(LearningPathFailure value)? learningPathFailure,
-    TResult Function(ComprehensionAssessmentFailure value)?
-        comprehensionAssessmentFailure,
-    TResult Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult Function(RateLimitFailure value)? rateLimitFailure,
-    TResult Function(ModelUnavailableFailure value)? modelUnavailableFailure,
-    TResult Function(DataQualityFailure value)? dataQualityFailure,
-    required TResult orElse(),
-  }) {
-    if (contentModerationFailure != null) {
-      return contentModerationFailure(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class ContentModerationFailure implements Failure {
-  const factory ContentModerationFailure(
-      {required final String message,
-      final String? reason,
-      final String? contentType}) = _$ContentModerationFailureImpl;
-
-  @override
-  String get message;
-  String? get reason;
-  String? get contentType;
-
-  /// Create a copy of Failure
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ContentModerationFailureImplCopyWith<_$ContentModerationFailureImpl>
-      get copyWith => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$RateLimitFailureImplCopyWith<$Res>
-    implements $FailureCopyWith<$Res> {
-  factory _$$RateLimitFailureImplCopyWith(_$RateLimitFailureImpl value,
-          $Res Function(_$RateLimitFailureImpl) then) =
-      __$$RateLimitFailureImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({String message, Duration cooldown, String? operation});
-}
-
-/// @nodoc
-class __$$RateLimitFailureImplCopyWithImpl<$Res>
-    extends _$FailureCopyWithImpl<$Res, _$RateLimitFailureImpl>
-    implements _$$RateLimitFailureImplCopyWith<$Res> {
-  __$$RateLimitFailureImplCopyWithImpl(_$RateLimitFailureImpl _value,
-      $Res Function(_$RateLimitFailureImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of Failure
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? message = null,
-    Object? cooldown = null,
-    Object? operation = freezed,
-  }) {
-    return _then(_$RateLimitFailureImpl(
-      message: null == message
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String,
-      cooldown: null == cooldown
-          ? _value.cooldown
-          : cooldown // ignore: cast_nullable_to_non_nullable
-              as Duration,
-      operation: freezed == operation
-          ? _value.operation
-          : operation // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$RateLimitFailureImpl implements RateLimitFailure {
-  const _$RateLimitFailureImpl(
-      {required this.message, required this.cooldown, this.operation});
-
-  @override
-  final String message;
-  @override
-  final Duration cooldown;
-  @override
-  final String? operation;
-
-  @override
-  String toString() {
-    return 'Failure.rateLimitFailure(message: $message, cooldown: $cooldown, operation: $operation)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$RateLimitFailureImpl &&
-            (identical(other.message, message) || other.message == message) &&
-            (identical(other.cooldown, cooldown) ||
-                other.cooldown == cooldown) &&
-            (identical(other.operation, operation) ||
-                other.operation == operation));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, message, cooldown, operation);
-
-  /// Create a copy of Failure
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$RateLimitFailureImplCopyWith<_$RateLimitFailureImpl> get copyWith =>
-      __$$RateLimitFailureImplCopyWithImpl<_$RateLimitFailureImpl>(
-          this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String message, int? statusCode) serverFailure,
-    required TResult Function(String message) networkFailure,
-    required TResult Function(String message) cacheFailure,
-    required TResult Function(String message, String? field)
-        invalidInputFailure,
-    required TResult Function(String message) authFailure,
-    required TResult Function(
-            String message, String? modelName, String? operation)
-        aiModelFailure,
-    required TResult Function(
-            String message, int minimumDataPoints, String? dataType)
-        insufficientDataFailure,
-    required TResult Function(
-            String message, String? recommendationType, String? reason)
-        recommendationGenerationFailure,
-    required TResult Function(
-            String message, String? analysisType, String? bookId)
-        contentAnalysisFailure,
-    required TResult Function(
-            String message, String? bookId, String? assessmentType)
-        difficultyAssessmentFailure,
-    required TResult Function(String message, String? pathId, String? operation)
-        learningPathFailure,
-    required TResult Function(String message, String? userId, String? bookId,
-            String? assessmentType)
-        comprehensionAssessmentFailure,
-    required TResult Function(
-            String message, String? bookId, String? nlpOperation)
-        nlpProcessingFailure,
-    required TResult Function(
-            String message, String? modelName, String? trainingData)
-        modelTrainingFailure,
-    required TResult Function(
-            String message, String? userId, String? preferenceType)
-        preferenceUpdateFailure,
-    required TResult Function(
-            String message, String? insightType, String? context)
-        insightGenerationFailure,
-    required TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)
-        scheduleGenerationFailure,
-    required TResult Function(
-            String message, String? userId, String? goalType, String? timeframe)
-        goalGenerationFailure,
-    required TResult Function(String message, String? userId,
-            String? challengeType, String? difficulty)
-        challengeGenerationFailure,
-    required TResult Function(
-            String message, String? reason, String? contentType)
-        contentModerationFailure,
-    required TResult Function(
-            String message, Duration cooldown, String? operation)
-        rateLimitFailure,
-    required TResult Function(
-            String message, String? modelName, String? alternative)
-        modelUnavailableFailure,
-    required TResult Function(
-            String message, String? dataType, String? qualityIssue)
-        dataQualityFailure,
-  }) {
-    return rateLimitFailure(message, cooldown, operation);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String message, int? statusCode)? serverFailure,
-    TResult? Function(String message)? networkFailure,
-    TResult? Function(String message)? cacheFailure,
-    TResult? Function(String message, String? field)? invalidInputFailure,
-    TResult? Function(String message)? authFailure,
-    TResult? Function(String message, String? modelName, String? operation)?
-        aiModelFailure,
-    TResult? Function(String message, int minimumDataPoints, String? dataType)?
-        insufficientDataFailure,
-    TResult? Function(
-            String message, String? recommendationType, String? reason)?
-        recommendationGenerationFailure,
-    TResult? Function(String message, String? analysisType, String? bookId)?
-        contentAnalysisFailure,
-    TResult? Function(String message, String? bookId, String? assessmentType)?
-        difficultyAssessmentFailure,
-    TResult? Function(String message, String? pathId, String? operation)?
-        learningPathFailure,
-    TResult? Function(String message, String? userId, String? bookId,
-            String? assessmentType)?
-        comprehensionAssessmentFailure,
-    TResult? Function(String message, String? bookId, String? nlpOperation)?
-        nlpProcessingFailure,
-    TResult? Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult? Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult? Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult? Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult? Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult? Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult? Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult? Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult? Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult? Function(String message, String? dataType, String? qualityIssue)?
-        dataQualityFailure,
-  }) {
-    return rateLimitFailure?.call(message, cooldown, operation);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String message, int? statusCode)? serverFailure,
-    TResult Function(String message)? networkFailure,
-    TResult Function(String message)? cacheFailure,
-    TResult Function(String message, String? field)? invalidInputFailure,
-    TResult Function(String message)? authFailure,
-    TResult Function(String message, String? modelName, String? operation)?
-        aiModelFailure,
-    TResult Function(String message, int minimumDataPoints, String? dataType)?
-        insufficientDataFailure,
-    TResult Function(
-            String message, String? recommendationType, String? reason)?
-        recommendationGenerationFailure,
-    TResult Function(String message, String? analysisType, String? bookId)?
-        contentAnalysisFailure,
-    TResult Function(String message, String? bookId, String? assessmentType)?
-        difficultyAssessmentFailure,
-    TResult Function(String message, String? pathId, String? operation)?
-        learningPathFailure,
-    TResult Function(String message, String? userId, String? bookId,
-            String? assessmentType)?
-        comprehensionAssessmentFailure,
-    TResult Function(String message, String? bookId, String? nlpOperation)?
-        nlpProcessingFailure,
-    TResult Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult Function(String message, String? dataType, String? qualityIssue)?
-        dataQualityFailure,
-    required TResult orElse(),
-  }) {
-    if (rateLimitFailure != null) {
-      return rateLimitFailure(message, cooldown, operation);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(ServerFailure value) serverFailure,
-    required TResult Function(NetworkFailure value) networkFailure,
-    required TResult Function(CacheFailure value) cacheFailure,
-    required TResult Function(InvalidInputFailure value) invalidInputFailure,
-    required TResult Function(AuthFailure value) authFailure,
-    required TResult Function(AIModelFailure value) aiModelFailure,
-    required TResult Function(InsufficientDataFailure value)
-        insufficientDataFailure,
-    required TResult Function(RecommendationGenerationFailure value)
-        recommendationGenerationFailure,
-    required TResult Function(ContentAnalysisFailure value)
-        contentAnalysisFailure,
-    required TResult Function(DifficultyAssessmentFailure value)
-        difficultyAssessmentFailure,
-    required TResult Function(LearningPathFailure value) learningPathFailure,
-    required TResult Function(ComprehensionAssessmentFailure value)
-        comprehensionAssessmentFailure,
-    required TResult Function(NLPProcessingFailure value) nlpProcessingFailure,
-    required TResult Function(ModelTrainingFailure value) modelTrainingFailure,
-    required TResult Function(PreferenceUpdateFailure value)
-        preferenceUpdateFailure,
-    required TResult Function(InsightGenerationFailure value)
-        insightGenerationFailure,
-    required TResult Function(ScheduleGenerationFailure value)
-        scheduleGenerationFailure,
-    required TResult Function(GoalGenerationFailure value)
-        goalGenerationFailure,
-    required TResult Function(ChallengeGenerationFailure value)
-        challengeGenerationFailure,
-    required TResult Function(ContentModerationFailure value)
-        contentModerationFailure,
-    required TResult Function(RateLimitFailure value) rateLimitFailure,
-    required TResult Function(ModelUnavailableFailure value)
-        modelUnavailableFailure,
-    required TResult Function(DataQualityFailure value) dataQualityFailure,
-  }) {
-    return rateLimitFailure(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(ServerFailure value)? serverFailure,
-    TResult? Function(NetworkFailure value)? networkFailure,
-    TResult? Function(CacheFailure value)? cacheFailure,
-    TResult? Function(InvalidInputFailure value)? invalidInputFailure,
-    TResult? Function(AuthFailure value)? authFailure,
-    TResult? Function(AIModelFailure value)? aiModelFailure,
-    TResult? Function(InsufficientDataFailure value)? insufficientDataFailure,
-    TResult? Function(RecommendationGenerationFailure value)?
-        recommendationGenerationFailure,
-    TResult? Function(ContentAnalysisFailure value)? contentAnalysisFailure,
-    TResult? Function(DifficultyAssessmentFailure value)?
-        difficultyAssessmentFailure,
-    TResult? Function(LearningPathFailure value)? learningPathFailure,
-    TResult? Function(ComprehensionAssessmentFailure value)?
-        comprehensionAssessmentFailure,
-    TResult? Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult? Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult? Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult? Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult? Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult? Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult? Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult? Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult? Function(RateLimitFailure value)? rateLimitFailure,
-    TResult? Function(ModelUnavailableFailure value)? modelUnavailableFailure,
-    TResult? Function(DataQualityFailure value)? dataQualityFailure,
-  }) {
-    return rateLimitFailure?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(ServerFailure value)? serverFailure,
-    TResult Function(NetworkFailure value)? networkFailure,
-    TResult Function(CacheFailure value)? cacheFailure,
-    TResult Function(InvalidInputFailure value)? invalidInputFailure,
-    TResult Function(AuthFailure value)? authFailure,
-    TResult Function(AIModelFailure value)? aiModelFailure,
-    TResult Function(InsufficientDataFailure value)? insufficientDataFailure,
-    TResult Function(RecommendationGenerationFailure value)?
-        recommendationGenerationFailure,
-    TResult Function(ContentAnalysisFailure value)? contentAnalysisFailure,
-    TResult Function(DifficultyAssessmentFailure value)?
-        difficultyAssessmentFailure,
-    TResult Function(LearningPathFailure value)? learningPathFailure,
-    TResult Function(ComprehensionAssessmentFailure value)?
-        comprehensionAssessmentFailure,
-    TResult Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult Function(RateLimitFailure value)? rateLimitFailure,
-    TResult Function(ModelUnavailableFailure value)? modelUnavailableFailure,
-    TResult Function(DataQualityFailure value)? dataQualityFailure,
-    required TResult orElse(),
-  }) {
-    if (rateLimitFailure != null) {
-      return rateLimitFailure(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class RateLimitFailure implements Failure {
-  const factory RateLimitFailure(
-      {required final String message,
-      required final Duration cooldown,
-      final String? operation}) = _$RateLimitFailureImpl;
-
-  @override
-  String get message;
-  Duration get cooldown;
-  String? get operation;
-
-  /// Create a copy of Failure
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$RateLimitFailureImplCopyWith<_$RateLimitFailureImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$$ModelUnavailableFailureImplCopyWith<$Res>
-    implements $FailureCopyWith<$Res> {
-  factory _$$ModelUnavailableFailureImplCopyWith(
-          _$ModelUnavailableFailureImpl value,
-          $Res Function(_$ModelUnavailableFailureImpl) then) =
-      __$$ModelUnavailableFailureImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({String message, String? modelName, String? alternative});
-}
-
-/// @nodoc
-class __$$ModelUnavailableFailureImplCopyWithImpl<$Res>
-    extends _$FailureCopyWithImpl<$Res, _$ModelUnavailableFailureImpl>
-    implements _$$ModelUnavailableFailureImplCopyWith<$Res> {
-  __$$ModelUnavailableFailureImplCopyWithImpl(
-      _$ModelUnavailableFailureImpl _value,
-      $Res Function(_$ModelUnavailableFailureImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of Failure
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? message = null,
-    Object? modelName = freezed,
-    Object? alternative = freezed,
-  }) {
-    return _then(_$ModelUnavailableFailureImpl(
-      message: null == message
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String,
-      modelName: freezed == modelName
-          ? _value.modelName
-          : modelName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      alternative: freezed == alternative
-          ? _value.alternative
-          : alternative // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
-  }
-}
-
-/// @nodoc
-
-class _$ModelUnavailableFailureImpl implements ModelUnavailableFailure {
-  const _$ModelUnavailableFailureImpl(
-      {required this.message, this.modelName, this.alternative});
-
-  @override
-  final String message;
-  @override
-  final String? modelName;
-  @override
-  final String? alternative;
-
-  @override
-  String toString() {
-    return 'Failure.modelUnavailableFailure(message: $message, modelName: $modelName, alternative: $alternative)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ModelUnavailableFailureImpl &&
-            (identical(other.message, message) || other.message == message) &&
-            (identical(other.modelName, modelName) ||
-                other.modelName == modelName) &&
-            (identical(other.alternative, alternative) ||
-                other.alternative == alternative));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, message, modelName, alternative);
-
-  /// Create a copy of Failure
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$ModelUnavailableFailureImplCopyWith<_$ModelUnavailableFailureImpl>
-      get copyWith => __$$ModelUnavailableFailureImplCopyWithImpl<
-          _$ModelUnavailableFailureImpl>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function(String message, int? statusCode) serverFailure,
-    required TResult Function(String message) networkFailure,
-    required TResult Function(String message) cacheFailure,
-    required TResult Function(String message, String? field)
-        invalidInputFailure,
-    required TResult Function(String message) authFailure,
-    required TResult Function(
-            String message, String? modelName, String? operation)
-        aiModelFailure,
-    required TResult Function(
-            String message, int minimumDataPoints, String? dataType)
-        insufficientDataFailure,
-    required TResult Function(
-            String message, String? recommendationType, String? reason)
-        recommendationGenerationFailure,
-    required TResult Function(
-            String message, String? analysisType, String? bookId)
-        contentAnalysisFailure,
-    required TResult Function(
-            String message, String? bookId, String? assessmentType)
-        difficultyAssessmentFailure,
-    required TResult Function(String message, String? pathId, String? operation)
-        learningPathFailure,
-    required TResult Function(String message, String? userId, String? bookId,
-            String? assessmentType)
-        comprehensionAssessmentFailure,
-    required TResult Function(
-            String message, String? bookId, String? nlpOperation)
-        nlpProcessingFailure,
-    required TResult Function(
-            String message, String? modelName, String? trainingData)
-        modelTrainingFailure,
-    required TResult Function(
-            String message, String? userId, String? preferenceType)
-        preferenceUpdateFailure,
-    required TResult Function(
-            String message, String? insightType, String? context)
-        insightGenerationFailure,
-    required TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)
-        scheduleGenerationFailure,
-    required TResult Function(
-            String message, String? userId, String? goalType, String? timeframe)
-        goalGenerationFailure,
-    required TResult Function(String message, String? userId,
-            String? challengeType, String? difficulty)
-        challengeGenerationFailure,
-    required TResult Function(
-            String message, String? reason, String? contentType)
-        contentModerationFailure,
-    required TResult Function(
-            String message, Duration cooldown, String? operation)
-        rateLimitFailure,
-    required TResult Function(
-            String message, String? modelName, String? alternative)
-        modelUnavailableFailure,
-    required TResult Function(
-            String message, String? dataType, String? qualityIssue)
-        dataQualityFailure,
-  }) {
-    return modelUnavailableFailure(message, modelName, alternative);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String message, int? statusCode)? serverFailure,
-    TResult? Function(String message)? networkFailure,
-    TResult? Function(String message)? cacheFailure,
-    TResult? Function(String message, String? field)? invalidInputFailure,
-    TResult? Function(String message)? authFailure,
-    TResult? Function(String message, String? modelName, String? operation)?
-        aiModelFailure,
-    TResult? Function(String message, int minimumDataPoints, String? dataType)?
-        insufficientDataFailure,
-    TResult? Function(
-            String message, String? recommendationType, String? reason)?
-        recommendationGenerationFailure,
-    TResult? Function(String message, String? analysisType, String? bookId)?
-        contentAnalysisFailure,
-    TResult? Function(String message, String? bookId, String? assessmentType)?
-        difficultyAssessmentFailure,
-    TResult? Function(String message, String? pathId, String? operation)?
-        learningPathFailure,
-    TResult? Function(String message, String? userId, String? bookId,
-            String? assessmentType)?
-        comprehensionAssessmentFailure,
-    TResult? Function(String message, String? bookId, String? nlpOperation)?
-        nlpProcessingFailure,
-    TResult? Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult? Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult? Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult? Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult? Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult? Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult? Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult? Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult? Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult? Function(String message, String? dataType, String? qualityIssue)?
-        dataQualityFailure,
-  }) {
-    return modelUnavailableFailure?.call(message, modelName, alternative);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String message, int? statusCode)? serverFailure,
-    TResult Function(String message)? networkFailure,
-    TResult Function(String message)? cacheFailure,
-    TResult Function(String message, String? field)? invalidInputFailure,
-    TResult Function(String message)? authFailure,
-    TResult Function(String message, String? modelName, String? operation)?
-        aiModelFailure,
-    TResult Function(String message, int minimumDataPoints, String? dataType)?
-        insufficientDataFailure,
-    TResult Function(
-            String message, String? recommendationType, String? reason)?
-        recommendationGenerationFailure,
-    TResult Function(String message, String? analysisType, String? bookId)?
-        contentAnalysisFailure,
-    TResult Function(String message, String? bookId, String? assessmentType)?
-        difficultyAssessmentFailure,
-    TResult Function(String message, String? pathId, String? operation)?
-        learningPathFailure,
-    TResult Function(String message, String? userId, String? bookId,
-            String? assessmentType)?
-        comprehensionAssessmentFailure,
-    TResult Function(String message, String? bookId, String? nlpOperation)?
-        nlpProcessingFailure,
-    TResult Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult Function(String message, String? dataType, String? qualityIssue)?
-        dataQualityFailure,
-    required TResult orElse(),
-  }) {
-    if (modelUnavailableFailure != null) {
-      return modelUnavailableFailure(message, modelName, alternative);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(ServerFailure value) serverFailure,
-    required TResult Function(NetworkFailure value) networkFailure,
-    required TResult Function(CacheFailure value) cacheFailure,
-    required TResult Function(InvalidInputFailure value) invalidInputFailure,
-    required TResult Function(AuthFailure value) authFailure,
-    required TResult Function(AIModelFailure value) aiModelFailure,
-    required TResult Function(InsufficientDataFailure value)
-        insufficientDataFailure,
-    required TResult Function(RecommendationGenerationFailure value)
-        recommendationGenerationFailure,
-    required TResult Function(ContentAnalysisFailure value)
-        contentAnalysisFailure,
-    required TResult Function(DifficultyAssessmentFailure value)
-        difficultyAssessmentFailure,
-    required TResult Function(LearningPathFailure value) learningPathFailure,
-    required TResult Function(ComprehensionAssessmentFailure value)
-        comprehensionAssessmentFailure,
-    required TResult Function(NLPProcessingFailure value) nlpProcessingFailure,
-    required TResult Function(ModelTrainingFailure value) modelTrainingFailure,
-    required TResult Function(PreferenceUpdateFailure value)
-        preferenceUpdateFailure,
-    required TResult Function(InsightGenerationFailure value)
-        insightGenerationFailure,
-    required TResult Function(ScheduleGenerationFailure value)
-        scheduleGenerationFailure,
-    required TResult Function(GoalGenerationFailure value)
-        goalGenerationFailure,
-    required TResult Function(ChallengeGenerationFailure value)
-        challengeGenerationFailure,
-    required TResult Function(ContentModerationFailure value)
-        contentModerationFailure,
-    required TResult Function(RateLimitFailure value) rateLimitFailure,
-    required TResult Function(ModelUnavailableFailure value)
-        modelUnavailableFailure,
-    required TResult Function(DataQualityFailure value) dataQualityFailure,
-  }) {
-    return modelUnavailableFailure(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(ServerFailure value)? serverFailure,
-    TResult? Function(NetworkFailure value)? networkFailure,
-    TResult? Function(CacheFailure value)? cacheFailure,
-    TResult? Function(InvalidInputFailure value)? invalidInputFailure,
-    TResult? Function(AuthFailure value)? authFailure,
-    TResult? Function(AIModelFailure value)? aiModelFailure,
-    TResult? Function(InsufficientDataFailure value)? insufficientDataFailure,
-    TResult? Function(RecommendationGenerationFailure value)?
-        recommendationGenerationFailure,
-    TResult? Function(ContentAnalysisFailure value)? contentAnalysisFailure,
-    TResult? Function(DifficultyAssessmentFailure value)?
-        difficultyAssessmentFailure,
-    TResult? Function(LearningPathFailure value)? learningPathFailure,
-    TResult? Function(ComprehensionAssessmentFailure value)?
-        comprehensionAssessmentFailure,
-    TResult? Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult? Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult? Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult? Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult? Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult? Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult? Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult? Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult? Function(RateLimitFailure value)? rateLimitFailure,
-    TResult? Function(ModelUnavailableFailure value)? modelUnavailableFailure,
-    TResult? Function(DataQualityFailure value)? dataQualityFailure,
-  }) {
-    return modelUnavailableFailure?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(ServerFailure value)? serverFailure,
-    TResult Function(NetworkFailure value)? networkFailure,
-    TResult Function(CacheFailure value)? cacheFailure,
-    TResult Function(InvalidInputFailure value)? invalidInputFailure,
-    TResult Function(AuthFailure value)? authFailure,
-    TResult Function(AIModelFailure value)? aiModelFailure,
-    TResult Function(InsufficientDataFailure value)? insufficientDataFailure,
-    TResult Function(RecommendationGenerationFailure value)?
-        recommendationGenerationFailure,
-    TResult Function(ContentAnalysisFailure value)? contentAnalysisFailure,
-    TResult Function(DifficultyAssessmentFailure value)?
-        difficultyAssessmentFailure,
-    TResult Function(LearningPathFailure value)? learningPathFailure,
-    TResult Function(ComprehensionAssessmentFailure value)?
-        comprehensionAssessmentFailure,
-    TResult Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult Function(RateLimitFailure value)? rateLimitFailure,
-    TResult Function(ModelUnavailableFailure value)? modelUnavailableFailure,
-    TResult Function(DataQualityFailure value)? dataQualityFailure,
-    required TResult orElse(),
-  }) {
-    if (modelUnavailableFailure != null) {
-      return modelUnavailableFailure(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class ModelUnavailableFailure implements Failure {
-  const factory ModelUnavailableFailure(
-      {required final String message,
-      final String? modelName,
-      final String? alternative}) = _$ModelUnavailableFailureImpl;
-
-  @override
-  String get message;
-  String? get modelName;
-  String? get alternative;
-
-  /// Create a copy of Failure
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ModelUnavailableFailureImplCopyWith<_$ModelUnavailableFailureImpl>
+  _$$PersonalizationFailureImplCopyWith<_$PersonalizationFailureImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -9102,7 +5943,7 @@ abstract class _$$DataQualityFailureImplCopyWith<$Res>
       __$$DataQualityFailureImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String message, String? dataType, String? qualityIssue});
+  $Res call({String message, String? dataSource, String? qualityIssue});
 }
 
 /// @nodoc
@@ -9119,7 +5960,7 @@ class __$$DataQualityFailureImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? message = null,
-    Object? dataType = freezed,
+    Object? dataSource = freezed,
     Object? qualityIssue = freezed,
   }) {
     return _then(_$DataQualityFailureImpl(
@@ -9127,9 +5968,9 @@ class __$$DataQualityFailureImplCopyWithImpl<$Res>
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      dataType: freezed == dataType
-          ? _value.dataType
-          : dataType // ignore: cast_nullable_to_non_nullable
+      dataSource: freezed == dataSource
+          ? _value.dataSource
+          : dataSource // ignore: cast_nullable_to_non_nullable
               as String?,
       qualityIssue: freezed == qualityIssue
           ? _value.qualityIssue
@@ -9143,18 +5984,18 @@ class __$$DataQualityFailureImplCopyWithImpl<$Res>
 
 class _$DataQualityFailureImpl implements DataQualityFailure {
   const _$DataQualityFailureImpl(
-      {required this.message, this.dataType, this.qualityIssue});
+      {required this.message, this.dataSource, this.qualityIssue});
 
   @override
   final String message;
   @override
-  final String? dataType;
+  final String? dataSource;
   @override
   final String? qualityIssue;
 
   @override
   String toString() {
-    return 'Failure.dataQualityFailure(message: $message, dataType: $dataType, qualityIssue: $qualityIssue)';
+    return 'Failure.dataQualityFailure(message: $message, dataSource: $dataSource, qualityIssue: $qualityIssue)';
   }
 
   @override
@@ -9163,14 +6004,15 @@ class _$DataQualityFailureImpl implements DataQualityFailure {
         (other.runtimeType == runtimeType &&
             other is _$DataQualityFailureImpl &&
             (identical(other.message, message) || other.message == message) &&
-            (identical(other.dataType, dataType) ||
-                other.dataType == dataType) &&
+            (identical(other.dataSource, dataSource) ||
+                other.dataSource == dataSource) &&
             (identical(other.qualityIssue, qualityIssue) ||
                 other.qualityIssue == qualityIssue));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, message, dataType, qualityIssue);
+  int get hashCode =>
+      Object.hash(runtimeType, message, dataSource, qualityIssue);
 
   /// Create a copy of Failure
   /// with the given fields replaced by the non-null parameter values.
@@ -9194,7 +6036,7 @@ class _$DataQualityFailureImpl implements DataQualityFailure {
             String message, String? modelName, String? operation)
         aiModelFailure,
     required TResult Function(
-            String message, int minimumDataPoints, String? dataType)
+            String message, int? minimumDataPoints, String? dataType)
         insufficientDataFailure,
     required TResult Function(
             String message, String? recommendationType, String? reason)
@@ -9210,41 +6052,24 @@ class _$DataQualityFailureImpl implements DataQualityFailure {
     required TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)
         comprehensionAssessmentFailure,
-    required TResult Function(
-            String message, String? bookId, String? nlpOperation)
+    required TResult Function(String message, String? operation, String? text)
         nlpProcessingFailure,
     required TResult Function(
-            String message, String? modelName, String? trainingData)
-        modelTrainingFailure,
+            String message, String? bookId, String? analysisType)
+        sentimentAnalysisFailure,
+    required TResult Function(String message, String? bookId, String? modelType)
+        topicModelingFailure,
     required TResult Function(
-            String message, String? userId, String? preferenceType)
-        preferenceUpdateFailure,
+            String message, String? bookId, String? assessmentMethod)
+        readingLevelAssessmentFailure,
     required TResult Function(
-            String message, String? insightType, String? context)
-        insightGenerationFailure,
-    required TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)
-        scheduleGenerationFailure,
+            String message, String? userId, String? personalizationType)
+        personalizationFailure,
     required TResult Function(
-            String message, String? userId, String? goalType, String? timeframe)
-        goalGenerationFailure,
-    required TResult Function(String message, String? userId,
-            String? challengeType, String? difficulty)
-        challengeGenerationFailure,
-    required TResult Function(
-            String message, String? reason, String? contentType)
-        contentModerationFailure,
-    required TResult Function(
-            String message, Duration cooldown, String? operation)
-        rateLimitFailure,
-    required TResult Function(
-            String message, String? modelName, String? alternative)
-        modelUnavailableFailure,
-    required TResult Function(
-            String message, String? dataType, String? qualityIssue)
+            String message, String? dataSource, String? qualityIssue)
         dataQualityFailure,
   }) {
-    return dataQualityFailure(message, dataType, qualityIssue);
+    return dataQualityFailure(message, dataSource, qualityIssue);
   }
 
   @override
@@ -9257,7 +6082,7 @@ class _$DataQualityFailureImpl implements DataQualityFailure {
     TResult? Function(String message)? authFailure,
     TResult? Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult? Function(String message, int minimumDataPoints, String? dataType)?
+    TResult? Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult? Function(
             String message, String? recommendationType, String? reason)?
@@ -9271,33 +6096,21 @@ class _$DataQualityFailureImpl implements DataQualityFailure {
     TResult? Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult? Function(String message, String? bookId, String? nlpOperation)?
+    TResult? Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult? Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult? Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult? Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult? Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult? Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult? Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult? Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult? Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult? Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult? Function(String message, String? dataType, String? qualityIssue)?
+    TResult? Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult? Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult? Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult? Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult? Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
   }) {
-    return dataQualityFailure?.call(message, dataType, qualityIssue);
+    return dataQualityFailure?.call(message, dataSource, qualityIssue);
   }
 
   @override
@@ -9310,7 +6123,7 @@ class _$DataQualityFailureImpl implements DataQualityFailure {
     TResult Function(String message)? authFailure,
     TResult Function(String message, String? modelName, String? operation)?
         aiModelFailure,
-    TResult Function(String message, int minimumDataPoints, String? dataType)?
+    TResult Function(String message, int? minimumDataPoints, String? dataType)?
         insufficientDataFailure,
     TResult Function(
             String message, String? recommendationType, String? reason)?
@@ -9324,35 +6137,23 @@ class _$DataQualityFailureImpl implements DataQualityFailure {
     TResult Function(String message, String? userId, String? bookId,
             String? assessmentType)?
         comprehensionAssessmentFailure,
-    TResult Function(String message, String? bookId, String? nlpOperation)?
+    TResult Function(String message, String? operation, String? text)?
         nlpProcessingFailure,
-    TResult Function(String message, String? modelName, String? trainingData)?
-        modelTrainingFailure,
-    TResult Function(String message, String? userId, String? preferenceType)?
-        preferenceUpdateFailure,
-    TResult Function(String message, String? insightType, String? context)?
-        insightGenerationFailure,
-    TResult Function(String message, String? userId, String? bookId,
-            String? scheduleType)?
-        scheduleGenerationFailure,
-    TResult Function(String message, String? userId, String? goalType,
-            String? timeframe)?
-        goalGenerationFailure,
-    TResult Function(String message, String? userId, String? challengeType,
-            String? difficulty)?
-        challengeGenerationFailure,
-    TResult Function(String message, String? reason, String? contentType)?
-        contentModerationFailure,
-    TResult Function(String message, Duration cooldown, String? operation)?
-        rateLimitFailure,
-    TResult Function(String message, String? modelName, String? alternative)?
-        modelUnavailableFailure,
-    TResult Function(String message, String? dataType, String? qualityIssue)?
+    TResult Function(String message, String? bookId, String? analysisType)?
+        sentimentAnalysisFailure,
+    TResult Function(String message, String? bookId, String? modelType)?
+        topicModelingFailure,
+    TResult Function(String message, String? bookId, String? assessmentMethod)?
+        readingLevelAssessmentFailure,
+    TResult Function(
+            String message, String? userId, String? personalizationType)?
+        personalizationFailure,
+    TResult Function(String message, String? dataSource, String? qualityIssue)?
         dataQualityFailure,
     required TResult orElse(),
   }) {
     if (dataQualityFailure != null) {
-      return dataQualityFailure(message, dataType, qualityIssue);
+      return dataQualityFailure(message, dataSource, qualityIssue);
     }
     return orElse();
   }
@@ -9378,22 +6179,13 @@ class _$DataQualityFailureImpl implements DataQualityFailure {
     required TResult Function(ComprehensionAssessmentFailure value)
         comprehensionAssessmentFailure,
     required TResult Function(NLPProcessingFailure value) nlpProcessingFailure,
-    required TResult Function(ModelTrainingFailure value) modelTrainingFailure,
-    required TResult Function(PreferenceUpdateFailure value)
-        preferenceUpdateFailure,
-    required TResult Function(InsightGenerationFailure value)
-        insightGenerationFailure,
-    required TResult Function(ScheduleGenerationFailure value)
-        scheduleGenerationFailure,
-    required TResult Function(GoalGenerationFailure value)
-        goalGenerationFailure,
-    required TResult Function(ChallengeGenerationFailure value)
-        challengeGenerationFailure,
-    required TResult Function(ContentModerationFailure value)
-        contentModerationFailure,
-    required TResult Function(RateLimitFailure value) rateLimitFailure,
-    required TResult Function(ModelUnavailableFailure value)
-        modelUnavailableFailure,
+    required TResult Function(SentimentAnalysisFailure value)
+        sentimentAnalysisFailure,
+    required TResult Function(TopicModelingFailure value) topicModelingFailure,
+    required TResult Function(ReadingLevelAssessmentFailure value)
+        readingLevelAssessmentFailure,
+    required TResult Function(PersonalizationFailure value)
+        personalizationFailure,
     required TResult Function(DataQualityFailure value) dataQualityFailure,
   }) {
     return dataQualityFailure(this);
@@ -9418,17 +6210,11 @@ class _$DataQualityFailureImpl implements DataQualityFailure {
     TResult? Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult? Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult? Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult? Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult? Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult? Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult? Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult? Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult? Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult? Function(RateLimitFailure value)? rateLimitFailure,
-    TResult? Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult? Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult? Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult? Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult? Function(PersonalizationFailure value)? personalizationFailure,
     TResult? Function(DataQualityFailure value)? dataQualityFailure,
   }) {
     return dataQualityFailure?.call(this);
@@ -9453,17 +6239,11 @@ class _$DataQualityFailureImpl implements DataQualityFailure {
     TResult Function(ComprehensionAssessmentFailure value)?
         comprehensionAssessmentFailure,
     TResult Function(NLPProcessingFailure value)? nlpProcessingFailure,
-    TResult Function(ModelTrainingFailure value)? modelTrainingFailure,
-    TResult Function(PreferenceUpdateFailure value)? preferenceUpdateFailure,
-    TResult Function(InsightGenerationFailure value)? insightGenerationFailure,
-    TResult Function(ScheduleGenerationFailure value)?
-        scheduleGenerationFailure,
-    TResult Function(GoalGenerationFailure value)? goalGenerationFailure,
-    TResult Function(ChallengeGenerationFailure value)?
-        challengeGenerationFailure,
-    TResult Function(ContentModerationFailure value)? contentModerationFailure,
-    TResult Function(RateLimitFailure value)? rateLimitFailure,
-    TResult Function(ModelUnavailableFailure value)? modelUnavailableFailure,
+    TResult Function(SentimentAnalysisFailure value)? sentimentAnalysisFailure,
+    TResult Function(TopicModelingFailure value)? topicModelingFailure,
+    TResult Function(ReadingLevelAssessmentFailure value)?
+        readingLevelAssessmentFailure,
+    TResult Function(PersonalizationFailure value)? personalizationFailure,
     TResult Function(DataQualityFailure value)? dataQualityFailure,
     required TResult orElse(),
   }) {
@@ -9477,12 +6257,12 @@ class _$DataQualityFailureImpl implements DataQualityFailure {
 abstract class DataQualityFailure implements Failure {
   const factory DataQualityFailure(
       {required final String message,
-      final String? dataType,
+      final String? dataSource,
       final String? qualityIssue}) = _$DataQualityFailureImpl;
 
   @override
   String get message;
-  String? get dataType;
+  String? get dataSource;
   String? get qualityIssue;
 
   /// Create a copy of Failure
