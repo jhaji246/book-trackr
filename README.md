@@ -11,7 +11,7 @@
 
 ## 🚀 **Project Overview**
 
-**BookTrackr** is a comprehensive, production-ready social reading platform that combines the best of Goodreads, Letterboxd, and modern social media. Built with **204 Dart files** and **136,651+ lines of production code**, it represents the future of digital reading communities with enterprise-grade architecture and cutting-edge Flutter technology.
+**BookTrackr** is a comprehensive, production-ready social reading platform that combines the best of Goodreads, Letterboxd, and modern social media. it represents the future of digital reading communities with enterprise-grade architecture and cutting-edge Flutter technology.
 
 ### **🎯 Key Features**
 - 📚 **Intelligent Book Management** with Google Books API integration
