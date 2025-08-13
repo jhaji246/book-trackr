@@ -234,7 +234,6 @@ class _BookTrackrAppState extends ConsumerState<BookTrackrApp> {
       darkTheme: AppThemes.darkTheme,
       home: ErrorBoundary(
         onError: (error, stackTrace) {
-          
         },
         child: Consumer(
           builder: (context, ref, child) {
